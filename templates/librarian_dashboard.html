@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Librarian Dashboard | Library Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="logo-section">
+
+        <div class="logo-circle">
+
+            <i class="fa-solid fa-book-open"></i>
+
+        </div>
+
+        <div>
+
+            <h2>Library Management System</h2>
+
+            <p>Librarian Portal</p>
+
+        </div>
+
+    </div>
+
+    <div class="navbar-right">
+
+        <div class="profile-dropdown">
+
+            <button class="profile-btn">
+
+                <i class="fa-solid fa-user"></i>
+
+                Profile
+
+                <i class="fa-solid fa-angle-down"></i>
+
+            </button>
+
+            <div class="dropdown-content">
+
+                <a href="{{ url_for('profile') }}">
+                    <i class="fa-solid fa-user"></i>
+                    My Profile
+                </a>
+
+                <a href="{{ url_for('profile') }}">
+                    <i class="fa-solid fa-user-pen"></i>
+                    Edit Profile
+                </a>
+
+                <a href="{{ url_for('change_password') }}">
+                    <i class="fa-solid fa-key"></i>
+                    Change Password
+                </a>
+
+            </div>
+
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </a>
+
+    </div>
+
+</header>
+
+<!-- ================= WELCOME ================= -->
+
+<section class="welcome-box">
+
+    <div class="welcome-text">
+
+        <h1>Welcome, {{ name if name else "Librarian" }} 👋</h1>
+
+        <p>
+
+            Manage books, members, borrowing records and all daily library
+            operations from one place.
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ================= DASHBOARD ================= -->
+
+<div class="dashboard-grid">
+<!-- ================= ROW 1 ================= -->
+
+<a href="{{ url_for('book_management') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-book"></i>
+
+    <h3>Book Management</h3>
+
+    <p>Add, Edit, Delete and Search Books</p>
+
+</a>
+
+
+<a href="{{ url_for('member_management') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-users"></i>
+
+    <h3>Member Management</h3>
+
+    <p>Manage Library Members</p>
+
+</a>
+
+
+<a href="{{ url_for('issue_books') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-book-open-reader"></i>
+
+    <h3>Issue Books</h3>
+
+    <p>Issue Books to Members</p>
+
+</a>
+
+
+<a href="{{ url_for('librarian_return_books') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-arrow-rotate-left"></i>
+
+    <h3>Return Books</h3>
+
+    <p>Accept Returned Books</p>
+
+</a>
+
+
+<!-- ================= ROW 2 ================= -->
+
+<a href="{{ url_for('librarian_renew_books') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-repeat"></i>
+
+    <h3>Renew Books</h3>
+
+    <p>Extend Borrow Duration</p>
+
+</a>
+
+
+<a href="{{ url_for('waitlist_management') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-clock"></i>
+
+    <h3>Waitlist</h3>
+
+    <p>Manage Waiting Members</p>
+
+</a>
+
+
+<a href="{{ url_for('fine_management') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-money-bill-wave"></i>
+
+    <h3>Fine Management</h3>
+
+    <p>Collect & Update Fines</p>
+
+</a>
+
+
+<a href="{{ url_for('book_availability') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-book-open"></i>
+
+    <h3>Book Availability</h3>
+
+    <p>View Available Books</p>
+
+</a>
+
+
+<!-- ================= ROW 3 ================= -->
+
+<a href="{{ url_for('borrow_records') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-file-lines"></i>
+
+    <h3>Borrow Records</h3>
+
+    <p>View Complete Borrow History</p>
+
+</a>
+
+
+<a href="{{ url_for('reports') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-chart-column"></i>
+
+    <h3>Reports</h3>
+
+    <p>Library Statistics & Reports</p>
+
+</a>
+
+
+<a href="{{ url_for('categories') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-layer-group"></i>
+
+    <h3>Categories</h3>
+
+    <p>Manage Book Categories</p>
+
+</a>
+
+
+<a href="{{ url_for('book_management') }}" class="dashboard-card">
+
+    <i class="fa-solid fa-circle-plus"></i>
+
+    <h3>Add New Book</h3>
+
+    <p>Quickly Add a New Book</p>
+
+</a>
+
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="dashboard-footer">
+
+    <p>
+
+        © 2026 Library Management System | Librarian Portal
+
+    </p>
+
+</footer>
+
+</body>
+
+</html>

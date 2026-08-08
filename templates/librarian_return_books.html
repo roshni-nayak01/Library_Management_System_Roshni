@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Return Books | Library Management System</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+<div class="logo-section">
+
+<div class="logo-circle">
+
+<i class="fa-solid fa-book-open"></i>
+
+</div>
+
+<div>
+
+<h2>Library Management System</h2>
+
+<p>Librarian Portal</p>
+
+</div>
+
+</div>
+
+<div class="navbar-right">
+
+<a href="{{ url_for('librarian_dashboard') }}" class="profile-btn">
+
+<i class="fa-solid fa-house"></i>
+
+Dashboard
+
+</a>
+
+<a href="{{ url_for('profile') }}" class="profile-btn">
+
+<i class="fa-solid fa-user"></i>
+
+Profile
+
+</a>
+
+<a href="{{ url_for('logout') }}" class="logout-btn">
+
+Logout
+
+</a>
+
+</div>
+
+</header>
+
+<section class="welcome-box">
+
+<h1>
+
+<i class="fa-solid fa-arrow-rotate-left"></i>
+
+Return Books
+
+</h1>
+
+<p>
+
+Receive returned books and update records.
+
+</p>
+
+</section>
+
+<section class="book-form">
+
+<h2>Return Book</h2>
+
+<form>
+
+<div class="form-grid">
+
+<input
+type="text"
+placeholder="Issue ID"
+required>
+
+<input
+type="text"
+placeholder="Member Name"
+required>
+
+<input
+type="text"
+placeholder="Book Name"
+required>
+
+<input
+type="date"
+required>
+
+<input
+type="number"
+placeholder="Fine Amount">
+
+<select>
+
+<option>Book Condition</option>
+
+<option>Good</option>
+
+<option>Damaged</option>
+
+<option>Lost</option>
+
+</select>
+
+</div>
+
+<div class="form-buttons">
+
+<button class="save-btn">
+
+<i class="fa-solid fa-check"></i>
+
+Return Book
+
+</button>
+
+<button type="reset" class="cancel-btn">
+
+Reset
+
+</button>
+
+</div>
+
+</form>
+
+</section>
+
+<div class="table-container">
+
+<h2>Recently Returned Books</h2>
+
+<table class="book-table">
+
+<thead>
+
+<tr>
+
+<th>Issue ID</th>
+
+<th>Member</th>
+
+<th>Book</th>
+
+<th>Return Date</th>
+
+<th>Fine</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>I001</td>
+
+<td>Roshni Nayak</td>
+
+<td>Python Programming</td>
+
+<td>15-08-2026</td>
+
+<td>₹0</td>
+
+<td><span class="available">Returned</span></td>
+
+</tr>
+
+<tr>
+
+<td>I002</td>
+
+<td>Savio</td>
+
+<td>Database Systems</td>
+
+<td>18-08-2026</td>
+
+<td>₹100</td>
+
+<td><span class="issued">Late</span></td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<footer class="dashboard-footer">
+
+<p>
+
+© 2026 Library Management System | Return Books
+
+</p>
+
+</footer>
+
+</body>
+
+</html>

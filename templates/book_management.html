@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book Management | Library Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ===========================
+        NAVBAR
+=========================== -->
+
+<header class="navbar">
+
+    <div class="logo-section">
+
+        <div class="logo-circle">
+
+            <i class="fa-solid fa-book-open"></i>
+
+        </div>
+
+        <div>
+
+            <h2>Library Management System</h2>
+
+            <p>Librarian Portal</p>
+
+        </div>
+
+    </div>
+
+    <div class="navbar-right">
+
+        <a href="{{ url_for('librarian_dashboard') }}" class="profile-btn">
+
+            <i class="fa-solid fa-house"></i>
+
+            Dashboard
+
+        </a>
+
+        <a href="{{ url_for('profile') }}" class="profile-btn">
+
+            <i class="fa-solid fa-user"></i>
+
+            Profile
+
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </a>
+
+    </div>
+
+</header>
+
+<!-- ===========================
+        PAGE HEADER
+=========================== -->
+
+<section class="welcome-box">
+
+    <h1>
+
+        <i class="fa-solid fa-book"></i>
+
+        Book Management
+
+    </h1>
+
+    <p>
+
+        Add, Edit, Delete and Manage all books available in the library.
+
+    </p>
+
+</section>
+
+<!-- ===========================
+        SEARCH SECTION
+=========================== -->
+
+<div class="table-container">
+
+    <div class="table-top">
+
+        <input
+
+            type="text"
+
+            placeholder="🔍 Search by Book ID, Title or Author"
+
+            class="search-box"
+
+        >
+
+        <select class="category-filter">
+
+            <option>All Categories</option>
+
+            <option>Programming</option>
+
+            <option>Database</option>
+
+            <option>Artificial Intelligence</option>
+
+            <option>Science</option>
+
+            <option>Mathematics</option>
+
+            <option>History</option>
+
+            <option>Novel</option>
+
+        </select>
+
+        <a href="#add-member" class="add-book-btn">
+
+<i class="fa-solid fa-user-plus"></i>
+
+Add Member
+
+</a>
+
+    </div>
+
+<!-- ===========================
+        BOOK TABLE
+=========================== -->
+
+<table class="book-table">
+
+<thead>
+
+<tr>
+
+<th>Book ID</th>
+
+<th>Book Name</th>
+
+<th>Author</th>
+
+<th>Category</th>
+
+<th>Copies</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>B001</td>
+
+<td>Python Programming</td>
+
+<td>Mark Lutz</td>
+
+<td>Programming</td>
+
+<td>12</td>
+
+<td>
+
+<span class="available">
+
+Available
+
+</span>
+
+</td>
+
+<td>
+
+<button class="view-btn">
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
+
+<button class="edit-btn">
+
+<i class="fa-solid fa-pen"></i>
+
+</button>
+
+<button class="delete-btn">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>B002</td>
+
+<td>Database Systems</td>
+
+<td>Elmasri</td>
+
+<td>Database</td>
+
+<td>5</td>
+
+<td>
+
+<span class="issued">
+
+Issued
+
+</span>
+
+</td>
+
+<td>
+
+<button class="view-btn">
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
+
+<button class="edit-btn">
+
+<i class="fa-solid fa-pen"></i>
+
+</button>
+
+<button class="delete-btn">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+<tr>
+
+<td>B003</td>
+
+<td>Artificial Intelligence</td>
+
+<td>Stuart Russell</td>
+
+<td>AI</td>
+
+<td>8</td>
+
+<td>
+
+<span class="available">
+
+Available
+
+</span>
+
+</td>
+
+<td>
+
+<button class="view-btn">
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
+
+<button class="edit-btn">
+
+<i class="fa-solid fa-pen"></i>
+
+</button>
+
+<button class="delete-btn">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>B004</td>
+
+<td>Operating Systems</td>
+
+<td>Galvin</td>
+
+<td>Computer Science</td>
+
+<td>2</td>
+
+<td>
+
+<span class="issued">
+
+Issued
+
+</span>
+
+</td>
+
+<td>
+
+<button class="view-btn">
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
+
+<button class="edit-btn">
+
+<i class="fa-solid fa-pen"></i>
+
+</button>
+
+<button class="delete-btn">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+
+<!-- ===========================
+        ADD BOOK FORM
+=========================== -->
+
+<section class="book-form">
+
+<h2>
+
+<i class="fa-solid fa-circle-plus"></i>
+
+Add New Book
+
+</h2>
+
+<form>
+
+<div class="form-grid">
+
+<input
+type="text"
+placeholder="Book ID"
+required>
+
+<input
+type="text"
+placeholder="Book Name"
+required>
+
+<input
+type="text"
+placeholder="Author"
+required>
+
+<input
+type="text"
+placeholder="Publisher">
+
+<input
+type="text"
+placeholder="ISBN">
+
+<select required>
+
+<option>Select Category</option>
+
+<option>Programming</option>
+
+<option>Database</option>
+
+<option>AI</option>
+
+<option>Science</option>
+
+<option>Mathematics</option>
+
+<option>History</option>
+
+<option>Novel</option>
+
+</select>
+
+<input
+type="number"
+placeholder="Number of Copies">
+
+</div>
+
+<div class="form-buttons">
+
+<button type="submit" class="save-btn">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Book
+
+</button>
+
+<button type="reset" class="cancel-btn">
+
+<i class="fa-solid fa-rotate-left"></i>
+
+Reset
+
+</button>
+
+</div>
+
+</form>
+
+</section>
+
+
+<footer class="dashboard-footer">
+
+<p>
+
+© 2026 Library Management System | Book Management
+
+</p>
+
+</footer>
+
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>View Books | Library Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <div class="history-card">
+
+        <div class="icon">
+
+            <i class="fa-solid fa-book-open"></i>
+
+        </div>
+
+        <h2>View Book Details</h2>
+
+        <p class="subtitle">
+
+            Browse complete information about the books available in the library.
+
+        </p>
+
+        <table class="history-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Book ID</th>
+
+                    <th>Title</th>
+
+                    <th>Author</th>
+
+                    <th>Category</th>
+
+                    <th>ISBN</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td colspan="6">
+
+                        Book details will be displayed here.
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <hr>
+
+        <a class="back-home"
+           href="{{ url_for('dashboard') }}">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Back to Dashboard
+
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+

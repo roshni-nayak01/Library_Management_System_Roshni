@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Waitlist Management | Library Management System</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+<div class="logo-section">
+
+<div class="logo-circle">
+
+<i class="fa-solid fa-book-open"></i>
+
+</div>
+
+
+<div>
+
+<h2>Library Management System</h2>
+
+<p>Librarian Portal</p>
+
+</div>
+
+</div>
+
+
+
+<div class="navbar-right">
+
+
+<a href="{{ url_for('librarian_dashboard') }}" class="profile-btn">
+
+<i class="fa-solid fa-house"></i>
+
+Dashboard
+
+</a>
+
+
+<a href="{{ url_for('profile') }}" class="profile-btn">
+
+<i class="fa-solid fa-user"></i>
+
+Profile
+
+</a>
+
+
+<a href="{{ url_for('logout') }}" class="logout-btn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</a>
+
+
+</div>
+
+
+</header>
+
+
+
+<!-- TITLE -->
+
+
+<section class="welcome-box">
+
+
+<h1>
+
+<i class="fa-solid fa-clock"></i>
+
+Waitlist Management
+
+</h1>
+
+
+<p>
+
+Manage members waiting for unavailable books.
+
+</p>
+
+
+</section>
+
+
+
+
+<!-- TABLE -->
+
+
+<div class="table-container">
+
+
+<table class="book-table">
+
+
+<thead>
+
+
+<tr>
+
+<th>Waitlist ID</th>
+
+<th>Member Name</th>
+
+<th>Book Name</th>
+
+<th>Request Date</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody>
+
+
+<tr>
+
+
+<td>W001</td>
+
+<td>Roshni Nayak</td>
+
+<td>Database Management System</td>
+
+<td>05-08-2026</td>
+
+
+<td>
+
+<span class="issued">
+
+Waiting
+
+</span>
+
+</td>
+
+
+<td>
+
+
+<button class="view-btn">
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
+
+
+</td>
+
+
+</tr>
+
+
+
+
+<tr>
+
+
+<td>W002</td>
+
+<td>Savio</td>
+
+<td>Python Programming</td>
+
+<td>06-08-2026</td>
+
+
+<td>
+
+<span class="available">
+
+Available
+
+</span>
+
+</td>
+
+<td>
+
+<button class="view-btn">
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
+
+</td>
+
+
+
+</tr>
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+
+<footer class="dashboard-footer">
+
+
+<p>
+
+© 2026 Library Management System | Waitlist Management
+
+</p>
+
+
+</footer>
+
+
+
+</body>
+
+</html>
