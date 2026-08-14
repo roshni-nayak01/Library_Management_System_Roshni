@@ -1,212 +1,374 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>User Dashboard | Library Management System</title>
 
+
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <!-- Main CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
+
 <body>
 
-    <!-- ================= NAVBAR ================= -->
-    <nav class="navbar">
 
-        <div class="nav-logo">
-            <i class="fa-solid fa-book-open-reader"></i>
-            <span>Library Management System</span>
-        </div>
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-        <div class="nav-buttons">
+<nav class="navbar">
 
-            <a href="/profile" class="nav-btn profile-btn">
-                <i class="fa-solid fa-user"></i>
-                Profile
-            </a>
+    <!-- Logo -->
 
-            <a href="/change_password" class="nav-btn password-btn">
-                <i class="fa-solid fa-key"></i>
-                Change Password
-            </a>
+    <div class="nav-logo">
 
-            <a href="/logout" class="nav-btn logout-btn">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Logout
-            </a>
+        <i class="fa-solid fa-book-open-reader"></i>
 
-        </div>
-
-    </nav>
-
-    <!-- ================= MAIN CONTENT ================= -->
-
-    <div class="container">
-
-        <!-- Welcome Banner -->
-
-        <section class="welcome-card">
-
-            <h1>
-                Welcome,
-                <span>{{ session['username'] }}</span>
-                👋
-            </h1>
-
-            <p>
-                Manage your library activities quickly and efficiently from one place.
-            </p>
-
-        </section>
-
-        <!-- Dashboard Cards -->
-
-        <section class="dashboard-grid">
-
-            <!-- Search -->
-
-            <a href="/search_books" class="card">
-                <div class="icon">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-
-                <h3>Search Books</h3>
-
-                <p>
-                    Search books by title,
-                    author, ISBN or category.
-                </p>
-            </a>
-
-            <!-- View -->
-
-            <a href="/view_books" class="card">
-
-                <div class="icon">
-                    <i class="fa-solid fa-book"></i>
-                </div>
-
-                <h3>View Books</h3>
-
-                <p>
-                    View complete information
-                    about available books.
-                </p>
-
-            </a>
-
-            <!-- Borrow -->
-
-            <a href="/borrow_books" class="card">
-
-                <div class="icon">
-                    <i class="fa-solid fa-book-open"></i>
-                </div>
-
-                <h3>Borrow Books</h3>
-
-                <p>
-                    Borrow available books
-                    from the library.
-                </p>
-
-            </a>
-
-            <!-- Return -->
-
-            <a href="/return_books" class="card">
-
-                <div class="icon">
-                    <i class="fa-solid fa-right-left"></i>
-                </div>
-
-                <h3>Return Books</h3>
-
-                <p>
-                    Return borrowed books
-                    with a single click.
-                </p>
-
-            </a>
-
-            <!-- Renew -->
-
-            <a href="/renew_books" class="card">
-
-                <div class="icon">
-                    <i class="fa-solid fa-rotate-right"></i>
-                </div>
-
-                <h3>Renew Books</h3>
-
-                <p>
-                    Extend your borrowing
-                    period easily.
-                </p>
-
-            </a>
-
-            <!-- Reserve -->
-
-            <a href="/reserve_books" class="card">
-
-                <div class="icon">
-                    <i class="fa-solid fa-bookmark"></i>
-                </div>
-
-                <h3>Reserve Books</h3>
-
-                <p>
-                    Reserve books that are
-                    currently unavailable.
-                </p>
-
-            </a>
-
-            <!-- Cancel -->
-
-            <a href="/cancel_reservation" class="card">
-
-                <div class="icon">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                </div>
-
-                <h3>Cancel Reservation</h3>
-
-                <p>
-                    Cancel an existing
-                    reservation request.
-                </p>
-
-            </a>
-
-            <!-- History -->
-
-            <a href="/borrow_history" class="card">
-
-                <div class="icon">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                </div>
-
-                <h3>Borrow History</h3>
-
-                <p>
-                    View your previous
-                    borrowing records.
-                </p>
-
-            </a>
-
-        </section>
+        <span>
+            Library Management System
+        </span>
 
     </div>
 
-</body>
-</html>
 
+    <!-- Navigation Buttons -->
+
+    <div class="nav-buttons">
+
+        <!-- Profile -->
+
+        <a href="{{ url_for('profile') }}"
+           class="nav-btn profile-btn">
+
+            <i class="fa-solid fa-user"></i>
+
+            Profile
+
+        </a>
+
+
+        <!-- Change Password -->
+
+        <a href="{{ url_for('change_password') }}"
+           class="nav-btn password-btn">
+
+            <i class="fa-solid fa-key"></i>
+
+            Change Password
+
+        </a>
+
+
+        <!-- Logout -->
+
+        <a href="{{ url_for('logout') }}"
+           class="nav-btn logout-btn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<div class="container">
+
+
+    <!-- =================================================
+         WELCOME SECTION
+    ================================================== -->
+
+    <section class="welcome-card">
+
+        <h1>
+
+            Welcome,
+            <span>
+                {{ session.get('username', session.get('name', 'User')) }}
+            </span>
+
+            👋
+
+        </h1>
+
+
+        <p>
+
+            Manage your library activities quickly and
+            efficiently from one place.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================================
+         DASHBOARD CARDS
+    ================================================== -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- =================================================
+             SEARCH BOOKS
+        ================================================== -->
+
+        <a href="{{ url_for('search_books') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+            </div>
+
+
+            <h3>
+
+                Search Books
+
+            </h3>
+
+
+            <p>
+
+                Search books by title,
+                author, ISBN or category.
+
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             VIEW BOOKS
+        ================================================== -->
+
+        <a href="{{ url_for('view_books') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-book"></i>
+
+            </div>
+
+
+            <h3>
+
+                View Books
+
+            </h3>
+
+
+            <p>
+
+                View complete information
+                about available books.
+
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             BORROW BOOKS
+        ================================================== -->
+
+        <a href="{{ url_for('borrow_books') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-book-open"></i>
+
+            </div>
+
+
+            <h3>
+
+                Borrow Books
+
+            </h3>
+
+
+            <p>
+
+                Borrow available books
+                from the library.
+
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             RETURN BOOKS
+        ================================================== -->
+
+        <a href="{{ url_for('return_books') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-right-left"></i>
+
+            </div>
+
+
+            <h3>
+
+                Return Books
+
+            </h3>
+
+
+            <p>
+
+                Return borrowed books
+                with a single click.
+
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             RENEW BOOKS
+        ================================================== -->
+
+        <a href="{{ url_for('renew_books') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-rotate-right"></i>
+
+            </div>
+
+
+            <h3>
+
+                Renew Books
+
+            </h3>
+
+
+            <p>
+
+                Extend your borrowing
+                period easily.
+
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             RESERVE BOOKS
+        ================================================== -->
+
+        <a href="{{ url_for('reserve_books') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-bookmark"></i>
+
+            </div>
+
+
+            <h3>
+
+                Reserve Books
+
+            </h3>
+
+
+            <p>
+
+                Reserve unavailable books
+                and manage your reservations.
+
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             BORROW HISTORY
+        ================================================== -->
+
+        <a href="{{ url_for('borrow_history') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+            </div>
+
+
+            <h3>
+
+                Borrow History
+
+            </h3>
+
+
+            <p>
+
+                View your previous
+                borrowing records.
+
+            </p>
+
+        </a>
+
+
+    </section>
+
+</div>
+
+
+</body>
+
+</html>

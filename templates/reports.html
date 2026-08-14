@@ -1,11 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-<title>Reports</title>
+    <meta charset="UTF-8">
 
-<link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reports | Library Management System</title>
+
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
 
 </head>
 
@@ -13,53 +35,328 @@
 <body>
 
 
-<div class="form-card">
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
 
 
-<h2>📊 Library Reports</h2>
+    <!-- LEFT -->
+
+    <div class="logo-section">
 
 
-<div class="report-box">
+        <div class="logo-circle">
 
-<h3>Total Books</h3>
-<p>500</p>
+            <i class="fa-solid fa-book-open"></i>
 
-</div>
-
-
-<div class="report-box">
-
-<h3>Total Members</h3>
-<p>250</p>
-
-</div>
+        </div>
 
 
+        <div>
 
-<div class="report-box">
-
-<h3>Issued Books</h3>
-<p>120</p>
-
-</div>
+            <h2>
+                Library Management System
+            </h2>
 
 
+            <p>
 
-<div class="report-box">
+                {% if session.get('role') == 'admin' %}
 
-<h3>Total Fine</h3>
-<p>₹2500</p>
+                    Admin Portal
 
-</div>
+                {% elif session.get('role') == 'librarian' %}
+
+                    Librarian Portal
+
+                {% else %}
+
+                    User Portal
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+    </div>
 
 
 
-<a href="{{url_for('dashboard')}}">
-Back
-</a>
+    <!-- RIGHT -->
+
+    <div class="navbar-right">
 
 
-</div>
+        <!-- DASHBOARD -->
+
+        <a href="{{ url_for('back_to_dashboard') }}"
+           class="profile-btn">
+
+            <i class="fa-solid fa-house"></i>
+
+            Dashboard
+
+        </a>
+
+
+
+        <!-- PROFILE -->
+
+        <a href="{{ url_for('profile') }}"
+           class="profile-btn">
+
+            <i class="fa-solid fa-user"></i>
+
+            Profile
+
+        </a>
+
+
+
+        <!-- LOGOUT -->
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-btn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </a>
+
+
+    </div>
+
+
+</header>
+
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<main class="dashboard-container">
+
+
+    <!-- WELCOME -->
+
+    <section class="welcome-box">
+
+
+        <h1>
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            Library Reports
+
+        </h1>
+
+
+        <p>
+
+            View important statistics and reports
+            of the library system.
+
+        </p>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         REPORT CARDS
+    ================================================== -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- TOTAL BOOKS -->
+
+        <div class="dashboard-card">
+
+
+            <div class="card-icon">
+
+                <i class="fa-solid fa-book"></i>
+
+            </div>
+
+
+            <div class="card-content">
+
+                <h3>
+                    Total Books
+                </h3>
+
+
+                <p class="report-number">
+                    500
+                </p>
+
+
+                <p>
+                    Total books available in the library.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- TOTAL MEMBERS -->
+
+        <div class="dashboard-card">
+
+
+            <div class="card-icon">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
+
+            <div class="card-content">
+
+                <h3>
+                    Total Members
+                </h3>
+
+
+                <p class="report-number">
+                    250
+                </p>
+
+
+                <p>
+                    Registered library members.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ISSUED BOOKS -->
+
+        <div class="dashboard-card">
+
+
+            <div class="card-icon">
+
+                <i class="fa-solid fa-book-open"></i>
+
+            </div>
+
+
+            <div class="card-content">
+
+                <h3>
+                    Issued Books
+                </h3>
+
+
+                <p class="report-number">
+                    120
+                </p>
+
+
+                <p>
+                    Books currently issued to members.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- TOTAL FINE -->
+
+        <div class="dashboard-card">
+
+
+            <div class="card-icon">
+
+                <i class="fa-solid fa-money-bill-wave"></i>
+
+            </div>
+
+
+            <div class="card-content">
+
+                <h3>
+                    Total Fine
+                </h3>
+
+
+                <p class="report-number">
+                    ₹2500
+                </p>
+
+
+                <p>
+                    Total outstanding library fines.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         BACK BUTTON
+    ================================================== -->
+
+    <div class="bottom-actions">
+
+
+        <a href="{{ url_for('back_to_dashboard') }}"
+           class="back-dashboard-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Back to Dashboard
+
+        </a>
+
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="dashboard-footer">
+
+    <p>
+
+        © 2026 Library Management System |
+        Reports
+
+    </p>
+
+</footer>
 
 
 </body>

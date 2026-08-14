@@ -5,78 +5,80 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Librarian Dashboard | Library Management System</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
 
+    <!-- Font Awesome -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <!-- Main CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
 
-<header class="navbar">
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-    <div class="logo-section">
+<nav class="navbar">
 
-        <div class="logo-circle">
+    <!-- LOGO -->
 
-            <i class="fa-solid fa-book-open"></i>
+    <div class="nav-logo">
 
-        </div>
+        <i class="fa-solid fa-book-open-reader"></i>
 
-        <div>
-
-            <h2>Library Management System</h2>
-
-            <p>Librarian Portal</p>
-
-        </div>
+        <span>
+            Library Management System
+        </span>
 
     </div>
 
-    <div class="navbar-right">
 
-        <div class="profile-dropdown">
+    <!-- NAVIGATION BUTTONS -->
 
-            <button class="profile-btn">
+    <div class="nav-buttons">
 
-                <i class="fa-solid fa-user"></i>
+        <!-- Profile -->
 
-                Profile
+        <a href="{{ url_for('profile') }}"
+           class="nav-btn profile-btn">
 
-                <i class="fa-solid fa-angle-down"></i>
+            <i class="fa-solid fa-user"></i>
 
-            </button>
+            Profile
 
-            <div class="dropdown-content">
+        </a>
 
-                <a href="{{ url_for('profile') }}">
-                    <i class="fa-solid fa-user"></i>
-                    My Profile
-                </a>
 
-                <a href="{{ url_for('profile') }}">
-                    <i class="fa-solid fa-user-pen"></i>
-                    Edit Profile
-                </a>
+        <!-- Change Password -->
 
-                <a href="{{ url_for('change_password') }}">
-                    <i class="fa-solid fa-key"></i>
-                    Change Password
-                </a>
+        <a href="{{ url_for('change_password') }}"
+           class="nav-btn password-btn">
 
-            </div>
+            <i class="fa-solid fa-key"></i>
 
-        </div>
+            Change Password
 
-        <a href="{{ url_for('logout') }}" class="logout-btn">
+        </a>
+
+
+        <!-- Logout -->
+
+        <a href="{{ url_for('logout') }}"
+           class="nav-btn logout-btn">
 
             <i class="fa-solid fa-right-from-bracket"></i>
 
@@ -86,181 +88,408 @@
 
     </div>
 
-</header>
+</nav>
 
-<!-- ================= WELCOME ================= -->
 
-<section class="welcome-box">
 
-    <div class="welcome-text">
+<!-- =====================================================
+     MAIN CONTAINER
+===================================================== -->
 
-        <h1>Welcome, {{ name if name else "Librarian" }} 👋</h1>
+<div class="container">
+
+
+    <!-- =================================================
+         WELCOME SECTION
+    ================================================== -->
+
+    <section class="welcome-card">
+
+        <h1>
+
+            Welcome,
+
+            <span>
+                {{ session.get('name', 'Librarian') }}
+            </span>
+
+            👋
+
+        </h1>
+
 
         <p>
 
-            Manage books, members, borrowing records and all daily library
-            operations from one place.
+            Manage library operations quickly and efficiently
+            from one place.
 
         </p>
 
-    </div>
+    </section>
 
-</section>
 
-<!-- ================= DASHBOARD ================= -->
 
-<div class="dashboard-grid">
-<!-- ================= ROW 1 ================= -->
+    <!-- =================================================
+         DASHBOARD GRID
+    ================================================== -->
 
-<a href="{{ url_for('book_management') }}" class="dashboard-card">
+    <section class="dashboard-grid">
 
-    <i class="fa-solid fa-book"></i>
 
-    <h3>Book Management</h3>
+        <!-- =================================================
+             SEARCH BOOKS
+        ================================================== -->
 
-    <p>Add, Edit, Delete and Search Books</p>
+        <a href="{{ url_for('search_books') }}"
+           class="card">
 
-</a>
+            <div class="icon">
 
+                <i class="fa-solid fa-magnifying-glass"></i>
 
-<a href="{{ url_for('member_management') }}" class="dashboard-card">
+            </div>
 
-    <i class="fa-solid fa-users"></i>
 
-    <h3>Member Management</h3>
+            <h3>
+                Search Books
+            </h3>
 
-    <p>Manage Library Members</p>
 
-</a>
+            <p>
+                Search books by title, author, ISBN or category.
+            </p>
 
+        </a>
 
-<a href="{{ url_for('issue_books') }}" class="dashboard-card">
 
-    <i class="fa-solid fa-book-open-reader"></i>
 
-    <h3>Issue Books</h3>
+        <!-- =================================================
+             VIEW BOOKS
+        ================================================== -->
 
-    <p>Issue Books to Members</p>
+        <a href="{{ url_for('view_books') }}"
+           class="card">
 
-</a>
+            <div class="icon">
 
+                <i class="fa-solid fa-book"></i>
 
-<a href="{{ url_for('librarian_return_books') }}" class="dashboard-card">
+            </div>
 
-    <i class="fa-solid fa-arrow-rotate-left"></i>
 
-    <h3>Return Books</h3>
+            <h3>
+                View Books
+            </h3>
 
-    <p>Accept Returned Books</p>
 
-</a>
+            <p>
+                View complete information about library books.
+            </p>
 
+        </a>
 
-<!-- ================= ROW 2 ================= -->
 
-<a href="{{ url_for('librarian_renew_books') }}" class="dashboard-card">
 
-    <i class="fa-solid fa-repeat"></i>
+        <!-- =================================================
+             BOOK MANAGEMENT
+        ================================================== -->
 
-    <h3>Renew Books</h3>
+        <a href="{{ url_for('book_management') }}"
+           class="card">
 
-    <p>Extend Borrow Duration</p>
+            <div class="icon">
 
-</a>
+                <i class="fa-solid fa-book-open"></i>
 
+            </div>
 
-<a href="{{ url_for('waitlist_management') }}" class="dashboard-card">
 
-    <i class="fa-solid fa-clock"></i>
+            <h3>
+                Book Management
+            </h3>
 
-    <h3>Waitlist</h3>
 
-    <p>Manage Waiting Members</p>
+            <p>
+                Manage and maintain library book information.
+            </p>
 
-</a>
+        </a>
 
 
-<a href="{{ url_for('fine_management') }}" class="dashboard-card">
 
-    <i class="fa-solid fa-money-bill-wave"></i>
+        <!-- =================================================
+             USER MANAGEMENT
+        ================================================== -->
 
-    <h3>Fine Management</h3>
+        <a href="{{ url_for('user_management') }}"
+           class="card">
 
-    <p>Collect & Update Fines</p>
+            <div class="icon">
 
-</a>
+                <i class="fa-solid fa-users"></i>
 
+            </div>
 
-<a href="{{ url_for('book_availability') }}" class="dashboard-card">
 
-    <i class="fa-solid fa-book-open"></i>
+            <h3>
+                User Management
+            </h3>
 
-    <h3>Book Availability</h3>
 
-    <p>View Available Books</p>
+            <p>
+                View, edit and manage registered users and librarians.
+            </p>
 
-</a>
+        </a>
 
 
-<!-- ================= ROW 3 ================= -->
 
-<a href="{{ url_for('borrow_records') }}" class="dashboard-card">
+        <!-- =================================================
+             ISSUE BOOKS
+        ================================================== -->
 
-    <i class="fa-solid fa-file-lines"></i>
+        <a href="{{ url_for('issue_books') }}"
+           class="card">
 
-    <h3>Borrow Records</h3>
+            <div class="icon">
 
-    <p>View Complete Borrow History</p>
+                <i class="fa-solid fa-book-open-reader"></i>
 
-</a>
+            </div>
 
 
-<a href="{{ url_for('reports') }}" class="dashboard-card">
+            <h3>
+                Issue Books
+            </h3>
 
-    <i class="fa-solid fa-chart-column"></i>
 
-    <h3>Reports</h3>
+            <p>
+                Issue books to registered library users.
+            </p>
 
-    <p>Library Statistics & Reports</p>
+        </a>
 
-</a>
 
 
-<a href="{{ url_for('categories') }}" class="dashboard-card">
+        <!-- =================================================
+             RETURN BOOKS
+        ================================================== -->
 
-    <i class="fa-solid fa-layer-group"></i>
+        <a href="{{ url_for('librarian_return_books') }}"
+           class="card">
 
-    <h3>Categories</h3>
+            <div class="icon">
 
-    <p>Manage Book Categories</p>
+                <i class="fa-solid fa-right-left"></i>
 
-</a>
+            </div>
 
 
-<a href="{{ url_for('book_management') }}" class="dashboard-card">
+            <h3>
+                Return Books
+            </h3>
 
-    <i class="fa-solid fa-circle-plus"></i>
 
-    <h3>Add New Book</h3>
+            <p>
+                Manage returned books and update records.
+            </p>
 
-    <p>Quickly Add a New Book</p>
+        </a>
 
-</a>
+
+
+        <!-- =================================================
+             RENEW BOOKS
+        ================================================== -->
+
+        <a href="{{ url_for('librarian_renew_books') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-rotate-right"></i>
+
+            </div>
+
+
+            <h3>
+                Renew Books
+            </h3>
+
+
+            <p>
+                Extend the borrowing period of issued books.
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             WAITLIST MANAGEMENT
+        ================================================== -->
+
+        <a href="{{ url_for('waitlist_management') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-list"></i>
+
+            </div>
+
+
+            <h3>
+                Waitlist Management
+            </h3>
+
+
+            <p>
+                Manage users waiting for unavailable books.
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             FINE MANAGEMENT
+        ================================================== -->
+
+        <a href="{{ url_for('fine_management') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-money-bill-wave"></i>
+
+            </div>
+
+
+            <h3>
+                Fine Management
+            </h3>
+
+
+            <p>
+                Manage fines and overdue book records.
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             BOOK AVAILABILITY
+        ================================================== -->
+
+        <a href="{{ url_for('book_availability') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+            </div>
+
+
+            <h3>
+                Book Availability
+            </h3>
+
+
+            <p>
+                Check the current availability of library books.
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             BORROW RECORDS
+        ================================================== -->
+
+        <a href="{{ url_for('borrow_records') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+            </div>
+
+
+            <h3>
+                Borrow Records
+            </h3>
+
+
+            <p>
+                View and manage book borrowing records.
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             REPORTS
+        ================================================== -->
+
+        <a href="{{ url_for('reports') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+            </div>
+
+
+            <h3>
+                Reports
+            </h3>
+
+
+            <p>
+                View library activity and management reports.
+            </p>
+
+        </a>
+
+
+
+        <!-- =================================================
+             CATEGORIES
+        ================================================== -->
+
+        <a href="{{ url_for('categories') }}"
+           class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+            </div>
+
+
+            <h3>
+                Categories
+            </h3>
+
+
+            <p>
+                Manage and organize book categories.
+            </p>
+
+        </a>
+
+
+    </section>
 
 </div>
 
-
-<!-- ================= FOOTER ================= -->
-
-<footer class="dashboard-footer">
-
-    <p>
-
-        © 2026 Library Management System | Librarian Portal
-
-    </p>
-
-</footer>
 
 </body>
 

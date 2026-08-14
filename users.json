@@ -1,62 +1,20 @@
 [
     {
         "name": "Roshni Nayak",
-        "email": "abc@gmail.com",
-        "password": "$2b$12$zsebcrvyLxH754WIstG9eeojsFYSv7aUK84pJM23WSQDUczLl53cq",
-        "role": "librarian"
+        "email": "roshni@gmail.com",
+        "password": "$2b$12$nWU1jW03jBhHbK7y.FP96eFKN7e7tun37GO41VSHt83n6iGrCawDq",
+        "role": "admin"
     },
     {
-        "name": "qqq",
-        "email": "qqq@gmail.com",
-        "password": "$2b$12$QlwvqPTkLH5bdPPEWz3RYOKKoNShtdGtt4r8Oi5l8cY0/CLIWiQO2",
-        "role": "librarian"
-    },
-    {
-        "name": "abc",
-        "email": "abcd@gmail.com",
-        "password": "$2b$12$zH3s6e3ds.WYRxIqJ5GeS.QGwKOV7347vm0o0mXQOk6AcODRe9WAy",
-        "role": "user"
-    },
-    {
-        "name": "Arun Kamat",
-        "email": "arun@gmail.com",
-        "password": "$2b$12$pqUseYsGCsORuwRviLSyuOMjsk2cmW0MStTk4JuP5BsLgaq9Ka0lS",
-        "role": "librarian"
-    },
-    {
-        "name": "manya",
-        "email": "manya@gmail.com",
-        "password": "$2b$12$yeNyJWoDLtGW.fqEVI.y/eKlKmMs1lRj4137mEM3U5bK6mZrK4aka",
-        "role": "librarian"
-    },
-    {
-        "name": "Sheela nayak",
-        "email": "hello@gmail.com",
-        "password": "$2b$12$1wHHlQmYBIPkRtli41h4ROtaL7hEiXszrY5Nm8Plu4ccWBhDZVfl6",
-        "role": "librarian"
-    },
-    {
-        "name": "www",
-        "email": "www@gmail.com",
-        "password": "$2b$12$DNhMxDCJkN2Iq9yXS/ELpOJyd7Laa1smEH3NBfiOzyO20KxStcrfK",
-        "role": "librarian"
-    },
-    {
-        "name": "Roshni Nayak",
-        "email": "mmm@gmail.com",
-        "password": "$2b$12$DspZoaz1zQ8dhlQJLlxwBuZxBigkLFJIX70J2kL32qPvbKViTl0ui",
+        "name": "princia",
+        "email": "princia@gmail.com",
+        "password": "$2b$12$xnQNPilFZc.Xru9AcE2u6OXOTFCnqpO8SMwBZnDws54L51wnreYjC",
         "role": "librarian"
     },
     {
         "name": "Roshni Nayak",
         "email": "nnm24is189@nmamit.in",
-        "password": "$2b$12$YHrl6KNrG1sHKtxs4wKkLeSffc9R1V8Yss.beW3EkUZlf39.RMEue",
-        "role": "user"
-    },
-    {
-        "name": "Sheela nayak",
-        "email": "1@gmail.com",
-        "password": "$2b$12$h8bbc6.9.oENXNoD1SEDtuhJUu/zvGRogCcBXB1Bet9sRhQpPC7tK",
-        "role": "user"
+        "password": "$2b$12$ZjcujPa1NFOC4cQI6lTVwOx1CT7CzdrFeEHQfcnsLslPpknwtWk6q",
+        "role": "admin"
     }
 ]

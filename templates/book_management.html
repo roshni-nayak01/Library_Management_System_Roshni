@@ -5,7 +5,8 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Book Management | Library Management System</title>
 
@@ -17,13 +18,14 @@
 
 </head>
 
+
 <body>
 
-<!-- ===========================
-        NAVBAR
-=========================== -->
+
+<!-- ================= NAVBAR ================= -->
 
 <header class="navbar">
+
 
     <div class="logo-section">
 
@@ -33,19 +35,28 @@
 
         </div>
 
+
         <div>
 
             <h2>Library Management System</h2>
 
-            <p>Librarian Portal</p>
-
+<p>
+    {% if session.get('role') == 'admin' %}
+        Admin Portal
+    {% elif session.get('role') == 'librarian' %}
+        Librarian Portal
+    {% endif %}
+</p>
         </div>
 
     </div>
 
+
     <div class="navbar-right">
 
-        <a href="{{ url_for('librarian_dashboard') }}" class="profile-btn">
+
+       <a href="{{ url_for('back_to_dashboard') }}"
+          class="profile-btn">
 
             <i class="fa-solid fa-house"></i>
 
@@ -53,7 +64,9 @@
 
         </a>
 
-        <a href="{{ url_for('profile') }}" class="profile-btn">
+
+        <a href="{{ url_for('profile') }}"
+           class="profile-btn">
 
             <i class="fa-solid fa-user"></i>
 
@@ -61,7 +74,9 @@
 
         </a>
 
-        <a href="{{ url_for('logout') }}" class="logout-btn">
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-btn">
 
             <i class="fa-solid fa-right-from-bracket"></i>
 
@@ -73,9 +88,9 @@
 
 </header>
 
-<!-- ===========================
-        PAGE HEADER
-=========================== -->
+
+
+<!-- ================= PAGE HEADER ================= -->
 
 <section class="welcome-box">
 
@@ -87,21 +102,96 @@
 
     </h1>
 
+
     <p>
 
-        Add, Edit, Delete and Manage all books available in the library.
+        Manage books, categories and add new books to the library.
 
     </p>
 
 </section>
 
-<!-- ===========================
-        SEARCH SECTION
-=========================== -->
 
-<div class="table-container">
+
+<!-- ================================================= -->
+<!-- BOOK MANAGEMENT OPTIONS -->
+<!-- ================================================= -->
+
+<div class="book-management-options">
+
+
+    <!-- ================= VIEW BOOKS ================= -->
+
+    <a href="#books"
+       class="management-option">
+
+        <i class="fa-solid fa-book"></i>
+
+        <h3>
+            View / Manage Books
+        </h3>
+
+        <p>
+            Search, edit, delete and manage library books.
+        </p>
+
+    </a>
+
+
+
+    <!-- ================= CATEGORIES ================= -->
+
+    <a href="{{ url_for('categories') }}"
+       class="management-option">
+
+        <i class="fa-solid fa-layer-group"></i>
+
+        <h3>
+            Categories
+        </h3>
+
+        <p>
+            View and manage book categories.
+        </p>
+
+    </a>
+
+
+
+    <!-- ================= ADD NEW BOOK ================= -->
+
+    <a href="#add-book"
+       class="management-option">
+
+        <i class="fa-solid fa-circle-plus"></i>
+
+        <h3>
+            Add New Book
+        </h3>
+
+        <p>
+            Add a new book to the library.
+        </p>
+
+    </a>
+
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- SEARCH AND BOOK MANAGEMENT -->
+<!-- ================================================= -->
+
+<div class="table-container"
+     id="books">
+
 
     <div class="table-top">
+
+
+        <!-- SEARCH -->
 
         <input
 
@@ -113,358 +203,574 @@
 
         >
 
+
+
+        <!-- CATEGORY FILTER -->
+
         <select class="category-filter">
 
-            <option>All Categories</option>
+            <option>
+                All Categories
+            </option>
 
-            <option>Programming</option>
+            <option>
+                Programming
+            </option>
 
-            <option>Database</option>
+            <option>
+                Database
+            </option>
 
-            <option>Artificial Intelligence</option>
+            <option>
+                Artificial Intelligence
+            </option>
 
-            <option>Science</option>
+            <option>
+                Science
+            </option>
 
-            <option>Mathematics</option>
+            <option>
+                Mathematics
+            </option>
 
-            <option>History</option>
+            <option>
+                History
+            </option>
 
-            <option>Novel</option>
+            <option>
+                Novel
+            </option>
 
         </select>
 
-        <a href="#add-member" class="add-book-btn">
 
-<i class="fa-solid fa-user-plus"></i>
 
-Add Member
+        <!-- ADD BOOK BUTTON -->
 
-</a>
+        <a href="#add-book"
+           class="add-book-btn">
+
+            <i class="fa-solid fa-circle-plus"></i>
+
+            Add New Book
+
+        </a>
+
 
     </div>
 
-<!-- ===========================
-        BOOK TABLE
-=========================== -->
 
-<table class="book-table">
 
-<thead>
+    <!-- ================================================= -->
+    <!-- BOOK TABLE -->
+    <!-- ================================================= -->
 
-<tr>
+    <table class="book-table">
 
-<th>Book ID</th>
 
-<th>Book Name</th>
+        <thead>
 
-<th>Author</th>
+        <tr>
 
-<th>Category</th>
+            <th>
+                Book ID
+            </th>
 
-<th>Copies</th>
+            <th>
+                Book Name
+            </th>
 
-<th>Status</th>
+            <th>
+                Author
+            </th>
 
-<th>Actions</th>
+            <th>
+                Category
+            </th>
 
-</tr>
+            <th>
+                Copies
+            </th>
 
-</thead>
+            <th>
+                Status
+            </th>
 
-<tbody>
+            <th>
+                Actions
+            </th>
 
-<tr>
+        </tr>
 
-<td>B001</td>
+        </thead>
 
-<td>Python Programming</td>
 
-<td>Mark Lutz</td>
 
-<td>Programming</td>
+        <tbody>
 
-<td>12</td>
 
-<td>
+        <!-- ================= BOOK 1 ================= -->
 
-<span class="available">
+        <tr>
 
-Available
+            <td>
+                B001
+            </td>
 
-</span>
+            <td>
+                Python Programming
+            </td>
 
-</td>
+            <td>
+                Mark Lutz
+            </td>
 
-<td>
+            <td>
+                Programming
+            </td>
 
-<button class="view-btn">
+            <td>
+                12
+            </td>
 
-<i class="fa-solid fa-eye"></i>
+            <td>
 
-</button>
+                <span class="available">
 
-<button class="edit-btn">
+                    Available
 
-<i class="fa-solid fa-pen"></i>
+                </span>
 
-</button>
+            </td>
 
-<button class="delete-btn">
+            <td>
 
-<i class="fa-solid fa-trash"></i>
+                <button class="view-btn">
 
-</button>
+                    <i class="fa-solid fa-eye"></i>
 
-</td>
+                </button>
 
-</tr>
 
-<tr>
+                <button class="edit-btn">
 
-<td>B002</td>
+                    <i class="fa-solid fa-pen"></i>
 
-<td>Database Systems</td>
+                </button>
 
-<td>Elmasri</td>
 
-<td>Database</td>
+                <button class="delete-btn">
 
-<td>5</td>
+                    <i class="fa-solid fa-trash"></i>
 
-<td>
+                </button>
 
-<span class="issued">
+            </td>
 
-Issued
+        </tr>
 
-</span>
 
-</td>
 
-<td>
+        <!-- ================= BOOK 2 ================= -->
 
-<button class="view-btn">
+        <tr>
 
-<i class="fa-solid fa-eye"></i>
+            <td>
+                B002
+            </td>
 
-</button>
+            <td>
+                Database Systems
+            </td>
 
-<button class="edit-btn">
+            <td>
+                Elmasri
+            </td>
 
-<i class="fa-solid fa-pen"></i>
+            <td>
+                Database
+            </td>
 
-</button>
+            <td>
+                5
+            </td>
 
-<button class="delete-btn">
+            <td>
 
-<i class="fa-solid fa-trash"></i>
+                <span class="issued">
 
-</button>
+                    Issued
 
-</td>
+                </span>
 
-</tr>
-<tr>
+            </td>
 
-<td>B003</td>
+            <td>
 
-<td>Artificial Intelligence</td>
+                <button class="view-btn">
 
-<td>Stuart Russell</td>
+                    <i class="fa-solid fa-eye"></i>
 
-<td>AI</td>
+                </button>
 
-<td>8</td>
 
-<td>
+                <button class="edit-btn">
 
-<span class="available">
+                    <i class="fa-solid fa-pen"></i>
 
-Available
+                </button>
 
-</span>
 
-</td>
+                <button class="delete-btn">
 
-<td>
+                    <i class="fa-solid fa-trash"></i>
 
-<button class="view-btn">
+                </button>
 
-<i class="fa-solid fa-eye"></i>
+            </td>
 
-</button>
+        </tr>
 
-<button class="edit-btn">
 
-<i class="fa-solid fa-pen"></i>
 
-</button>
+        <!-- ================= BOOK 3 ================= -->
 
-<button class="delete-btn">
+        <tr>
 
-<i class="fa-solid fa-trash"></i>
+            <td>
+                B003
+            </td>
 
-</button>
+            <td>
+                Artificial Intelligence
+            </td>
 
-</td>
+            <td>
+                Stuart Russell
+            </td>
 
-</tr>
+            <td>
+                AI
+            </td>
 
+            <td>
+                8
+            </td>
 
-<tr>
+            <td>
 
-<td>B004</td>
+                <span class="available">
 
-<td>Operating Systems</td>
+                    Available
 
-<td>Galvin</td>
+                </span>
 
-<td>Computer Science</td>
+            </td>
 
-<td>2</td>
+            <td>
 
-<td>
+                <button class="view-btn">
 
-<span class="issued">
+                    <i class="fa-solid fa-eye"></i>
 
-Issued
+                </button>
 
-</span>
 
-</td>
+                <button class="edit-btn">
 
-<td>
+                    <i class="fa-solid fa-pen"></i>
 
-<button class="view-btn">
+                </button>
 
-<i class="fa-solid fa-eye"></i>
 
-</button>
+                <button class="delete-btn">
 
-<button class="edit-btn">
+                    <i class="fa-solid fa-trash"></i>
 
-<i class="fa-solid fa-pen"></i>
+                </button>
 
-</button>
+            </td>
 
-<button class="delete-btn">
+        </tr>
 
-<i class="fa-solid fa-trash"></i>
 
-</button>
 
-</td>
+        <!-- ================= BOOK 4 ================= -->
 
-</tr>
+        <tr>
 
-</tbody>
+            <td>
+                B004
+            </td>
 
-</table>
+            <td>
+                Operating Systems
+            </td>
+
+            <td>
+                Galvin
+            </td>
+
+            <td>
+                Computer Science
+            </td>
+
+            <td>
+                2
+            </td>
+
+            <td>
+
+                <span class="issued">
+
+                    Issued
+
+                </span>
+
+            </td>
+
+            <td>
+
+                <button class="view-btn">
+
+                    <i class="fa-solid fa-eye"></i>
+
+                </button>
+
+
+                <button class="edit-btn">
+
+                    <i class="fa-solid fa-pen"></i>
+
+                </button>
+
+
+                <button class="delete-btn">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            </td>
+
+        </tr>
+
+
+        </tbody>
+
+    </table>
+
 
 </div>
 
 
-<!-- ===========================
-        ADD BOOK FORM
-=========================== -->
 
-<section class="book-form">
+<!-- ================================================= -->
+<!-- ADD NEW BOOK FORM -->
+<!-- ================================================= -->
 
-<h2>
+<section class="book-form"
+         id="add-book">
 
-<i class="fa-solid fa-circle-plus"></i>
 
-Add New Book
+    <h2>
 
-</h2>
+        <i class="fa-solid fa-circle-plus"></i>
 
-<form>
+        Add New Book
 
-<div class="form-grid">
+    </h2>
 
-<input
-type="text"
-placeholder="Book ID"
-required>
 
-<input
-type="text"
-placeholder="Book Name"
-required>
 
-<input
-type="text"
-placeholder="Author"
-required>
+    <form>
 
-<input
-type="text"
-placeholder="Publisher">
 
-<input
-type="text"
-placeholder="ISBN">
+        <div class="form-grid">
 
-<select required>
 
-<option>Select Category</option>
+            <!-- BOOK ID -->
 
-<option>Programming</option>
+            <input
 
-<option>Database</option>
+                type="text"
 
-<option>AI</option>
+                placeholder="Book ID"
 
-<option>Science</option>
+                required
 
-<option>Mathematics</option>
+            >
 
-<option>History</option>
 
-<option>Novel</option>
 
-</select>
+            <!-- BOOK NAME -->
 
-<input
-type="number"
-placeholder="Number of Copies">
+            <input
 
-</div>
+                type="text"
 
-<div class="form-buttons">
+                placeholder="Book Name"
 
-<button type="submit" class="save-btn">
+                required
 
-<i class="fa-solid fa-floppy-disk"></i>
+            >
 
-Save Book
 
-</button>
 
-<button type="reset" class="cancel-btn">
+            <!-- AUTHOR -->
 
-<i class="fa-solid fa-rotate-left"></i>
+            <input
 
-Reset
+                type="text"
 
-</button>
+                placeholder="Author"
 
-</div>
+                required
 
-</form>
+            >
+
+
+
+            <!-- PUBLISHER -->
+
+            <input
+
+                type="text"
+
+                placeholder="Publisher"
+
+            >
+
+
+
+            <!-- ISBN -->
+
+            <input
+
+                type="text"
+
+                placeholder="ISBN"
+
+            >
+
+
+
+            <!-- CATEGORY -->
+
+            <select required>
+
+                <option value="">
+                    Select Category
+                </option>
+
+                <option>
+                    Programming
+                </option>
+
+                <option>
+                    Database
+                </option>
+
+                <option>
+                    Artificial Intelligence
+                </option>
+
+                <option>
+                    Science
+                </option>
+
+                <option>
+                    Mathematics
+                </option>
+
+                <option>
+                    History
+                </option>
+
+                <option>
+                    Novel
+                </option>
+
+            </select>
+
+
+
+            <!-- COPIES -->
+
+            <input
+
+                type="number"
+
+                placeholder="Number of Copies"
+
+                min="1"
+
+            >
+
+
+        </div>
+
+
+
+        <!-- FORM BUTTONS -->
+
+        <div class="form-buttons">
+
+
+            <button
+
+                type="submit"
+
+                class="save-btn"
+
+            >
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Save Book
+
+            </button>
+
+
+
+            <button
+
+                type="reset"
+
+                class="cancel-btn"
+
+            >
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                Reset
+
+            </button>
+
+
+        </div>
+
+
+    </form>
+
 
 </section>
 
 
+
+<!-- ================= FOOTER ================= -->
+
 <footer class="dashboard-footer">
 
-<p>
+    <p>
 
-© 2026 Library Management System | Book Management
+        © 2026 Library Management System | Book Management
 
-</p>
+    </p>
 
 </footer>
+
+
 
 </body>
 

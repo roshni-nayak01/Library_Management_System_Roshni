@@ -3222,3 +3222,59 @@ overflow-x:auto;
 }
 
 }
+/* ================================
+   BOOK MANAGEMENT OPTIONS
+================================ */
+
+.book-management-options {
+    width: 90%;
+    max-width: 1200px;
+    margin: 25px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.management-option {
+    text-decoration: none;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: 0.3s ease;
+    color: #222;
+}
+
+.management-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.management-option i {
+    font-size: 35px;
+    margin-bottom: 12px;
+}
+
+.management-option h3 {
+    margin: 8px 0;
+    font-size: 20px;
+}
+
+.management-option p {
+    margin: 0;
+    font-size: 14px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 768px) {
+
+    .book-management-options {
+        grid-template-columns: 1fr;
+    }
+
+}

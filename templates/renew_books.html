@@ -1,89 +1,145 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Renew Books | Library Management System</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <title>Renew Books</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .renew-container {
+            min-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .renew-card {
+            width: 100%;
+            max-width: 850px;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .renew-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .renew-header .icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 28px;
+        }
+
+        .renew-header h1 {
+            margin: 0;
+            font-size: 30px;
+            color: #222;
+        }
+
+        .renew-header p {
+            color: #777;
+            margin-top: 8px;
+        }
+
+        .renew-message {
+            padding: 20px;
+            border-radius: 12px;
+            background: #f5f7ff;
+            color: #555;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.3);
+        }
+
+        .button-area {
+            text-align: center;
+            margin-top: 25px;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="page-container">
+    <div class="renew-container">
 
-    <div class="book-card">
+        <div class="renew-card">
 
-        <div class="icon">
+            <div class="renew-header">
 
-            <i class="fa-solid fa-rotate-right"></i>
+                <div class="icon">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </div>
 
-        </div>
+                <h1>Renew Books</h1>
 
-        <h2>Renew Books</h2>
-
-        <p class="subtitle">
-
-            Enter the Book ID to renew your borrowed book.
-
-        </p>
-
-        <form action="" method="POST">
-
-            <div class="input-group">
-
-                <label>
-
-                    <i class="fa-solid fa-book"></i>
-
-                    Book ID
-
-                </label>
-
-                <input
-                    type="text"
-                    name="book_id"
-                    placeholder="Enter Book ID"
-                    required>
+                <p>
+                    Renew your borrowed books and extend the return period.
+                </p>
 
             </div>
 
-            <button type="submit">
+            <div class="renew-message">
+                <i class="fa-solid fa-book"></i>
 
-                <i class="fa-solid fa-arrows-rotate"></i>
+                <p>
+                    Your borrowed books will appear here for renewal.
+                </p>
+            </div>
 
-                Renew Book
+            <div class="button-area">
 
-            </button>
+                <!-- IMPORTANT:
+                     This goes back to the correct dashboard
+                     according to the logged-in user's role.
+                -->
+                <a href="{{ dashboard_url }}" class="back-btn">
 
-        </form>
+                    <i class="fa-solid fa-arrow-left"></i>
 
-        <hr>
+                    Back to Dashboard
 
-        <a class="back-home"
-            href="{{ url_for('librarian_dashboard') }}">
-            <i class="fa-solid fa-arrow-left"></i>
+                </a>
 
-            Back to Dashboard
+            </div>
 
-        </a>
+        </div>
 
     </div>
 
-</div>
-
 </body>
-
 </html>
-
