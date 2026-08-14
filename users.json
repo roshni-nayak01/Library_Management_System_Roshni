@@ -16,5 +16,17 @@
         "email": "nnm24is189@nmamit.in",
         "password": "$2b$12$ZjcujPa1NFOC4cQI6lTVwOx1CT7CzdrFeEHQfcnsLslPpknwtWk6q",
         "role": "admin"
+    },
+    {
+        "name": "abc",
+        "email": "abc@gmail.com",
+        "password": "$2b$12$CJl/9cLG6sXEaUIi0BUKk.Z3zboRlH2ACzgWYgie.uakBdnzKrirG",
+        "role": "admin"
+    },
+    {
+        "name": "Roshni",
+        "email": "aaaa@gmail.com",
+        "password": "$2b$12$BGwi7phddErQIjn98b6tY.2MoKPGndq.1Vx3PfuyoFU1WGddRSSZu",
+        "role": "user"
     }
 ]

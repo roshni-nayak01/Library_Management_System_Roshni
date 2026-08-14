@@ -2360,20 +2360,24 @@ body{
     font-size:18px;
 
 }
-
 .role-grid{
 
     width:90%;
 
     max-width:1200px;
 
+    margin:0 auto;
+
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3, 1fr);
 
     gap:35px;
 
+    justify-content:center;
+
 }
+
 
 .role-card{
 
@@ -2389,7 +2393,7 @@ body{
 
     text-decoration:none;
 
-    color:white;
+    color:rgb(189, 113, 113);
 
     transition:.35s;
 
@@ -3286,7 +3290,7 @@ body{
     background:linear-gradient(
         135deg,
         #3b6fe8 0%,
-        #2563eb 45%,
+        #2f65da 45%,
         #1d4ed8 100%
     ) !important;
     background-attachment:fixed;

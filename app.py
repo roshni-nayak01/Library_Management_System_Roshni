@@ -82,14 +82,22 @@ def generate_otp():
 def home():
     return render_template("home.html")
 
-
 # =========================================================
 # DASHBOARD SELECTION
 # =========================================================
 
 @app.route("/dashboard-selection")
 def dashboard_selection():
-    return render_template("dashboard_selection.html")
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    user_role = session.get("role", "user").lower()
+
+    return render_template(
+        "dashboard_selection.html",
+        user_role=user_role
+    )
 
 
 # =========================================================
@@ -104,9 +112,64 @@ def select_role(role):
     if role not in allowed_roles:
         return redirect(url_for("dashboard_selection"))
 
-    session["selected_role"] = role
+    # User must already be logged in
+    if "email" not in session:
+        return redirect(url_for("login"))
 
-    return redirect(url_for("login"))
+    user_role = session.get("role", "user").lower()
+
+    # =====================================================
+    # ADMIN
+    # Admin can select Admin, Librarian or User
+    # =====================================================
+
+    if user_role == "admin":
+
+        if role == "admin":
+            return redirect(url_for("admin_dashboard"))
+
+        if role == "librarian":
+            return redirect(url_for("librarian_dashboard"))
+
+        if role == "user":
+            return redirect(url_for("dashboard"))
+
+
+    # =====================================================
+    # LIBRARIAN
+    # Librarian can select Librarian or User
+    # =====================================================
+
+    elif user_role == "librarian":
+
+        if role == "librarian":
+            return redirect(url_for("librarian_dashboard"))
+
+        if role == "user":
+            return redirect(url_for("dashboard"))
+
+
+    # =====================================================
+    # USER
+    # User can select only User
+    # =====================================================
+
+    elif user_role == "user":
+
+        if role == "user":
+            return redirect(url_for("dashboard"))
+
+
+    # =====================================================
+    # UNAUTHORIZED
+    # =====================================================
+
+    flash(
+        "You are not authorized to access this dashboard.",
+        "error"
+    )
+
+    return redirect(url_for("dashboard_selection"))
 
 
 # =========================================================
@@ -130,6 +193,7 @@ def view_books():
 
     return render_template("view_books.html")
 
+
 # =========================================================
 # USER MANAGEMENT
 # =========================================================
@@ -141,7 +205,10 @@ def user_management():
         return redirect(url_for("login"))
 
     if session.get("role") not in ["admin", "librarian"]:
-        flash("You are not authorized to access User Management.", "error")
+        flash(
+            "You are not authorized to access User Management.",
+            "error"
+        )
         return redirect(url_for("back_to_dashboard"))
 
     users = load_users()
@@ -158,7 +225,6 @@ def user_management():
         "user_management.html",
         users=managed_users
     )
-
 
 # =========================================================
 # OLD MEMBER MANAGEMENT URL
@@ -939,7 +1005,6 @@ def register():
 
     return render_template("register.html")
 
-
 # =========================================================
 # LOGIN
 # =========================================================
@@ -974,8 +1039,10 @@ def login():
             flash("Invalid Email or Password", "error")
             return render_template("login.html")
 
-        user_role = user.get("role", "user")
+        user_role = user.get("role", "user").lower()
 
+        # If a role was selected before login,
+        # make sure it matches the actual account role.
         if selected_role is not None and user_role != selected_role:
             flash(
                 "Selected role does not match your account.",
@@ -983,19 +1050,16 @@ def login():
             )
             return render_template("login.html")
 
+        # Store logged-in user information
         session["email"] = user.get("email")
         session["name"] = user.get("name")
         session["role"] = user_role
 
+        # Remove temporary selected role
         session.pop("selected_role", None)
 
-        if user_role == "admin":
-            return redirect(url_for("admin_dashboard"))
-
-        if user_role == "librarian":
-            return redirect(url_for("librarian_dashboard"))
-
-        return redirect(url_for("dashboard"))
+        # Show role-based dashboard selection
+        return redirect(url_for("dashboard_selection"))
 
     return render_template("login.html")
 
