@@ -3278,3 +3278,17 @@ overflow-x:auto;
     }
 
 }
+/* =========================================================
+   ADMIN DASHBOARD BLUE THEME
+========================================================= */
+
+body{
+    background:linear-gradient(
+        135deg,
+        #3b6fe8 0%,
+        #2563eb 45%,
+        #1d4ed8 100%
+    ) !important;
+    background-attachment:fixed;
+    min-height:100vh;
+}
