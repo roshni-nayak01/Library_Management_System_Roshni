@@ -1128,6 +1128,153 @@ body{
     }
 
 }
+/* =================================================
+   ROLE SELECTION PAGE
+   ================================================= */
+
+.role-header {
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 40px;
+}
+
+.role-logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #2563eb;
+    color: white;
+
+    font-size: 36px;
+
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+}
+
+.role-header h1 {
+    margin: 0;
+
+    font-size: 34px;
+    font-weight: 700;
+
+    color: #1e293b;
+}
+
+.role-header p {
+    margin-top: 10px;
+
+    font-size: 16px;
+
+    color: #64748b;
+}
+
+
+/* ROLE CARDS CONTAINER */
+
+.role-grid {
+    width: 90%;
+    max-width: 1100px;
+
+    margin: 0 auto 60px auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 30px;
+
+    justify-content: center;
+}
+
+
+/* ROLE CARD */
+
+.role-card {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    min-height: 230px;
+
+    padding: 30px;
+
+    text-decoration: none;
+
+    background: white;
+
+    border-radius: 18px;
+
+    border: 1px solid #e2e8f0;
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+    color: #1e293b;
+}
+
+
+/* ROLE CARD ICON */
+
+.role-card i {
+    font-size: 45px;
+
+    margin-bottom: 18px;
+
+    color: #2563eb;
+}
+
+
+/* ROLE CARD TITLE */
+
+.role-card h2 {
+    margin: 0 0 10px 0;
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+    color: #1e293b;
+}
+
+
+/* ROLE CARD DESCRIPTION */
+
+.role-card p {
+    margin: 0;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    color: #64748b;
+}
+
+
+/* HOVER EFFECT */
+
+.role-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 18px 35px rgba(0, 0, 0, 0.12);
+}
 
 @media(max-width:600px){
 
