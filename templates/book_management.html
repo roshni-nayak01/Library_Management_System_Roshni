@@ -2,11 +2,8 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Book Management | Library Management System</title>
 
@@ -15,12 +12,9 @@
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
 </head>
 
-
 <body>
-
 
 <!-- ================= NAVBAR ================= -->
 
@@ -29,25 +23,21 @@
     <div class="logo-section">
 
         <div class="logo-circle">
-
             <i class="fa-solid fa-book-open"></i>
-
         </div>
 
         <div>
-
             <h2>Library Management System</h2>
 
             <p>
-
                 {% if session.get('role') == 'admin' %}
                     Admin Portal
                 {% elif session.get('role') == 'librarian' %}
                     Librarian Portal
+                {% else %}
+                    Library Portal
                 {% endif %}
-
             </p>
-
         </div>
 
     </div>
@@ -55,33 +45,22 @@
 
     <div class="navbar-right">
 
-        <a href="{{ url_for('back_to_dashboard') }}"
-           class="profile-btn">
-
+        <!-- Dashboard -->
+        <a href="/dashboard" class="profile-btn">
             <i class="fa-solid fa-house"></i>
-
             Dashboard
-
         </a>
 
-
-        <a href="{{ url_for('profile') }}"
-           class="profile-btn">
-
+        <!-- Profile -->
+        <a href="/profile" class="profile-btn">
             <i class="fa-solid fa-user"></i>
-
             Profile
-
         </a>
 
-
-        <a href="{{ url_for('logout') }}"
-           class="logout-btn">
-
+        <!-- Logout -->
+        <a href="/logout" class="logout-btn">
             <i class="fa-solid fa-right-from-bracket"></i>
-
             Logout
-
         </a>
 
     </div>
@@ -89,41 +68,29 @@
 </header>
 
 
-
 <!-- ================= PAGE HEADER ================= -->
 
 <section class="welcome-box">
 
     <h1>
-
         <i class="fa-solid fa-book"></i>
-
         Book Management
-
     </h1>
 
-
     <p>
-
-        Manage books, categories and add new books to the library.
-
+        Manage books, search books and add new books to the library.
     </p>
 
 </section>
 
 
-
-<!-- ================================================= -->
-<!-- BOOK MANAGEMENT OPTIONS -->
-<!-- ================================================= -->
+<!-- ================= OPTIONS ================= -->
 
 <div class="book-management-options">
 
+    <!-- View Books -->
 
-    <!-- VIEW BOOKS -->
-
-    <a href="#books"
-       class="management-option">
+    <a href="#books" class="management-option">
 
         <i class="fa-solid fa-book"></i>
 
@@ -132,17 +99,15 @@
         </h3>
 
         <p>
-            Search, edit, delete and manage library books.
+            Search, edit and delete library books.
         </p>
 
     </a>
 
 
+    <!-- Categories -->
 
-    <!-- CATEGORIES -->
-
-    <a href="{{ url_for('categories') }}"
-       class="management-option">
+    <a href="/categories" class="management-option">
 
         <i class="fa-solid fa-layer-group"></i>
 
@@ -157,11 +122,9 @@
     </a>
 
 
+    <!-- Add Book -->
 
-    <!-- ADD BOOK -->
-
-    <a href="#add-book"
-       class="management-option">
+    <a href="#add-book" class="management-option">
 
         <i class="fa-solid fa-circle-plus"></i>
 
@@ -178,19 +141,13 @@
 </div>
 
 
+<!-- ================= BOOK TABLE ================= -->
 
-<!-- ================================================= -->
-<!-- SEARCH AND BOOK MANAGEMENT -->
-<!-- ================================================= -->
-
-<div class="table-container"
-     id="books">
-
+<div class="table-container" id="books">
 
     <div class="table-top">
 
-
-        <!-- SEARCH -->
+        <!-- Search -->
 
         <input
             type="text"
@@ -200,7 +157,7 @@
         >
 
 
-        <!-- CATEGORY FILTER -->
+        <!-- Category -->
 
         <select
             class="category-filter"
@@ -245,10 +202,9 @@
         </select>
 
 
-        <!-- ADD BOOK BUTTON -->
+        <!-- Add Book -->
 
-        <a href="#add-book"
-           class="add-book-btn">
+        <a href="#add-book" class="add-book-btn">
 
             <i class="fa-solid fa-circle-plus"></i>
 
@@ -259,45 +215,27 @@
     </div>
 
 
+    <!-- ================= TABLE ================= -->
 
-    <!-- ================================================= -->
-    <!-- BOOK TABLE -->
-    <!-- ================================================= -->
-
-    <table class="book-table"
-           id="bookTable">
+    <table class="book-table" id="bookTable">
 
         <thead>
 
         <tr>
 
-            <th>
-                Book ID
-            </th>
+            <th>Book ID</th>
 
-            <th>
-                Book Name
-            </th>
+            <th>Book Name</th>
 
-            <th>
-                Author
-            </th>
+            <th>Author</th>
 
-            <th>
-                Category
-            </th>
+            <th>Category</th>
 
-            <th>
-                Copies
-            </th>
+            <th>Copies</th>
 
-            <th>
-                Status
-            </th>
+            <th>Status</th>
 
-            <th>
-                Actions
-            </th>
+            <th>Actions</th>
 
         </tr>
 
@@ -306,55 +244,30 @@
 
         <tbody>
 
-
         {% if books %}
 
             {% for book in books %}
 
             <tr>
 
-                <!-- BOOK ID -->
-
                 <td>
-
                     {{ book.get('book_id', 'N/A') }}
-
                 </td>
 
-
-                <!-- BOOK NAME -->
-
                 <td>
-
                     {{ book.get('book_name', 'N/A') }}
-
                 </td>
 
-
-                <!-- AUTHOR -->
-
                 <td>
-
                     {{ book.get('author', 'N/A') }}
-
                 </td>
 
-
-                <!-- CATEGORY -->
-
                 <td>
-
                     {{ book.get('category', 'N/A') }}
-
                 </td>
 
-
-                <!-- COPIES -->
-
                 <td>
-
                     {{ book.get('copies', 0) }}
-
                 </td>
 
 
@@ -365,17 +278,13 @@
                     {% if book.get('copies', 0)|int > 0 %}
 
                         <span class="available">
-
                             Available
-
                         </span>
 
                     {% else %}
 
                         <span class="issued">
-
                             Unavailable
-
                         </span>
 
                     {% endif %}
@@ -391,53 +300,50 @@
 
 
                         <!-- VIEW -->
+                     <button
+    type="button"
+    class="view-btn"
+    title="View Book"
 
-                        <a href="#"
-                           class="view-btn"
-                           title="View Book"
-                           onclick="viewBook(
-                               '{{ book.get('book_id', '')|e }}',
-                               '{{ book.get('book_name', '')|e }}',
-                               '{{ book.get('author', '')|e }}',
-                               '{{ book.get('category', '')|e }}',
-                               '{{ book.get('copies', 0) }}'
-                           ); return false;">
+    data-book-id="{{ book.get('book_id', '') }}"
+    data-book-name="{{ book.get('book_name', '') }}"
+    data-author="{{ book.get('author', '') }}"
+    data-category="{{ book.get('category', '') }}"
+    data-copies="{{ book.get('copies', 0) }}"
 
-                            <i class="fa-solid fa-eye"></i>
+    onclick="viewBookFromButton(this)">
 
-                        </a>
+    <i class="fa-solid fa-eye"></i>
+
+</button>
 
 
                         <!-- EDIT -->
 
-                        <a href="{{ url_for(
-                            'edit_book',
-                            book_id=book.get('book_id')
-                        ) }}"
-                           class="edit-btn"
-                           title="Edit Book">
+                     <a
+    href="/edit-book/{{ book.get('book_id') }}"
+    class="edit-btn"
+    title="Edit Book">
 
-                            <i class="fa-solid fa-pen"></i>
+    <i class="fa-solid fa-pen"></i>
 
-                        </a>
+</a>
 
 
                         <!-- DELETE -->
+<a
+    href="/delete-book/{{ book.get('book_id') }}"
+    class="delete-btn"
+    title="Delete Book"
 
-                        <a href="{{ url_for(
-                            'delete_book',
-                            book_id=book.get('book_id')
-                        ) }}"
-                           class="delete-btn"
-                           title="Delete Book"
-                           onclick="return confirm(
-                               'Are you sure you want to delete this book?'
-                           );">
+    onclick="return confirm(
+        'Are you sure you want to delete this book?'
+    );">
 
-                            <i class="fa-solid fa-trash"></i>
+    <i class="fa-solid fa-trash"></i>
 
-                        </a>
-
+</a>
+                        
 
                     </div>
 
@@ -452,8 +358,7 @@
 
             <tr>
 
-                <td colspan="7"
-                    class="empty-message">
+                <td colspan="7" class="empty-message">
 
                     <i class="fa-solid fa-book"></i>
 
@@ -465,7 +370,6 @@
 
         {% endif %}
 
-
         </tbody>
 
     </table>
@@ -473,14 +377,9 @@
 </div>
 
 
+<!-- ================= ADD BOOK ================= -->
 
-<!-- ================================================= -->
-<!-- ADD NEW BOOK FORM -->
-<!-- ================================================= -->
-
-<section class="book-form"
-         id="add-book">
-
+<section class="book-form" id="add-book">
 
     <h2>
 
@@ -492,14 +391,14 @@
 
 
     <form
-        action="{{ url_for('add_book') }}"
+        action="/add-book"
         method="POST">
 
 
         <div class="form-grid">
 
 
-            <!-- BOOK ID -->
+            <!-- Book ID -->
 
             <input
                 type="text"
@@ -509,7 +408,7 @@
             >
 
 
-            <!-- BOOK NAME -->
+            <!-- Book Name -->
 
             <input
                 type="text"
@@ -519,7 +418,7 @@
             >
 
 
-            <!-- AUTHOR -->
+            <!-- Author -->
 
             <input
                 type="text"
@@ -529,7 +428,7 @@
             >
 
 
-            <!-- PUBLISHER -->
+            <!-- Publisher -->
 
             <input
                 type="text"
@@ -547,7 +446,7 @@
             >
 
 
-            <!-- CATEGORY -->
+            <!-- Category -->
 
             <select
                 name="category"
@@ -592,7 +491,7 @@
             </select>
 
 
-            <!-- COPIES -->
+            <!-- Copies -->
 
             <input
                 type="number"
@@ -605,11 +504,9 @@
         </div>
 
 
-
-        <!-- FORM BUTTONS -->
+        <!-- BUTTONS -->
 
         <div class="form-buttons">
-
 
             <button
                 type="submit"
@@ -639,16 +536,15 @@
 </section>
 
 
+<!-- ================= VIEW BOOK MODAL ================= -->
 
-<!-- ================================================= -->
-<!-- VIEW BOOK POPUP -->
-<!-- ================================================= -->
-
-<div id="bookModal"
-     class="book-modal"
-     style="display:none;">
+<div
+    id="bookModal"
+    class="book-modal"
+    style="display:none;">
 
     <div class="book-modal-content">
+
 
         <button
             type="button"
@@ -659,30 +555,39 @@
 
         </button>
 
+
         <h2>
+
             <i class="fa-solid fa-book"></i>
+
             Book Details
+
         </h2>
+
 
         <p>
             <strong>Book ID:</strong>
             <span id="modalBookId"></span>
         </p>
 
+
         <p>
             <strong>Book Name:</strong>
             <span id="modalBookName"></span>
         </p>
+
 
         <p>
             <strong>Author:</strong>
             <span id="modalAuthor"></span>
         </p>
 
+
         <p>
             <strong>Category:</strong>
             <span id="modalCategory"></span>
         </p>
+
 
         <p>
             <strong>Copies:</strong>
@@ -694,184 +599,164 @@
 </div>
 
 
-
 <!-- ================= FOOTER ================= -->
 
 <footer class="dashboard-footer">
 
     <p>
-
         © 2026 Library Management System | Book Management
-
     </p>
 
 </footer>
 
 
-
-<!-- ================================================= -->
-<!-- JAVASCRIPT -->
-<!-- ================================================= -->
+<!-- ================= JAVASCRIPT ================= -->
 
 <script>
 
-    // =================================================
-    // SEARCH BOOKS
-    // =================================================
 
-    const searchInput =
-        document.getElementById("searchInput");
+// =====================================================
+// SEARCH + CATEGORY FILTER
+// =====================================================
 
-    const categoryFilter =
-        document.getElementById("categoryFilter");
+const searchInput =
+    document.getElementById("searchInput");
 
-    const bookTable =
-        document.getElementById("bookTable");
+const categoryFilter =
+    document.getElementById("categoryFilter");
 
-
-    function filterBooks() {
-
-        const searchValue =
-            searchInput.value.toLowerCase().trim();
-
-        const categoryValue =
-            categoryFilter.value.toLowerCase().trim();
-
-        const rows =
-            bookTable.querySelectorAll("tbody tr");
+const bookTable =
+    document.getElementById("bookTable");
 
 
-        rows.forEach(function(row) {
+function filterBooks() {
 
-            const cells = row.querySelectorAll("td");
+    const searchValue =
+        searchInput.value.toLowerCase().trim();
 
-
-            if (cells.length < 6) {
-                return;
-            }
-
-
-            const bookId =
-                cells[0].innerText.toLowerCase();
-
-            const bookName =
-                cells[1].innerText.toLowerCase();
-
-            const author =
-                cells[2].innerText.toLowerCase();
-
-            const category =
-                cells[3].innerText.toLowerCase();
+    const categoryValue =
+        categoryFilter.value.toLowerCase().trim();
 
 
-            const matchesSearch =
-                bookId.includes(searchValue) ||
-                bookName.includes(searchValue) ||
-                author.includes(searchValue);
+    const rows =
+        bookTable.querySelectorAll("tbody tr");
 
 
-            const matchesCategory =
-                categoryValue === "" ||
-                category === categoryValue;
+    rows.forEach(function(row) {
+
+        const cells =
+            row.querySelectorAll("td");
 
 
-            if (
-                matchesSearch &&
-                matchesCategory
-            ) {
-
-                row.style.display = "";
-
-            } else {
-
-                row.style.display = "none";
-
-            }
-
-        });
-
-    }
+        if (cells.length < 6) {
+            return;
+        }
 
 
-    searchInput.addEventListener(
-        "input",
-        filterBooks
-    );
+        const bookId =
+            cells[0].innerText.toLowerCase();
+
+        const bookName =
+            cells[1].innerText.toLowerCase();
+
+        const author =
+            cells[2].innerText.toLowerCase();
+
+        const category =
+            cells[3].innerText.toLowerCase();
 
 
-    categoryFilter.addEventListener(
-        "change",
-        filterBooks
-    );
+        const matchesSearch =
+            bookId.includes(searchValue) ||
+            bookName.includes(searchValue) ||
+            author.includes(searchValue);
 
 
-    // =================================================
-    // VIEW BOOK
-    // =================================================
-
-    function viewBook(
-        bookId,
-        bookName,
-        author,
-        category,
-        copies
-    ) {
-
-        document.getElementById(
-            "modalBookId"
-        ).innerText = bookId;
+        const matchesCategory =
+            categoryValue === "" ||
+            category === categoryValue;
 
 
-        document.getElementById(
-            "modalBookName"
-        ).innerText = bookName;
+        if (
+            matchesSearch &&
+            matchesCategory
+        ) {
 
+            row.style.display = "";
 
-        document.getElementById(
-            "modalAuthor"
-        ).innerText = author;
+        } else {
 
-
-        document.getElementById(
-            "modalCategory"
-        ).innerText = category;
-
-
-        document.getElementById(
-            "modalCopies"
-        ).innerText = copies;
-
-
-        document.getElementById(
-            "bookModal"
-        ).style.display = "flex";
-
-    }
-
-
-    function closeBookModal() {
-
-        document.getElementById(
-            "bookModal"
-        ).style.display = "none";
-
-    }
-
-
-    // Close popup when clicking outside
-
-    window.onclick = function(event) {
-
-        const modal =
-            document.getElementById("bookModal");
-
-        if (event.target === modal) {
-
-            closeBookModal();
+            row.style.display = "none";
 
         }
 
-    };
+    });
+
+}
+
+
+searchInput.addEventListener(
+    "input",
+    filterBooks
+);
+
+
+categoryFilter.addEventListener(
+    "change",
+    filterBooks
+);
+
+
+// =====================================================
+// VIEW BOOK
+// =====================================================
+function viewBookFromButton(button) {
+
+    const bookId = button.dataset.bookId;
+    const bookName = button.dataset.bookName;
+    const author = button.dataset.author;
+    const category = button.dataset.category;
+    const copies = button.dataset.copies;
+
+    document.getElementById("modalBookId").innerText = bookId;
+    document.getElementById("modalBookName").innerText = bookName;
+    document.getElementById("modalAuthor").innerText = author;
+    document.getElementById("modalCategory").innerText = category;
+    document.getElementById("modalCopies").innerText = copies;
+
+    document.getElementById("bookModal").style.display = "flex";
+}
+
+// =====================================================
+// CLOSE MODAL
+// =====================================================
+
+function closeBookModal() {
+
+    document.getElementById(
+        "bookModal"
+    ).style.display = "none";
+
+}
+
+
+// =====================================================
+// CLOSE WHEN CLICKING OUTSIDE
+// =====================================================
+
+window.onclick = function(event) {
+
+    const modal =
+        document.getElementById("bookModal");
+
+
+    if (event.target === modal) {
+
+        closeBookModal();
+
+    }
+
+};
 
 </script>
 

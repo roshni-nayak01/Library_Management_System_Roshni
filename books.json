@@ -1,0 +1,12 @@
+[
+    {},
+    {
+        "book_id": "1",
+        "book_name": "geetanjali",
+        "author": "rabindranath tagore",
+        "publisher": "arun",
+        "isbn": "11",
+        "category": "Novel",
+        "copies": 10
+    }
+]

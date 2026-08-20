@@ -191,8 +191,20 @@ def view_books():
     if "email" not in session:
         return redirect(url_for("login"))
 
-    return render_template("view_books.html")
+    # Load books from books.json
+    if os.path.exists("books.json"):
 
+        with open("books.json", "r") as file:
+            books = json.load(file)
+
+    else:
+
+        books = []
+
+    return render_template(
+        "view_books.html",
+        books=books
+    )
 
 # =========================================================
 # USER MANAGEMENT
@@ -534,7 +546,6 @@ def delete_user(email):
 # =========================================================
 # BOOK MANAGEMENT
 # =========================================================
-
 @app.route("/book-management")
 def book_management():
 
@@ -544,8 +555,19 @@ def book_management():
     if session.get("role") not in ["admin", "librarian"]:
         return redirect(url_for("login"))
 
-    return render_template("book_management.html")
+    # Load books from books.json
+    if os.path.exists("books.json"):
 
+        with open("books.json", "r") as file:
+            books = json.load(file)
+
+    else:
+        books = []
+
+    return render_template(
+        "book_management.html",
+        books=books
+    )
 
 # =========================================================
 # LIBRARIAN MANAGEMENT
@@ -778,6 +800,185 @@ def admin_renew_books():
 
     return render_template("renew_books.html")
 
+@app.route("/add-book", methods=["POST"])
+def add_book():
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    book_id = request.form.get("book_id", "").strip()
+    book_name = request.form.get("book_name", "").strip()
+    author = request.form.get("author", "").strip()
+    publisher = request.form.get("publisher", "").strip()
+    isbn = request.form.get("isbn", "").strip()
+    category = request.form.get("category", "").strip()
+    copies = request.form.get("copies", "0").strip()
+
+    if not book_id or not book_name or not author or not category:
+        flash("Please fill all required fields.", "error")
+        return redirect(url_for("book_management"))
+
+    try:
+        copies = int(copies)
+    except ValueError:
+        flash("Copies must be a number.", "error")
+        return redirect(url_for("book_management"))
+
+    # Load existing books
+    if os.path.exists("books.json"):
+        with open("books.json", "r") as file:
+            books = json.load(file)
+    else:
+        books = []
+
+    # Check duplicate Book ID
+    for book in books:
+        if book.get("book_id") == book_id:
+            flash("Book ID already exists.", "error")
+            return redirect(url_for("book_management"))
+
+    # Create new book
+    new_book = {
+        "book_id": book_id,
+        "book_name": book_name,
+        "author": author,
+        "publisher": publisher,
+        "isbn": isbn,
+        "category": category,
+        "copies": copies
+    }
+
+    # Add book
+    books.append(new_book)
+
+    # Save book
+    with open("books.json", "w") as file:
+        json.dump(books, file, indent=4)
+
+    flash("Book added successfully!", "success")
+
+    return redirect(url_for("book_management"))
+
+
+@app.route("/edit-book/<book_id>", methods=["GET", "POST"])
+def edit_book(book_id):
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    if session.get("role") not in ["admin", "librarian"]:
+        return redirect(url_for("login"))
+
+    # Load books
+    if os.path.exists("books.json"):
+        with open("books.json", "r") as file:
+            books = json.load(file)
+    else:
+        books = []
+
+    # Find the selected book
+    book = None
+
+    for item in books:
+        if item.get("book_id") == book_id:
+            book = item
+            break
+
+    # Book not found
+    if book is None:
+        flash("Book not found.", "error")
+        return redirect(url_for("book_management"))
+
+    # Save edited book
+    if request.method == "POST":
+
+        book["book_name"] = request.form.get(
+            "book_name", ""
+        ).strip()
+
+        book["author"] = request.form.get(
+            "author", ""
+        ).strip()
+
+        book["publisher"] = request.form.get(
+            "publisher", ""
+        ).strip()
+
+        book["isbn"] = request.form.get(
+            "isbn", ""
+        ).strip()
+
+        book["category"] = request.form.get(
+            "category", ""
+        ).strip()
+
+        copies = request.form.get(
+            "copies", "0"
+        ).strip()
+
+        try:
+            book["copies"] = int(copies)
+        except ValueError:
+            flash("Copies must be a number.", "error")
+            return redirect(
+                url_for("edit_book", book_id=book_id)
+            )
+
+        # Save changes to books.json
+        with open("books.json", "w") as file:
+            json.dump(books, file, indent=4)
+
+        flash("Book updated successfully!", "success")
+
+        return redirect(url_for("book_management"))
+
+    # Show edit page
+    return render_template(
+        "edit_book.html",
+        book=book
+    )
+
+
+
+@app.route("/delete-book/<book_id>")
+def delete_book(book_id):
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    if session.get("role") not in ["admin", "librarian"]:
+        return redirect(url_for("login"))
+
+    # Load books
+    if os.path.exists("books.json"):
+        with open("books.json", "r") as file:
+            books = json.load(file)
+    else:
+        books = []
+
+    # Remove selected book
+    updated_books = []
+
+    book_found = False
+
+    for book in books:
+
+        if book.get("book_id") == book_id:
+            book_found = True
+        else:
+            updated_books.append(book)
+
+    if not book_found:
+        flash("Book not found.", "error")
+        return redirect(url_for("book_management"))
+
+    # Save updated books
+    with open("books.json", "w") as file:
+        json.dump(updated_books, file, indent=4)
+
+    flash("Book deleted successfully!", "success")
+
+    return redirect(url_for("book_management"))
 
 # =========================================================
 # REPORTS
