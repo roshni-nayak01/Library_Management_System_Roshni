@@ -1058,8 +1058,17 @@ def login():
         # Remove temporary selected role
         session.pop("selected_role", None)
 
-        # Show role-based dashboard selection
-        return redirect(url_for("dashboard_selection"))
+        # Redirect based on actual account role
+        if user_role == "user":
+            return redirect(url_for("dashboard"))
+
+        elif user_role == "librarian":
+            return redirect(url_for("dashboard_selection"))
+
+        elif user_role == "admin":
+            return redirect(url_for("dashboard_selection"))
+
+        return redirect(url_for("login"))
 
     return render_template("login.html")
 
