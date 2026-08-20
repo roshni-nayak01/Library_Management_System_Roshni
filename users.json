@@ -1,32 +1,26 @@
 [
     {
-        "name": "Roshni Nayak",
+        "name": "Roshni",
         "email": "roshni@gmail.com",
-        "password": "$2b$12$nWU1jW03jBhHbK7y.FP96eFKN7e7tun37GO41VSHt83n6iGrCawDq",
+        "password": "$2b$12$BNQ6ogz7Wp7ksWsxTLeu4efthTJWXSkOIzq5NKbKJxlMFpKpNZ3Wm",
         "role": "admin"
     },
     {
         "name": "princia",
         "email": "princia@gmail.com",
-        "password": "$2b$12$xnQNPilFZc.Xru9AcE2u6OXOTFCnqpO8SMwBZnDws54L51wnreYjC",
+        "password": "$2b$12$0xIq1VZeq60NljX0ThvW9e4Mj5PDPJrBZRp6BO/pNhGOGk2izA.yu",
         "role": "librarian"
     },
     {
-        "name": "Roshni Nayak",
-        "email": "nnm24is189@nmamit.in",
-        "password": "$2b$12$ZjcujPa1NFOC4cQI6lTVwOx1CT7CzdrFeEHQfcnsLslPpknwtWk6q",
-        "role": "admin"
+        "name": "Savio Lobo",
+        "email": "savio@gmail.com",
+        "password": "$2b$12$qiCyA1qAQs.lSxIB/LITPOLnQrrzc5.5dN2LnOEbZpmml3lXcJjvO",
+        "role": "user"
     },
     {
         "name": "abc",
         "email": "abc@gmail.com",
-        "password": "$2b$12$CJl/9cLG6sXEaUIi0BUKk.Z3zboRlH2ACzgWYgie.uakBdnzKrirG",
-        "role": "admin"
-    },
-    {
-        "name": "Roshni",
-        "email": "aaaa@gmail.com",
-        "password": "$2b$12$BGwi7phddErQIjn98b6tY.2MoKPGndq.1Vx3PfuyoFU1WGddRSSZu",
+        "password": "$2b$12$VHVFicxdXnb0Yb/Eisoj3unZXcgSVkXej/Tcuz1u6gtZ/ydvdgIFO",
         "role": "user"
     }
 ]
