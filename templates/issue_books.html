@@ -18,7 +18,9 @@
 
 </head>
 
+
 <body>
+
 
 <!-- ================= NAVBAR ================= -->
 
@@ -42,9 +44,11 @@
 
     </div>
 
+
     <div class="navbar-right">
 
-        <a href="{{ url_for('librarian_dashboard') }}" class="profile-btn">
+        <a href="{{ url_for('librarian_dashboard') }}"
+           class="profile-btn">
 
             <i class="fa-solid fa-house"></i>
 
@@ -52,7 +56,9 @@
 
         </a>
 
-        <a href="{{ url_for('profile') }}" class="profile-btn">
+
+        <a href="{{ url_for('profile') }}"
+           class="profile-btn">
 
             <i class="fa-solid fa-user"></i>
 
@@ -60,7 +66,9 @@
 
         </a>
 
-        <a href="{{ url_for('logout') }}" class="logout-btn">
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-btn">
 
             <i class="fa-solid fa-right-from-bracket"></i>
 
@@ -71,6 +79,8 @@
     </div>
 
 </header>
+
+
 
 <!-- ================= TITLE ================= -->
 
@@ -86,198 +96,271 @@
 
     <p>
 
-        Assign books to library members.
+        Issue available books to registered library members.
 
     </p>
 
 </section>
 
-<!-- ================= FORM ================= -->
 
-<section class="book-form" id="add-member">
 
-<h2>
+<!-- ================= FLASH MESSAGES ================= -->
 
-Issue Book
+{% with messages = get_flashed_messages(with_categories=true) %}
 
-</h2>
+    {% if messages %}
 
-<form>
+        <div class="flash-container">
 
-<div class="form-grid">
+            {% for category, message in messages %}
 
-<input
-type="text"
-placeholder="Member ID"
-required>
+                <div class="flash-message {{ category }}">
 
-<input
-type="text"
-placeholder="Member Name"
-required>
+                    {{ message }}
 
-<input
-type="text"
-placeholder="Book ID"
-required>
+                </div>
 
-<input
-type="text"
-placeholder="Book Name"
-required>
+            {% endfor %}
 
-<input
-type="date"
-required>
+        </div>
 
-<input
-type="date"
-required>
+    {% endif %}
 
-</div>
+{% endwith %}
 
-<div class="form-buttons">
 
-<button class="save-btn">
 
-<i class="fa-solid fa-book"></i>
+<!-- ================= ISSUE FORM ================= -->
 
-Issue Book
+<section class="book-form">
 
-</button>
+    <h2>
 
-<button type="reset"
-class="cancel-btn">
+        <i class="fa-solid fa-book"></i>
 
-Reset
+        Issue Book
 
-</button>
+    </h2>
 
-</div>
 
-</form>
+    <form method="POST"
+          action="{{ url_for('issue_books') }}">
+
+
+        <div class="form-grid">
+
+
+            <!-- MEMBER -->
+
+            <select name="user_email"
+                    required>
+
+                <option value="">
+
+                    Select Member
+
+                </option>
+
+                {% for member in members %}
+
+                    <option value="{{ member.email }}">
+
+                        {{ member.name }} -
+                        {{ member.email }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+
+            <!-- BOOK -->
+
+            <select name="book_id"
+                    required>
+
+                <option value="">
+
+                    Select Available Book
+
+                </option>
+
+                {% for book in books %}
+
+                    {% if book.copies|int > 0 %}
+
+                        <option value="{{ book.book_id }}">
+
+                            {{ book.book_name }}
+                            -
+                            {{ book.author }}
+                            ({{ book.copies }} copies)
+
+                        </option>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </select>
+
+
+        </div>
+
+
+        <div class="form-buttons">
+
+            <button type="submit"
+                    class="save-btn">
+
+                <i class="fa-solid fa-book"></i>
+
+                Issue Book
+
+            </button>
+
+
+            <button type="reset"
+                    class="cancel-btn">
+
+                Reset
+
+            </button>
+
+        </div>
+
+    </form>
 
 </section>
 
-<!-- ================= TABLE ================= -->
+
+
+<!-- ================= CURRENTLY ISSUED BOOKS ================= -->
 
 <div class="table-container">
 
-<h2>
+    <h2>
 
-Currently Issued Books
+        Currently Issued Books
 
-</h2>
+    </h2>
 
-<table class="book-table">
 
-<thead>
+    <table class="book-table">
 
-<tr>
+        <thead>
 
-<th>Issue ID</th>
+            <tr>
 
-<th>Member</th>
+                <th>Member</th>
 
-<th>Book</th>
+                <th>Book</th>
 
-<th>Issue Date</th>
+                <th>Author</th>
 
-<th>Due Date</th>
+                <th>Issue Date</th>
 
-<th>Status</th>
+                <th>Due Date</th>
 
-<th>Action</th>
+                <th>Status</th>
 
-</tr>
+            </tr>
 
-</thead>
+        </thead>
 
-<tbody>
 
-<tr>
+        <tbody>
 
-<td>I001</td>
+            {% if issued_books %}
 
-<td>Roshni Nayak</td>
+                {% for record in issued_books %}
 
-<td>Python Programming</td>
+                    <tr>
 
-<td>01-08-2026</td>
+                        <td>
 
-<td>15-08-2026</td>
+                            {{ record.user_email }}
 
-<td>
+                        </td>
 
-<span class="available">
 
-Issued
+                        <td>
 
-</span>
+                            {{ record.book_name }}
 
-</td>
+                        </td>
 
-<td>
 
-<button class="view-btn">
+                        <td>
 
-<i class="fa-solid fa-eye"></i>
+                            {{ record.author }}
 
-</button>
+                        </td>
 
-</td>
 
-</tr>
+                        <td>
 
-<tr>
+                            {{ record.borrowed_date }}
 
-<td>I002</td>
+                        </td>
 
-<td>Savio</td>
 
-<td>Database Systems</td>
+                        <td>
 
-<td>30-07-2026</td>
+                            {{ record.due_date }}
 
-<td>13-08-2026</td>
+                        </td>
 
-<td>
 
-<span class="issued">
+                        <td>
 
-Overdue
+                            <span class="available">
 
-</span>
+                                Issued
 
-</td>
+                            </span>
 
-<td>
+                        </td>
 
-<button class="view-btn">
+                    </tr>
 
-<i class="fa-solid fa-eye"></i>
+                {% endfor %}
 
-</button>
+            {% else %}
 
-</td>
+                <tr>
 
-</tr>
+                    <td colspan="6"
+                        style="text-align:center;">
 
-</tbody>
+                        No books are currently issued.
 
-</table>
+                    </td>
+
+                </tr>
+
+            {% endif %}
+
+        </tbody>
+
+    </table>
 
 </div>
 
+
+
 <footer class="dashboard-footer">
 
-<p>
+    <p>
 
-© 2026 Library Management System | Issue Books
+        © 2026 Library Management System | Issue Books
 
-</p>
+    </p>
 
 </footer>
+
 
 </body>
 

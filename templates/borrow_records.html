@@ -1,64 +1,248 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-<title>Borrow Records</title>
+    <meta charset="UTF-8">
 
-<link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Borrow Records | Library Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
-
 <body>
 
+<div class="page-container">
 
-<div class="form-card">
+    <div class="book-card">
 
+        <div class="icon">
 
-<h2>📄 Borrow Records</h2>
+            <i class="fa-solid fa-clock-rotate-left"></i>
 
+        </div>
 
-<table>
+        <h2>Borrow Records</h2>
 
+        <p class="subtitle">
 
-<tr>
+            View all actual borrowing records in the library.
 
-<th>Member</th>
-<th>Book</th>
-<th>Issue Date</th>
-<th>Return Date</th>
-<th>Status</th>
-
-</tr>
+        </p>
 
 
-<tr>
+        <!-- FLASH MESSAGES -->
 
-<td>Roshni</td>
+        {% with messages = get_flashed_messages(with_categories=true) %}
 
-<td>Data Structures</td>
+            {% if messages %}
 
-<td>01-08-2026</td>
+                {% for category, message in messages %}
 
-<td>06-08-2026</td>
+                    <div class="flash-message {{ category }}">
 
-<td>
-Returned
-</td>
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
 
 
-</tr>
+        <!-- RECORDS -->
+
+        {% if borrow_records %}
+
+            <div style="overflow-x:auto; margin-top:25px;">
+
+                <table
+                    style="width:100%; border-collapse:collapse;">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Member</th>
+
+                            <th>Email</th>
+
+                            <th>Book</th>
+
+                            <th>Book ID</th>
+
+                            <th>Borrowed Date</th>
+
+                            <th>Due Date</th>
+
+                            <th>Returned Date</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
 
 
-</table>
+                    <tbody>
 
-<a href="{{url_for('librarian_dashboard')}}">
-    Back
-</a>
+                    {% for record in borrow_records %}
+
+                        <tr>
+
+                            <!-- MEMBER -->
+
+                            <td>
+
+                                <strong>
+                                    {{ record.user_name }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- EMAIL -->
+
+                            <td>
+
+                                {{ record.user_email }}
+
+                            </td>
+
+
+                            <!-- BOOK -->
+
+                            <td>
+
+                                <strong>
+                                    {{ record.book_name }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- BOOK ID -->
+
+                            <td>
+
+                                {{ record.book_id }}
+
+                            </td>
+
+
+                            <!-- BORROWED DATE -->
+
+                            <td>
+
+                                {{ record.borrowed_date }}
+
+                            </td>
+
+
+                            <!-- DUE DATE -->
+
+                            <td>
+
+                                {{ record.due_date }}
+
+                            </td>
+
+
+                            <!-- RETURNED DATE -->
+
+                            <td>
+
+                                {% if record.returned_date %}
+
+                                    {{ record.returned_date }}
+
+                                {% else %}
+
+                                    Not returned
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                {% if record.status == "Returned" %}
+
+                                    <strong>
+                                        Returned
+                                    </strong>
+
+                                {% else %}
+
+                                    <strong>
+                                        Borrowed
+                                    </strong>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div style="margin-top:30px;">
+
+                <i
+                    class="fa-solid fa-book-open"
+                    style="font-size:40px;">
+                </i>
+
+                <p>
+
+                    No borrowing records found.
+
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <hr>
+
+
+        <!-- BACK TO DASHBOARD -->
+
+        <a
+            class="back-home"
+            href="{{ url_for('librarian_dashboard') }}">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Back to Dashboard
+
+        </a>
+
+    </div>
 
 </div>
-
 
 </body>
 

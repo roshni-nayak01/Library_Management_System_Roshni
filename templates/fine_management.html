@@ -1,65 +1,246 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-<title>Fine Management</title>
+    <meta charset="UTF-8">
 
-<link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Fine Management | Library Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
-
 <body>
 
+<div class="page-container">
 
-<div class="form-card">
+    <div class="book-card">
 
+        <div class="icon">
+            <i class="fa-solid fa-money-bill-wave"></i>
+        </div>
 
-<h2>💰 Fine Management</h2>
+        <h2>Fine Management</h2>
 
-
-<table>
-
-
-<tr>
-
-<th>Member</th>
-<th>Book</th>
-<th>Days Late</th>
-<th>Fine Amount</th>
-<th>Status</th>
-
-</tr>
+        <p class="subtitle">
+            View and manage fines for late, damaged and lost books.
+        </p>
 
 
-<tr>
+        {% with messages = get_flashed_messages(with_categories=true) %}
 
-<td>Roshni</td>
+            {% if messages %}
 
-<td>Operating System</td>
+                {% for category, message in messages %}
 
-<td>5</td>
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
 
-<td>₹50</td>
+                {% endfor %}
 
-<td>
-Pending
+            {% endif %}
+
+        {% endwith %}
+
+
+        {% if fines %}
+
+            <div style="overflow-x:auto; margin-top:25px;">
+
+                <table style="width:100%; border-collapse:collapse;">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Member</th>
+
+                            <th>Book</th>
+
+                            <th>Due Date</th>
+
+                            <th>Condition</th>
+
+                            <th>Days Late</th>
+
+                            <th>Late Fine</th>
+
+                            <th>Damage</th>
+
+                            <th>Lost</th>
+
+                            <th>Total Fine</th>
+
+                            <th>Status</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for fine in fines %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    {{ fine.member_name }}
+                                </strong>
+
+                                <br>
+
+                                <small>
+                                    {{ fine.user_email }}
+                                </small>
+
+                            </td>
+
+
+                            <td>
+
+                                {{ fine.book_name }}
+
+                                <br>
+
+                                <small>
+                                    ID: {{ fine.book_id }}
+                                </small>
+
+                            </td>
+
+
+                            <td>
+                                {{ fine.due_date }}
+                            </td>
+
+
+                            <td>
+                                {{ fine.condition }}
+                            </td>
+
+
+                            <td>
+                                {{ fine.days_late }}
+                            </td>
+
+
+                            <td>
+                                ₹{{ fine.late_fine }}
+                            </td>
+
+
+                            <td>
+                                ₹{{ fine.damage_fine }}
+                            </td>
+
+
+                            <td>
+                                ₹{{ fine.lost_fine }}
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    ₹{{ fine.total_fine }}
+                                </strong>
+
+                            </td>
+
+
+                           <td>
+    <strong>{{ fine.status }}</strong>
 </td>
 
-</tr>
+
+                            <td>
+
+                                {% if fine.status != "Paid" %}
+
+                                    <form
+                                        action="{{ url_for('fine_management') }}"
+                                        method="POST">
+
+                                        <input
+                                            type="hidden"
+                                            name="record_index"
+                                            value="{{ fine._index }}">
+
+                                        <button type="submit">
+
+                                            <i class="fa-solid fa-check"></i>
+
+                                            Mark Paid
+
+                                        </button>
+
+                                    </form>
+
+                                {% else %}
+
+                                    <span>
+                                        Paid
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div style="margin-top:30px;">
+
+                <i class="fa-solid fa-circle-check"
+                   style="font-size:40px;">
+                </i>
+
+                <p>
+                    No fines currently recorded.
+                </p>
+
+            </div>
+
+        {% endif %}
 
 
-</table>
+        <hr>
 
+        <a class="back-home"
+           href="{{ url_for('librarian_dashboard') }}">
 
-<a href="{{url_for('librarian_dashboard')}}">
-    Back
-</a>
+            <i class="fa-solid fa-arrow-left"></i>
 
+            Back to Dashboard
+
+        </a>
+
+    </div>
 
 </div>
-
 
 </body>
 

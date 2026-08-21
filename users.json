@@ -16,5 +16,17 @@
         "email": "savio@gmail.com",
         "password": "$2b$12$7TVEml0pvGqSscV2pbCnh.k0e33nF8/5ZD5WMOTvjxpgpb7wLM.sG",
         "role": "user"
+    },
+    {
+        "name": "abc",
+        "email": "abc@gmail.com",
+        "password": "$2b$12$MBBAjHFr.vM.t6bSo.bGF.MaSn2VqwWN6Ac4RDI6nOmOirrYyjOZe",
+        "role": "user"
+    },
+    {
+        "name": "xyz",
+        "email": "xyz@gmail.com",
+        "password": "$2b$12$tOPFfCJm2SmnKOewNCba4eULsDmQunZOf7xtLNcC/pUUYxbTCwbgK",
+        "role": "user"
     }
 ]
