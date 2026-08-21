@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
-from pymongo import MongoClient
+from datetime import datetime
 import json
 import os
 import random
@@ -17,31 +17,6 @@ app.secret_key = "library_secret_key"
 bcrypt = Bcrypt(app)
 
 # =========================================================
-# MONGODB CONFIGURATION
-# =========================================================
-
-books_collection = None
-
-try:
-    client = MongoClient(
-        "mongodb://localhost:27017/",
-        serverSelectionTimeoutMS=3000
-    )
-
-    client.admin.command("ping")
-
-    db = client["library_management"]
-
-    books_collection = db["books"]
-
-    print("MongoDB connected successfully.")
-
-except Exception as e:
-    print("MongoDB is not connected:", e)
-    print("Book Management database functions will not work until MongoDB is available.")
-
-
-# =========================================================
 # EMAIL CONFIGURATION
 # =========================================================
 
@@ -49,6 +24,7 @@ app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
 
+# PUT YOUR EXISTING GMAIL DETAILS HERE
 app.config["MAIL_USERNAME"] = "YOUR_GMAIL_USERNAME"
 app.config["MAIL_PASSWORD"] = "YOUR_GMAIL_APP_PASSWORD"
 
@@ -74,7 +50,6 @@ def load_users():
     try:
         with open(USERS_FILE, "r") as f:
             return json.load(f)
-
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
@@ -108,7 +83,6 @@ def generate_otp():
 def home():
     return render_template("home.html")
 
-
 # =========================================================
 # DASHBOARD SELECTION
 # =========================================================
@@ -139,10 +113,16 @@ def select_role(role):
     if role not in allowed_roles:
         return redirect(url_for("dashboard_selection"))
 
+    # User must already be logged in
     if "email" not in session:
         return redirect(url_for("login"))
 
     user_role = session.get("role", "user").lower()
+
+    # =====================================================
+    # ADMIN
+    # Admin can select Admin, Librarian or User
+    # =====================================================
 
     if user_role == "admin":
 
@@ -155,6 +135,12 @@ def select_role(role):
         if role == "user":
             return redirect(url_for("dashboard"))
 
+
+    # =====================================================
+    # LIBRARIAN
+    # Librarian can select Librarian or User
+    # =====================================================
+
     elif user_role == "librarian":
 
         if role == "librarian":
@@ -163,10 +149,21 @@ def select_role(role):
         if role == "user":
             return redirect(url_for("dashboard"))
 
+
+    # =====================================================
+    # USER
+    # User can select only User
+    # =====================================================
+
     elif user_role == "user":
 
         if role == "user":
             return redirect(url_for("dashboard"))
+
+
+    # =====================================================
+    # UNAUTHORIZED
+    # =====================================================
 
     flash(
         "You are not authorized to access this dashboard.",
@@ -192,12 +189,23 @@ def search_books():
 @app.route("/view-books")
 def view_books():
 
-
     if "email" not in session:
         return redirect(url_for("login"))
 
-    return render_template("view_books.html")
+    # Load books from books.json
+    if os.path.exists("books.json"):
 
+        with open("books.json", "r") as file:
+            books = json.load(file)
+
+    else:
+
+        books = []
+
+    return render_template(
+        "view_books.html",
+        books=books
+    )
 
 # =========================================================
 # USER MANAGEMENT
@@ -210,15 +218,11 @@ def user_management():
         return redirect(url_for("login"))
 
     if session.get("role") not in ["admin", "librarian"]:
-
         flash(
             "You are not authorized to access User Management.",
             "error"
         )
-
-        return redirect(
-            url_for("back_to_dashboard")
-        )
+        return redirect(url_for("back_to_dashboard"))
 
     users = load_users()
 
@@ -227,6 +231,7 @@ def user_management():
     for user in users:
 
         if user.get("role") in ["user", "librarian"]:
+
             managed_users.append(user)
 
     return render_template(
@@ -234,13 +239,13 @@ def user_management():
         users=managed_users
     )
 
-
 # =========================================================
 # OLD MEMBER MANAGEMENT URL
 # =========================================================
 
 @app.route("/member-management")
 def member_management():
+
     return redirect(url_for("user_management"))
 
 
@@ -255,15 +260,8 @@ def edit_user(email):
         return redirect(url_for("login"))
 
     if session.get("role") not in ["admin", "librarian"]:
-
-        flash(
-            "You are not authorized to edit users.",
-            "error"
-        )
-
-        return redirect(
-            url_for("back_to_dashboard")
-        )
+        flash("You are not authorized to edit users.", "error")
+        return redirect(url_for("back_to_dashboard"))
 
     users = load_users()
 
@@ -271,64 +269,46 @@ def edit_user(email):
 
     for user in users:
 
-        if (
-            user.get("email", "").strip().lower()
-            == email.strip().lower()
-        ):
+        if user.get("email", "").strip().lower() == email.strip().lower():
+
             selected_user = user
             break
 
     if selected_user is None:
 
-        flash(
-            "User not found.",
-            "error"
-        )
+        flash("User not found.", "error")
 
-        return redirect(
-            url_for("user_management")
-        )
+        return redirect(url_for("user_management"))
 
+    # Librarian cannot edit admin
     if (
         session.get("role") == "librarian"
         and selected_user.get("role") == "admin"
     ):
 
-        flash(
-            "Librarians cannot edit admin accounts.",
-            "error"
-        )
+        flash("Librarians cannot edit admin accounts.", "error")
 
-        return redirect(
-            url_for("user_management")
-        )
+        return redirect(url_for("user_management"))
+
+    # =====================================================
+    # SAVE EDITED USER
+    # =====================================================
 
     if request.method == "POST":
 
-        new_name = request.form.get(
-            "name",
-            ""
-        ).strip()
+        new_name = request.form.get("name", "").strip()
 
-        new_email = request.form.get(
-            "email",
-            ""
-        ).strip().lower()
+        new_email = request.form.get("email", "").strip().lower()
 
         new_role = request.form.get(
             "role",
-            selected_user.get(
-                "role",
-                "user"
-            )
+            selected_user.get("role", "user")
         ).strip().lower()
 
+        # Name validation
         if not new_name:
 
-            flash(
-                "Name cannot be empty.",
-                "error"
-            )
+            flash("Name cannot be empty.", "error")
 
             return redirect(
                 url_for(
@@ -337,12 +317,10 @@ def edit_user(email):
                 )
             )
 
+        # Email validation
         if not new_email:
 
-            flash(
-                "Email cannot be empty.",
-                "error"
-            )
+            flash("Email cannot be empty.", "error")
 
             return redirect(
                 url_for(
@@ -351,6 +329,7 @@ def edit_user(email):
                 )
             )
 
+        # Only these roles can be assigned here
         if new_role not in ["user", "librarian"]:
 
             new_role = selected_user.get(
@@ -358,6 +337,7 @@ def edit_user(email):
                 "user"
             )
 
+        # Librarian cannot create admin
         if (
             session.get("role") == "librarian"
             and new_role == "admin"
@@ -374,6 +354,10 @@ def edit_user(email):
                     email=email
                 )
             )
+
+        # =================================================
+        # CHECK DUPLICATE EMAIL
+        # =================================================
 
         old_email = selected_user.get(
             "email",
@@ -404,22 +388,28 @@ def edit_user(email):
                     )
                 )
 
+        # =================================================
+        # UPDATE USER
+        # =================================================
+
         selected_user["name"] = new_name
+
         selected_user["email"] = new_email
+
         selected_user["role"] = new_role
 
         save_users(users)
 
+        # Update session if current user edited themselves
         if (
-            session.get(
-                "email",
-                ""
-            ).strip().lower()
+            session.get("email", "").strip().lower()
             == old_email
         ):
 
             session["email"] = new_email
+
             session["name"] = new_name
+
             session["role"] = new_role
 
         flash(
@@ -430,6 +420,10 @@ def edit_user(email):
         return redirect(
             url_for("user_management")
         )
+
+    # =====================================================
+    # OPEN EDIT PAGE
+    # =====================================================
 
     return render_template(
         "edit_user.html",
@@ -465,10 +459,7 @@ def delete_user(email):
     for user in users:
 
         if (
-            user.get(
-                "email",
-                ""
-            ).strip().lower()
+            user.get("email", "").strip().lower()
             == email.strip().lower()
         ):
 
@@ -496,6 +487,7 @@ def delete_user(email):
         ""
     ).strip().lower()
 
+    # Cannot delete yourself
     if target_email == logged_in_email:
 
         flash(
@@ -507,6 +499,7 @@ def delete_user(email):
             url_for("user_management")
         )
 
+    # Librarian cannot delete admin
     if (
         session.get("role") == "librarian"
         and target_user.get("role") == "admin"
@@ -520,6 +513,10 @@ def delete_user(email):
         return redirect(
             url_for("user_management")
         )
+
+    # =====================================================
+    # DELETE
+    # =====================================================
 
     users = [
         user
@@ -546,6 +543,10 @@ def delete_user(email):
 # BOOK MANAGEMENT
 # =========================================================
 
+
+# =========================================================
+# BOOK MANAGEMENT
+# =========================================================
 @app.route("/book-management")
 def book_management():
 
@@ -555,375 +556,19 @@ def book_management():
     if session.get("role") not in ["admin", "librarian"]:
         return redirect(url_for("login"))
 
-    books = []
+    # Load books from books.json
+    if os.path.exists("books.json"):
 
-    try:
+        with open("books.json", "r") as file:
+            books = json.load(file)
 
-        if books_collection is not None:
-
-            books = list(
-                books_collection.find(
-                    {},
-                    {
-                        "_id": 0
-                    }
-                )
-            )
-
-        else:
-
-            flash(
-                "MongoDB is not connected.",
-                "error"
-            )
-
-    except Exception as e:
-
-        print(
-            "Error loading books:",
-            e
-        )
-
+    else:
         books = []
-
-        flash(
-            "Unable to load books.",
-            "error"
-        )
 
     return render_template(
         "book_management.html",
         books=books
     )
-
-
-# =========================================================
-# ADD BOOK
-# =========================================================
-
-@app.route("/add_book", methods=["POST"])
-def add_book():
-
-    if "email" not in session:
-        return redirect(url_for("login"))
-
-    if session.get("role") not in ["admin", "librarian"]:
-        return redirect(url_for("login"))
-
-    if books_collection is None:
-
-        flash(
-            "MongoDB is not connected.",
-            "error"
-        )
-
-        return redirect(
-            url_for("book_management")
-        )
-
-    try:
-
-        book_id = request.form.get(
-            "book_id",
-            ""
-        ).strip()
-
-        book_name = request.form.get(
-            "book_name",
-            ""
-        ).strip()
-
-        author = request.form.get(
-            "author",
-            ""
-        ).strip()
-
-        publisher = request.form.get(
-            "publisher",
-            ""
-        ).strip()
-
-        isbn = request.form.get(
-            "isbn",
-            ""
-        ).strip()
-
-        category = request.form.get(
-            "category",
-            ""
-        ).strip()
-
-        copies = request.form.get(
-            "copies",
-            "0"
-        ).strip()
-
-        if (
-            not book_id
-            or not book_name
-            or not author
-            or not category
-        ):
-
-            flash(
-                "Please fill all required fields.",
-                "error"
-            )
-
-            return redirect(
-                url_for("book_management")
-            )
-
-        try:
-            copies = int(copies)
-        except (ValueError, TypeError):
-            copies = 0
-
-        if copies < 0:
-            copies = 0
-
-        existing_book = books_collection.find_one({
-            "book_id": book_id
-        })
-
-        if existing_book:
-
-            flash(
-                "Book ID already exists.",
-                "error"
-            )
-
-            return redirect(
-                url_for("book_management")
-            )
-
-        new_book = {
-            "book_id": book_id,
-            "book_name": book_name,
-            "author": author,
-            "publisher": publisher,
-            "isbn": isbn,
-            "category": category,
-            "copies": copies
-        }
-
-        books_collection.insert_one(
-            new_book
-        )
-
-        flash(
-            "Book added successfully.",
-            "success"
-        )
-
-    except Exception as e:
-
-        print(
-            "Error adding book:",
-            e
-        )
-
-        flash(
-            "Error adding book.",
-            "error"
-        )
-
-    return redirect(
-        url_for("book_management")
-    )
-
-
-# =========================================================
-# EDIT BOOK
-# =========================================================
-
-@app.route(
-    "/edit_book/<book_id>",
-    methods=["GET", "POST"]
-)
-def edit_book(book_id):
-
-    if "email" not in session:
-        return redirect(url_for("login"))
-
-    if session.get("role") not in ["admin", "librarian"]:
-        return redirect(url_for("login"))
-
-    if books_collection is None:
-
-        flash(
-            "MongoDB is not connected.",
-            "error"
-        )
-
-        return redirect(
-            url_for("book_management")
-        )
-
-    try:
-
-        book = books_collection.find_one({
-            "book_id": book_id
-        })
-
-        if not book:
-
-            flash(
-                "Book not found.",
-                "error"
-            )
-
-            return redirect(
-                url_for("book_management")
-            )
-
-        if request.method == "POST":
-
-            book_name = request.form.get(
-                "book_name",
-                ""
-            ).strip()
-
-            author = request.form.get(
-                "author",
-                ""
-            ).strip()
-
-            publisher = request.form.get(
-                "publisher",
-                ""
-            ).strip()
-
-            isbn = request.form.get(
-                "isbn",
-                ""
-            ).strip()
-
-            category = request.form.get(
-                "category",
-                ""
-            ).strip()
-
-            copies = request.form.get(
-                "copies",
-                "0"
-            ).strip()
-
-            try:
-                copies = int(copies)
-            except (ValueError, TypeError):
-                copies = 0
-
-            if copies < 0:
-                copies = 0
-
-            books_collection.update_one(
-                {
-                    "book_id": book_id
-                },
-                {
-                    "$set": {
-                        "book_name": book_name,
-                        "author": author,
-                        "publisher": publisher,
-                        "isbn": isbn,
-                        "category": category,
-                        "copies": copies
-                    }
-                }
-            )
-
-            flash(
-                "Book updated successfully.",
-                "success"
-            )
-
-            return redirect(
-                url_for("book_management")
-            )
-
-        return render_template(
-            "edit_book.html",
-            book=book
-        )
-
-    except Exception as e:
-
-        print(
-            "Error editing book:",
-            e
-        )
-
-        flash(
-            "Error editing book.",
-            "error"
-        )
-
-        return redirect(
-            url_for("book_management")
-        )
-
-
-# =========================================================
-# DELETE BOOK
-# =========================================================
-
-@app.route("/delete_book/<book_id>")
-def delete_book(book_id):
-
-    if "email" not in session:
-        return redirect(url_for("login"))
-
-    if session.get("role") not in ["admin", "librarian"]:
-        return redirect(url_for("login"))
-
-    if books_collection is None:
-
-        flash(
-            "MongoDB is not connected.",
-            "error"
-        )
-
-        return redirect(
-            url_for("book_management")
-        )
-
-    try:
-
-        result = books_collection.delete_one({
-            "book_id": book_id
-        })
-
-        if result.deleted_count > 0:
-
-            flash(
-                "Book deleted successfully.",
-                "success"
-            )
-
-        else:
-
-            flash(
-                "Book not found.",
-                "error"
-            )
-
-    except Exception as e:
-
-        print(
-            "Error deleting book:",
-            e
-        )
-
-        flash(
-            "Error deleting book.",
-            "error"
-        )
-
-    return redirect(
-        url_for("book_management")
-    )
-
 
 # =========================================================
 # LIBRARIAN MANAGEMENT
@@ -941,8 +586,7 @@ def librarian_management():
     users = load_users()
 
     librarians = [
-        user
-        for user in users
+        user for user in users
         if user.get("role") == "librarian"
     ]
 
@@ -956,10 +600,7 @@ def librarian_management():
 # EDIT LIBRARIAN
 # =========================================================
 
-@app.route(
-    "/edit-librarian/<path:email>",
-    methods=["GET", "POST"]
-)
+@app.route("/edit-librarian/<path:email>", methods=["GET", "POST"])
 def edit_librarian(email):
 
     if "email" not in session:
@@ -975,92 +616,42 @@ def edit_librarian(email):
     for user in users:
 
         if (
-            user.get(
-                "email",
-                ""
-            ).strip().lower()
-            == email.strip().lower()
+            user.get("email", "").strip().lower() == email.strip().lower()
             and user.get("role") == "librarian"
         ):
-
             librarian = user
             break
 
     if librarian is None:
-
-        flash(
-            "Librarian not found.",
-            "error"
-        )
-
-        return redirect(
-            url_for("librarian_management")
-        )
+        flash("Librarian not found.", "error")
+        return redirect(url_for("librarian_management"))
 
     if request.method == "POST":
 
-        new_name = request.form.get(
-            "name",
-            ""
-        ).strip()
-
-        new_email = request.form.get(
-            "email",
-            ""
-        ).strip().lower()
+        new_name = request.form.get("name", "").strip()
+        new_email = request.form.get("email", "").strip().lower()
 
         if not new_name or not new_email:
-
-            flash(
-                "Name and email are required.",
-                "error"
-            )
-
-            return redirect(
-                url_for(
-                    "edit_librarian",
-                    email=email
-                )
-            )
+            flash("Name and email are required.", "error")
+            return redirect(url_for("edit_librarian", email=email))
 
         for user in users:
 
             if user is librarian:
                 continue
 
-            if (
-                user.get(
-                    "email",
-                    ""
-                ).strip().lower()
-                == new_email
-            ):
-
-                flash(
-                    "Email already exists.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for(
-                        "edit_librarian",
-                        email=email
-                    )
-                )
+            if user.get("email", "").strip().lower() == new_email:
+                flash("Email already exists.", "error")
+                return redirect(url_for("edit_librarian", email=email))
 
         librarian["name"] = new_name
         librarian["email"] = new_email
 
         save_users(users)
 
-        flash(
-            "Librarian updated successfully.",
-            "success"
-        )
+        flash("Librarian updated successfully.", "success")
 
-        return redirect(
-            url_for("librarian_management")
-        )
+        return redirect(url_for("librarian_management"))
 
     return render_template(
         "edit_librarian.html",
@@ -1090,38 +681,21 @@ def delete_librarian(email):
     for user in users:
 
         if (
-            user.get(
-                "email",
-                ""
-            ).strip().lower()
-            == email.strip().lower()
+            user.get("email", "").strip().lower() == email.strip().lower()
             and user.get("role") == "librarian"
         ):
-
             deleted = True
             continue
 
         new_users.append(user)
 
     if deleted:
-
         save_users(new_users)
-
-        flash(
-            "Librarian deleted successfully.",
-            "success"
-        )
-
+        flash("Librarian deleted successfully.", "success")
     else:
+        flash("Librarian not found.", "error")
 
-        flash(
-            "Librarian not found.",
-            "error"
-        )
-
-    return redirect(
-        url_for("librarian_management")
-    )
+    return redirect(url_for("librarian_management"))
 
 
 # =========================================================
@@ -1137,9 +711,7 @@ def issue_books():
     if session.get("role") != "librarian":
         return redirect(url_for("login"))
 
-    return render_template(
-        "issue_books.html"
-    )
+    return render_template("issue_books.html")
 
 
 @app.route("/librarian-return-books")
@@ -1151,9 +723,7 @@ def librarian_return_books():
     if session.get("role") != "librarian":
         return redirect(url_for("login"))
 
-    return render_template(
-        "librarian_return_books.html"
-    )
+    return render_template("librarian_return_books.html")
 
 
 @app.route("/librarian-renew-books")
@@ -1165,9 +735,7 @@ def librarian_renew_books():
     if session.get("role") != "librarian":
         return redirect(url_for("login"))
 
-    return render_template(
-        "renew_books.html"
-    )
+    return render_template("renew_books.html")
 
 
 @app.route("/waitlist-management")
@@ -1179,9 +747,7 @@ def waitlist_management():
     if session.get("role") != "librarian":
         return redirect(url_for("login"))
 
-    return render_template(
-        "waitlist_management.html"
-    )
+    return render_template("waitlist_management.html")
 
 
 @app.route("/fine-management")
@@ -1193,9 +759,7 @@ def fine_management():
     if session.get("role") != "librarian":
         return redirect(url_for("login"))
 
-    return render_template(
-        "fine_management.html"
-    )
+    return render_template("fine_management.html")
 
 
 @app.route("/book-availability")
@@ -1207,9 +771,7 @@ def book_availability():
     if session.get("role") != "librarian":
         return redirect(url_for("login"))
 
-    return render_template(
-        "book_availability.html"
-    )
+    return render_template("book_availability.html")
 
 
 @app.route("/borrow-records")
@@ -1221,9 +783,7 @@ def borrow_records():
     if session.get("role") != "librarian":
         return redirect(url_for("login"))
 
-    return render_template(
-        "borrow_records.html"
-    )
+    return render_template("borrow_records.html")
 
 
 # =========================================================
@@ -1239,10 +799,187 @@ def admin_renew_books():
     if session.get("role") != "admin":
         return redirect(url_for("login"))
 
+    return render_template("renew_books.html")
+
+@app.route("/add-book", methods=["POST"])
+def add_book():
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    book_id = request.form.get("book_id", "").strip()
+    book_name = request.form.get("book_name", "").strip()
+    author = request.form.get("author", "").strip()
+    publisher = request.form.get("publisher", "").strip()
+    isbn = request.form.get("isbn", "").strip()
+    category = request.form.get("category", "").strip()
+    copies = request.form.get("copies", "0").strip()
+
+    if not book_id or not book_name or not author or not category:
+        flash("Please fill all required fields.", "error")
+        return redirect(url_for("book_management"))
+
+    try:
+        copies = int(copies)
+    except ValueError:
+        flash("Copies must be a number.", "error")
+        return redirect(url_for("book_management"))
+
+    # Load existing books
+    if os.path.exists("books.json"):
+        with open("books.json", "r") as file:
+            books = json.load(file)
+    else:
+        books = []
+
+    # Check duplicate Book ID
+    for book in books:
+        if book.get("book_id") == book_id:
+            flash("Book ID already exists.", "error")
+            return redirect(url_for("book_management"))
+
+    # Create new book
+    new_book = {
+        "book_id": book_id,
+        "book_name": book_name,
+        "author": author,
+        "publisher": publisher,
+        "isbn": isbn,
+        "category": category,
+        "copies": copies
+    }
+
+    # Add book
+    books.append(new_book)
+
+    # Save book
+    with open("books.json", "w") as file:
+        json.dump(books, file, indent=4)
+
+    flash("Book added successfully!", "success")
+
+    return redirect(url_for("book_management"))
+
+
+@app.route("/edit-book/<book_id>", methods=["GET", "POST"])
+def edit_book(book_id):
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    if session.get("role") not in ["admin", "librarian"]:
+        return redirect(url_for("login"))
+
+    # Load books
+    if os.path.exists("books.json"):
+        with open("books.json", "r") as file:
+            books = json.load(file)
+    else:
+        books = []
+
+    # Find the selected book
+    book = None
+
+    for item in books:
+        if item.get("book_id") == book_id:
+            book = item
+            break
+
+    # Book not found
+    if book is None:
+        flash("Book not found.", "error")
+        return redirect(url_for("book_management"))
+
+    # Save edited book
+    if request.method == "POST":
+
+        book["book_name"] = request.form.get(
+            "book_name", ""
+        ).strip()
+
+        book["author"] = request.form.get(
+            "author", ""
+        ).strip()
+
+        book["publisher"] = request.form.get(
+            "publisher", ""
+        ).strip()
+
+        book["isbn"] = request.form.get(
+            "isbn", ""
+        ).strip()
+
+        book["category"] = request.form.get(
+            "category", ""
+        ).strip()
+
+        copies = request.form.get(
+            "copies", "0"
+        ).strip()
+
+        try:
+            book["copies"] = int(copies)
+        except ValueError:
+            flash("Copies must be a number.", "error")
+            return redirect(
+                url_for("edit_book", book_id=book_id)
+            )
+
+        # Save changes to books.json
+        with open("books.json", "w") as file:
+            json.dump(books, file, indent=4)
+
+        flash("Book updated successfully!", "success")
+
+        return redirect(url_for("book_management"))
+
+    # Show edit page
     return render_template(
-        "renew_books.html"
+        "edit_book.html",
+        book=book
     )
 
+
+
+@app.route("/delete-book/<book_id>")
+def delete_book(book_id):
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    if session.get("role") not in ["admin", "librarian"]:
+        return redirect(url_for("login"))
+
+    # Load books
+    if os.path.exists("books.json"):
+        with open("books.json", "r") as file:
+            books = json.load(file)
+    else:
+        books = []
+
+    # Remove selected book
+    updated_books = []
+
+    book_found = False
+
+    for book in books:
+
+        if book.get("book_id") == book_id:
+            book_found = True
+        else:
+            updated_books.append(book)
+
+    if not book_found:
+        flash("Book not found.", "error")
+        return redirect(url_for("book_management"))
+
+    # Save updated books
+    with open("books.json", "w") as file:
+        json.dump(updated_books, file, indent=4)
+
+    flash("Book deleted successfully!", "success")
+
+    return redirect(url_for("book_management"))
 
 # =========================================================
 # REPORTS
@@ -1257,9 +994,7 @@ def reports():
     if session.get("role") not in ["admin", "librarian"]:
         return redirect(url_for("login"))
 
-    return render_template(
-        "reports.html"
-    )
+    return render_template("reports.html")
 
 
 # =========================================================
@@ -1275,16 +1010,13 @@ def categories():
     if session.get("role") not in ["admin", "librarian"]:
         return redirect(url_for("login"))
 
-    return render_template(
-        "categories.html"
-    )
+    return render_template("categories.html")
 
 
 # =========================================================
 # USER - BORROW BOOKS
 # =========================================================
-
-@app.route("/borrow_books")
+@app.route("/borrow_books", methods=["GET", "POST"])
 def borrow_books():
 
     if "email" not in session:
@@ -1293,16 +1025,139 @@ def borrow_books():
     if session.get("role") != "user":
         return redirect(url_for("login"))
 
-    return render_template(
-        "borrow_books.html"
-    )
+    # Load books
+    if os.path.exists("books.json"):
 
+        with open("books.json", "r") as file:
+            books = json.load(file)
+
+    else:
+        books = []
+
+    # Load borrow records
+    if os.path.exists("borrow_records.json"):
+
+        with open("borrow_records.json", "r") as file:
+            borrow_records = json.load(file)
+
+    else:
+        borrow_records = []
+
+    if request.method == "POST":
+
+        book_id = request.form.get("book_id", "").strip()
+
+        if not book_id:
+
+            flash("Please enter a Book ID.", "error")
+
+            return redirect(url_for("borrow_books"))
+
+        # Check whether user already borrowed this book
+        for record in borrow_records:
+
+            if (
+                record.get("user_email") == session.get("email")
+                and record.get("book_id") == book_id
+                and record.get("returned") == False
+            ):
+
+                flash(
+                    "You have already borrowed this book.",
+                    "error"
+                )
+
+                return redirect(url_for("borrow_books"))
+
+        # Find book
+        book_found = False
+
+        for book in books:
+
+            if str(book.get("book_id", "")).strip() == book_id:
+
+                book_found = True
+
+                copies = int(book.get("copies", 0))
+
+                # Check availability
+                if copies <= 0:
+
+                    flash(
+                        "This book is currently unavailable.",
+                        "error"
+                    )
+
+                    return redirect(url_for("borrow_books"))
+
+                # Deduct one copy
+                book["copies"] = copies - 1
+
+                # Create borrow record
+                new_record = {
+
+                    "user_email": session.get("email"),
+
+                    "book_id": book.get("book_id"),
+
+                    "book_name": book.get("book_name"),
+
+                    "author": book.get("author"),
+
+                    "category": book.get("category"),
+
+                    "borrowed_date": datetime.now().strftime(
+                        "%Y-%m-%d %H:%M:%S"
+                    ),
+
+                    "returned": False
+
+                }
+
+                borrow_records.append(new_record)
+
+                # Save books
+                with open("books.json", "w") as file:
+
+                    json.dump(
+                        books,
+                        file,
+                        indent=4
+                    )
+
+                # Save borrow records
+                with open("borrow_records.json", "w") as file:
+
+                    json.dump(
+                        borrow_records,
+                        file,
+                        indent=4
+                    )
+
+                flash(
+                    f"'{book.get('book_name')}' borrowed successfully!",
+                    "success"
+                )
+
+                return redirect(url_for("borrow_books"))
+
+        if not book_found:
+
+            flash(
+                "Book ID not found. Please enter a valid Book ID.",
+                "error"
+            )
+
+    return render_template(
+        "borrow_books.html",
+        books=books
+    )
 
 # =========================================================
 # USER - RETURN BOOKS
 # =========================================================
 
-@app.route("/return_books")
+@app.route("/return_books", methods=["GET", "POST"])
 def return_books():
 
     if "email" not in session:
@@ -1311,19 +1166,114 @@ def return_books():
     if session.get("role") != "user":
         return redirect(url_for("login"))
 
+    # Load books
+    if os.path.exists("books.json"):
+
+        with open("books.json", "r") as file:
+            books = json.load(file)
+
+    else:
+        books = []
+
+    # Load borrow records
+    if os.path.exists("borrow_records.json"):
+
+        with open("borrow_records.json", "r") as file:
+            borrow_records = json.load(file)
+
+    else:
+        borrow_records = []
+
+    if request.method == "POST":
+
+        book_id = request.form.get("book_id", "").strip()
+
+        if not book_id:
+
+            flash(
+                "Please enter a Book ID.",
+                "error"
+            )
+
+            return redirect(url_for("return_books"))
+
+        record_found = False
+
+        # Find user's active borrowed book
+        for record in borrow_records:
+
+            if (
+                record.get("user_email") == session.get("email")
+                and record.get("book_id") == book_id
+                and record.get("returned") == False
+            ):
+
+                record_found = True
+
+                # Mark as returned
+                record["returned"] = True
+
+                record["returned_date"] = datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                )
+
+                # Increase book copies
+                for book in books:
+
+                    if str(book.get("book_id", "")).strip() == book_id:
+
+                        current_copies = int(
+                            book.get("copies", 0)
+                        )
+
+                        book["copies"] = current_copies + 1
+
+                        break
+
+                break
+
+        if not record_found:
+
+            flash(
+                "You have not borrowed this book.",
+                "error"
+            )
+
+            return redirect(url_for("return_books"))
+
+        # Save books
+        with open("books.json", "w") as file:
+
+            json.dump(
+                books,
+                file,
+                indent=4
+            )
+
+        # Save records
+        with open("borrow_records.json", "w") as file:
+
+            json.dump(
+                borrow_records,
+                file,
+                indent=4
+            )
+
+        flash(
+            "Book returned successfully!",
+            "success"
+        )
+
+        return redirect(url_for("return_books"))
+
     return render_template(
         "return_books.html"
     )
-
-
 # =========================================================
 # USER - RENEW BOOKS
 # =========================================================
 
-@app.route(
-    "/renew-books",
-    methods=["GET", "POST"]
-)
+@app.route("/renew-books", methods=["GET", "POST"])
 def renew_books():
 
     if "email" not in session:
@@ -1334,44 +1284,27 @@ def renew_books():
 
     if request.method == "POST":
 
-        book_id = request.form.get(
-            "book_id",
-            ""
-        ).strip()
+        book_id = request.form.get("book_id", "").strip()
 
         if not book_id:
-
-            flash(
-                "Please enter a Book ID.",
-                "error"
-            )
-
-            return redirect(
-                url_for("renew_books")
-            )
+            flash("Please enter a Book ID.", "error")
+            return redirect(url_for("renew_books"))
 
         flash(
             f"Renew request received for Book ID {book_id}.",
             "success"
         )
 
-        return redirect(
-            url_for("renew_books")
-        )
+        return redirect(url_for("renew_books"))
 
-    return render_template(
-        "renew_books.html"
-    )
+    return render_template("renew_books.html")
 
 
 # =========================================================
 # USER - RESERVE BOOKS
 # =========================================================
 
-@app.route(
-    "/reserve-books",
-    methods=["GET", "POST"]
-)
+@app.route("/reserve-books", methods=["GET", "POST"])
 def reserve_books():
 
     if "email" not in session:
@@ -1382,34 +1315,20 @@ def reserve_books():
 
     if request.method == "POST":
 
-        book_id = request.form.get(
-            "book_id",
-            ""
-        ).strip()
+        book_id = request.form.get("book_id", "").strip()
 
         if not book_id:
-
-            flash(
-                "Please enter a Book ID.",
-                "error"
-            )
-
-            return redirect(
-                url_for("reserve_books")
-            )
+            flash("Please enter a Book ID.", "error")
+            return redirect(url_for("reserve_books"))
 
         flash(
             f"Reservation request received for Book ID {book_id}.",
             "success"
         )
 
-        return redirect(
-            url_for("reserve_books")
-        )
+        return redirect(url_for("reserve_books"))
 
-    return render_template(
-        "reserve_books.html"
-    )
+    return render_template("reserve_books.html")
 
 
 # =========================================================
@@ -1425,9 +1344,7 @@ def borrow_history():
     if session.get("role") != "user":
         return redirect(url_for("login"))
 
-    return render_template(
-        "borrow_history.html"
-    )
+    return render_template("borrow_history.html")
 
 
 # =========================================================
@@ -1443,23 +1360,15 @@ def back_to_dashboard():
     role = session.get("role")
 
     if role == "admin":
-        return redirect(
-            url_for("admin_dashboard")
-        )
+        return redirect(url_for("admin_dashboard"))
 
     if role == "librarian":
-        return redirect(
-            url_for("librarian_dashboard")
-        )
+        return redirect(url_for("librarian_dashboard"))
 
     if role == "user":
-        return redirect(
-            url_for("dashboard")
-        )
+        return redirect(url_for("dashboard"))
 
-    return redirect(
-        url_for("login")
-    )
+    return redirect(url_for("login"))
 
 
 # =========================================================
@@ -1468,6 +1377,7 @@ def back_to_dashboard():
 
 @app.route("/go-dashboard")
 def go_dashboard():
+
     return back_to_dashboard()
 
 
@@ -1480,65 +1390,25 @@ def register():
 
     if request.method == "POST":
 
-        name = request.form.get(
-            "name",
-            ""
-        ).strip()
-
-        email = request.form.get(
-            "email",
-            ""
-        ).strip().lower()
-
-        password = request.form.get(
-            "password",
-            ""
-        )
-
-        role = request.form.get(
-            "role",
-            "user"
-        ).strip().lower()
+        name = request.form.get("name", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+        role = request.form.get("role", "user").strip().lower()
 
         if not name or not email or not password:
+            flash("All fields are required.", "error")
+            return redirect(url_for("register"))
 
-            flash(
-                "All fields are required.",
-                "error"
-            )
-
-            return redirect(
-                url_for("register")
-            )
-
-        if role not in [
-            "user",
-            "librarian",
-            "admin"
-        ]:
-
+        if role not in ["user", "librarian", "admin"]:
             role = "user"
 
         users = load_users()
 
         for user in users:
 
-            if (
-                user.get(
-                    "email",
-                    ""
-                ).strip().lower()
-                == email
-            ):
-
-                flash(
-                    "Email already exists.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for("register")
-                )
+            if user.get("email", "").strip().lower() == email:
+                flash("Email already exists.", "error")
+                return redirect(url_for("register"))
 
         hashed_password = bcrypt.generate_password_hash(
             password
@@ -1555,19 +1425,11 @@ def register():
 
         session["selected_role"] = role
 
-        flash(
-            "Registration Successful!",
-            "success"
-        )
+        flash("Registration Successful!", "success")
 
-        return redirect(
-            url_for("login")
-        )
+        return redirect(url_for("login"))
 
-    return render_template(
-        "register.html"
-    )
-
+    return render_template("register.html")
 
 # =========================================================
 # LOGIN
@@ -1578,101 +1440,63 @@ def login():
 
     if request.method == "POST":
 
-        email = request.form.get(
-            "email",
-            ""
-        ).strip().lower()
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
 
-        password = request.form.get(
-            "password",
-            ""
-        )
-
-        selected_role = session.get(
-            "selected_role"
-        )
+        selected_role = session.get("selected_role")
 
         user = find_user(email)
 
         if user is None:
+            flash("Invalid Email or Password", "error")
+            return render_template("login.html")
 
-            flash(
-                "Invalid Email or Password",
-                "error"
-            )
-
-            return render_template(
-                "login.html"
-            )
-
-        stored_password = user.get(
-            "password",
-            ""
-        )
+        stored_password = user.get("password", "")
 
         try:
-
             password_match = bcrypt.check_password_hash(
                 stored_password,
                 password
             )
-
         except Exception:
-
             password_match = False
 
         if not password_match:
+            flash("Invalid Email or Password", "error")
+            return render_template("login.html")
 
-            flash(
-                "Invalid Email or Password",
-                "error"
-            )
+        user_role = user.get("role", "user").lower()
 
-            return render_template(
-                "login.html"
-            )
-
-        user_role = user.get(
-            "role",
-            "user"
-        ).lower()
-
-        if (
-            selected_role is not None
-            and user_role != selected_role
-        ):
-
+        # If a role was selected before login,
+        # make sure it matches the actual account role.
+        if selected_role is not None and user_role != selected_role:
             flash(
                 "Selected role does not match your account.",
                 "error"
             )
+            return render_template("login.html")
 
-            return render_template(
-                "login.html"
-            )
-
-        session["email"] = user.get(
-            "email"
-        )
-
-        session["name"] = user.get(
-            "name"
-        )
-
+        # Store logged-in user information
+        session["email"] = user.get("email")
+        session["name"] = user.get("name")
         session["role"] = user_role
 
-        session.pop(
-            "selected_role",
-            None
-        )
+        # Remove temporary selected role
+        session.pop("selected_role", None)
 
-        return redirect(
-            url_for("dashboard_selection")
-        )
+        # Redirect based on actual account role
+        if user_role == "user":
+            return redirect(url_for("dashboard"))
 
-    return render_template(
-        "login.html"
-    )
+        elif user_role == "librarian":
+            return redirect(url_for("dashboard_selection"))
+
+        elif user_role == "admin":
+            return redirect(url_for("dashboard_selection"))
+
+        return redirect(url_for("login"))
+
+    return render_template("login.html")
 
 
 # =========================================================
@@ -1690,10 +1514,7 @@ def dashboard():
 
     return render_template(
         "user_dashboard.html",
-        name=session.get(
-            "name",
-            "User"
-        )
+        name=session.get("name", "User")
     )
 
 
@@ -1712,10 +1533,7 @@ def librarian_dashboard():
 
     return render_template(
         "librarian_dashboard.html",
-        name=session.get(
-            "name",
-            "Librarian"
-        )
+        name=session.get("name", "Librarian")
     )
 
 
@@ -1734,10 +1552,7 @@ def admin_dashboard():
 
     return render_template(
         "admin_dashboard.html",
-        name=session.get(
-            "name",
-            "Admin"
-        )
+        name=session.get("name", "Admin")
     )
 
 
@@ -1750,19 +1565,14 @@ def logout():
 
     session.clear()
 
-    return redirect(
-        url_for("home")
-    )
+    return redirect(url_for("home"))
 
 
 # =========================================================
 # PROFILE
 # =========================================================
 
-@app.route(
-    "/profile",
-    methods=["GET", "POST"]
-)
+@app.route("/profile", methods=["GET", "POST"])
 def profile():
 
     if "email" not in session:
@@ -1774,17 +1584,7 @@ def profile():
 
     for user in users:
 
-        if (
-            user.get(
-                "email",
-                ""
-            ).strip().lower()
-            == session.get(
-                "email",
-                ""
-            ).strip().lower()
-        ):
-
+        if user.get("email", "").strip().lower() == session.get("email", "").strip().lower():
             current_user = user
             break
 
@@ -1792,27 +1592,15 @@ def profile():
 
         session.clear()
 
-        return redirect(
-            url_for("login")
-        )
+        return redirect(url_for("login"))
 
     if request.method == "POST":
 
-        new_name = request.form.get(
-            "name",
-            ""
-        ).strip()
+        new_name = request.form.get("name", "").strip()
 
         if not new_name:
-
-            flash(
-                "Name cannot be empty.",
-                "error"
-            )
-
-            return redirect(
-                url_for("profile")
-            )
+            flash("Name cannot be empty.", "error")
+            return redirect(url_for("profile"))
 
         current_user["name"] = new_name
 
@@ -1820,14 +1608,9 @@ def profile():
 
         save_users(users)
 
-        flash(
-            "Profile Updated Successfully.",
-            "success"
-        )
+        flash("Profile Updated Successfully.", "success")
 
-        return redirect(
-            url_for("profile")
-        )
+        return redirect(url_for("profile"))
 
     return render_template(
         "profile.html",
@@ -1839,10 +1622,7 @@ def profile():
 # CHANGE PASSWORD
 # =========================================================
 
-@app.route(
-    "/change-password",
-    methods=["GET", "POST"]
-)
+@app.route("/change-password", methods=["GET", "POST"])
 def change_password():
 
     if "email" not in session:
@@ -1854,83 +1634,43 @@ def change_password():
 
     for user in users:
 
-        if (
-            user.get(
-                "email",
-                ""
-            ).strip().lower()
-            == session.get(
-                "email",
-                ""
-            ).strip().lower()
-        ):
-
+        if user.get("email", "").strip().lower() == session.get("email", "").strip().lower():
             current_user = user
             break
 
     if current_user is None:
-
         session.clear()
-
-        return redirect(
-            url_for("login")
-        )
+        return redirect(url_for("login"))
 
     if request.method == "POST":
 
-        old_password = request.form.get(
-            "old_password",
-            ""
-        )
-
-        new_password = request.form.get(
-            "new_password",
-            ""
-        )
-
-        confirm_password = request.form.get(
-            "confirm_password",
-            ""
-        )
+        old_password = request.form.get("old_password", "")
+        new_password = request.form.get("new_password", "")
+        confirm_password = request.form.get("confirm_password", "")
 
         if not bcrypt.check_password_hash(
             current_user["password"],
             old_password
         ):
-
-            flash(
-                "Old Password is Incorrect.",
-                "error"
-            )
-
-            return redirect(
-                url_for("change_password")
-            )
+            flash("Old Password is Incorrect.", "error")
+            return redirect(url_for("change_password"))
 
         if new_password != confirm_password:
-
             flash(
                 "New Password and Confirm Password do not match.",
                 "error"
             )
-
-            return redirect(
-                url_for("change_password")
-            )
+            return redirect(url_for("change_password"))
 
         if bcrypt.check_password_hash(
             current_user["password"],
             new_password
         ):
-
             flash(
                 "New Password cannot be the same as the current password.",
                 "error"
             )
-
-            return redirect(
-                url_for("change_password")
-            )
+            return redirect(url_for("change_password"))
 
         current_user["password"] = bcrypt.generate_password_hash(
             new_password
@@ -1938,49 +1678,29 @@ def change_password():
 
         save_users(users)
 
-        flash(
-            "Password Changed Successfully.",
-            "success"
-        )
+        flash("Password Changed Successfully.", "success")
 
-        return redirect(
-            url_for("back_to_dashboard")
-        )
+        return redirect(url_for("back_to_dashboard"))
 
-    return render_template(
-        "change_password.html"
-    )
+    return render_template("change_password.html")
 
 
 # =========================================================
 # FORGOT PASSWORD
 # =========================================================
 
-@app.route(
-    "/forgot-password",
-    methods=["GET", "POST"]
-)
+@app.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
 
     if request.method == "POST":
 
-        email = request.form.get(
-            "email",
-            ""
-        ).strip().lower()
+        email = request.form.get("email", "").strip().lower()
 
         user = find_user(email)
 
         if user is None:
-
-            flash(
-                "No account found with this email.",
-                "error"
-            )
-
-            return redirect(
-                url_for("forgot_password")
-            )
+            flash("No account found with this email.", "error")
+            return redirect(url_for("forgot_password"))
 
         otp = generate_otp()
 
@@ -2010,114 +1730,53 @@ Library Management System
 
             mail.send(msg)
 
-            flash(
-                "OTP Sent Successfully.",
-                "success"
-            )
+            flash("OTP Sent Successfully.", "success")
 
         except Exception as e:
 
-            print(
-                "EMAIL ERROR:",
-                e
-            )
+            print("EMAIL ERROR:", e)
 
-            flash(
-                "Unable to Send OTP.",
-                "error"
-            )
+            flash("Unable to Send OTP.", "error")
 
-        return redirect(
-            url_for("verify_otp")
-        )
+        return redirect(url_for("verify_otp"))
 
-    return render_template(
-        "forgot_password.html"
-    )
+    return render_template("forgot_password.html")
 
 
 # =========================================================
 # VERIFY OTP
 # =========================================================
 
-@app.route(
-    "/verify-otp",
-    methods=["GET", "POST"]
-)
+@app.route("/verify-otp", methods=["GET", "POST"])
 def verify_otp():
 
     if request.method == "POST":
 
-        entered_otp = request.form.get(
-            "otp",
-            ""
-        ).strip()
+        entered_otp = request.form.get("otp", "").strip()
+        new_password = request.form.get("new_password", "")
+        confirm_password = request.form.get("confirm_password", "")
 
-        new_password = request.form.get(
-            "new_password",
-            ""
-        )
+        if "otp" not in session or "reset_email" not in session:
+            flash("OTP Expired.", "error")
+            return redirect(url_for("forgot_password"))
 
-        confirm_password = request.form.get(
-            "confirm_password",
-            ""
-        )
-
-        if (
-            "otp" not in session
-            or "reset_email" not in session
-        ):
-
-            flash(
-                "OTP Expired.",
-                "error"
-            )
-
-            return redirect(
-                url_for("forgot_password")
-            )
-
-        if entered_otp != session.get(
-            "otp"
-        ):
-
-            flash(
-                "Invalid OTP.",
-                "error"
-            )
-
-            return redirect(
-                url_for("verify_otp")
-            )
+        if entered_otp != session.get("otp"):
+            flash("Invalid OTP.", "error")
+            return redirect(url_for("verify_otp"))
 
         if new_password != confirm_password:
-
-            flash(
-                "Passwords do not match.",
-                "error"
-            )
-
-            return redirect(
-                url_for("verify_otp")
-            )
+            flash("Passwords do not match.", "error")
+            return redirect(url_for("verify_otp"))
 
         users = load_users()
 
-        reset_email = session.get(
-            "reset_email"
-        )
+        reset_email = session.get("reset_email")
 
         user_found = False
 
         for user in users:
 
-            if (
-                user.get(
-                    "email",
-                    ""
-                ).strip().lower()
-                == reset_email
-            ):
+            if user.get("email", "").strip().lower() == reset_email:
 
                 user["password"] = bcrypt.generate_password_hash(
                     new_password
@@ -2128,40 +1787,19 @@ def verify_otp():
                 break
 
         if not user_found:
-
-            flash(
-                "User account not found.",
-                "error"
-            )
-
-            return redirect(
-                url_for("forgot_password")
-            )
+            flash("User account not found.", "error")
+            return redirect(url_for("forgot_password"))
 
         save_users(users)
 
-        session.pop(
-            "otp",
-            None
-        )
+        session.pop("otp", None)
+        session.pop("reset_email", None)
 
-        session.pop(
-            "reset_email",
-            None
-        )
+        flash("Password Reset Successful.", "success")
 
-        flash(
-            "Password Reset Successful.",
-            "success"
-        )
+        return redirect(url_for("login"))
 
-        return redirect(
-            url_for("login")
-        )
-
-    return render_template(
-        "verify_otp.html"
-    )
+    return render_template("verify_otp.html")
 
 
 # =========================================================
