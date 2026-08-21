@@ -1,881 +1,322 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Book Management | Library Management System</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-</head>
-
-
-<body>
-
-
-<!-- ================= NAVBAR ================= -->
-
-<header class="navbar">
-
-    <div class="logo-section">
-
-        <div class="logo-circle">
-
-            <i class="fa-solid fa-book-open"></i>
-
-        </div>
-
-        <div>
-
-            <h2>Library Management System</h2>
-
-            <p>
-
-                {% if session.get('role') == 'admin' %}
-                    Admin Portal
-                {% elif session.get('role') == 'librarian' %}
-                    Librarian Portal
-                {% endif %}
-
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="navbar-right">
-
-        <a href="{{ url_for('back_to_dashboard') }}"
-           class="profile-btn">
-
-            <i class="fa-solid fa-house"></i>
-
-            Dashboard
-
-        </a>
-
-
-        <a href="{{ url_for('profile') }}"
-           class="profile-btn">
-
-            <i class="fa-solid fa-user"></i>
-
-            Profile
-
-        </a>
-
-
-        <a href="{{ url_for('logout') }}"
-           class="logout-btn">
-
-            <i class="fa-solid fa-right-from-bracket"></i>
-
-            Logout
-
-        </a>
-
-    </div>
-
-</header>
-
-
-
-<!-- ================= PAGE HEADER ================= -->
-
-<section class="welcome-box">
-
-    <h1>
-
-        <i class="fa-solid fa-book"></i>
-
-        Book Management
-
-    </h1>
-
-
-    <p>
-
-        Manage books, categories and add new books to the library.
-
-    </p>
-
-</section>
-
-
-
-<!-- ================================================= -->
-<!-- BOOK MANAGEMENT OPTIONS -->
-<!-- ================================================= -->
-
-<div class="book-management-options">
-
-
-    <!-- VIEW BOOKS -->
-
-    <a href="#books"
-       class="management-option">
-
-        <i class="fa-solid fa-book"></i>
-
-        <h3>
-            View / Manage Books
-        </h3>
-
-        <p>
-            Search, edit, delete and manage library books.
-        </p>
-
-    </a>
-
-
-
-    <!-- CATEGORIES -->
-
-    <a href="{{ url_for('categories') }}"
-       class="management-option">
-
-        <i class="fa-solid fa-layer-group"></i>
-
-        <h3>
-            Categories
-        </h3>
-
-        <p>
-            View and manage book categories.
-        </p>
-
-    </a>
-
-
-
-    <!-- ADD BOOK -->
-
-    <a href="#add-book"
-       class="management-option">
-
-        <i class="fa-solid fa-circle-plus"></i>
-
-        <h3>
-            Add New Book
-        </h3>
-
-        <p>
-            Add a new book to the library.
-        </p>
-
-    </a>
-
-</div>
-
-
-
-<!-- ================================================= -->
-<!-- SEARCH AND BOOK MANAGEMENT -->
-<!-- ================================================= -->
-
-<div class="table-container"
-     id="books">
-
-
-    <div class="table-top">
-
-
-        <!-- SEARCH -->
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="🔍 Search by Book ID, Title or Author"
-            class="search-box"
-        >
-
-
-        <!-- CATEGORY FILTER -->
-
-        <select
-            class="category-filter"
-            id="categoryFilter">
-
-            <option value="">
-                All Categories
-            </option>
-
-            <option value="Programming">
-                Programming
-            </option>
-
-            <option value="Database">
-                Database
-            </option>
-
-            <option value="Artificial Intelligence">
-                Artificial Intelligence
-            </option>
-
-            <option value="Science">
-                Science
-            </option>
-
-            <option value="Mathematics">
-                Mathematics
-            </option>
-
-            <option value="History">
-                History
-            </option>
-
-            <option value="Novel">
-                Novel
-            </option>
-
-            <option value="Computer Science">
-                Computer Science
-            </option>
-
-        </select>
-
-
-        <!-- ADD BOOK BUTTON -->
-
-        <a href="#add-book"
-           class="add-book-btn">
-
-            <i class="fa-solid fa-circle-plus"></i>
-
-            Add New Book
-
-        </a>
-
-    </div>
-
-
-
-    <!-- ================================================= -->
-    <!-- BOOK TABLE -->
-    <!-- ================================================= -->
-
-    <table class="book-table"
-           id="bookTable">
-
-        <thead>
-
-        <tr>
-
-            <th>
-                Book ID
-            </th>
-
-            <th>
-                Book Name
-            </th>
-
-            <th>
-                Author
-            </th>
-
-            <th>
-                Category
-            </th>
-
-            <th>
-                Copies
-            </th>
-
-            <th>
-                Status
-            </th>
-
-            <th>
-                Actions
-            </th>
-
-        </tr>
-
-        </thead>
-
-
-        <tbody>
-
-
-        {% if books %}
-
-            {% for book in books %}
-
-            <tr>
-
-                <!-- BOOK ID -->
-
-                <td>
-
-                    {{ book.get('book_id', 'N/A') }}
-
-                </td>
-
-
-                <!-- BOOK NAME -->
-
-                <td>
-
-                    {{ book.get('book_name', 'N/A') }}
-
-                </td>
-
-
-                <!-- AUTHOR -->
-
-                <td>
-
-                    {{ book.get('author', 'N/A') }}
-
-                </td>
-
-
-                <!-- CATEGORY -->
-
-                <td>
-
-                    {{ book.get('category', 'N/A') }}
-
-                </td>
-
-
-                <!-- COPIES -->
-
-                <td>
-
-                    {{ book.get('copies', 0) }}
-
-                </td>
-
-
-                <!-- STATUS -->
-
-                <td>
-
-                    {% if book.get('copies', 0)|int > 0 %}
-
-                        <span class="available">
-
-                            Available
-
-                        </span>
-
-                    {% else %}
-
-                        <span class="issued">
-
-                            Unavailable
-
-                        </span>
-
-                    {% endif %}
-
-                </td>
-
-
-                <!-- ACTIONS -->
-
-                <td>
-
-                    <div class="action-buttons">
-
-
-                        <!-- VIEW -->
-
-                        <a href="#"
-                           class="view-btn"
-                           title="View Book"
-                           onclick="viewBook(
-                               '{{ book.get('book_id', '')|e }}',
-                               '{{ book.get('book_name', '')|e }}',
-                               '{{ book.get('author', '')|e }}',
-                               '{{ book.get('category', '')|e }}',
-                               '{{ book.get('copies', 0) }}'
-                           ); return false;">
-
-                            <i class="fa-solid fa-eye"></i>
-
-                        </a>
-
-
-                        <!-- EDIT -->
-
-                        <a href="{{ url_for(
-                            'edit_book',
-                            book_id=book.get('book_id')
-                        ) }}"
-                           class="edit-btn"
-                           title="Edit Book">
-
-                            <i class="fa-solid fa-pen"></i>
-
-                        </a>
-
-
-                        <!-- DELETE -->
-
-                        <a href="{{ url_for(
-                            'delete_book',
-                            book_id=book.get('book_id')
-                        ) }}"
-                           class="delete-btn"
-                           title="Delete Book"
-                           onclick="return confirm(
-                               'Are you sure you want to delete this book?'
-                           );">
-
-                            <i class="fa-solid fa-trash"></i>
-
-                        </a>
-
-
-                    </div>
-
-                </td>
-
-            </tr>
-
-            {% endfor %}
-
-
-        {% else %}
-
-            <tr>
-
-                <td colspan="7"
-                    class="empty-message">
-
-                    <i class="fa-solid fa-book"></i>
-
-                    No books registered yet.
-
-                </td>
-
-            </tr>
-
-        {% endif %}
-
-
-        </tbody>
-
-    </table>
-
-</div>
-
-
-
-<!-- ================================================= -->
-<!-- ADD NEW BOOK FORM -->
-<!-- ================================================= -->
-
-<section class="book-form"
-         id="add-book">
-
-
-    <h2>
-
-        <i class="fa-solid fa-circle-plus"></i>
-
-        Add New Book
-
-    </h2>
-
-
-    <form
-        action="{{ url_for('add_book') }}"
-        method="POST">
-
-
-        <div class="form-grid">
-
-
-            <!-- BOOK ID -->
-
-            <input
-                type="text"
-                name="book_id"
-                placeholder="Book ID"
-                required
-            >
-
-
-            <!-- BOOK NAME -->
-
-            <input
-                type="text"
-                name="book_name"
-                placeholder="Book Name"
-                required
-            >
-
-
-            <!-- AUTHOR -->
-
-            <input
-                type="text"
-                name="author"
-                placeholder="Author"
-                required
-            >
-
-
-            <!-- PUBLISHER -->
-
-            <input
-                type="text"
-                name="publisher"
-                placeholder="Publisher"
-            >
-
-
-            <!-- ISBN -->
-
-            <input
-                type="text"
-                name="isbn"
-                placeholder="ISBN"
-            >
-
-
-            <!-- CATEGORY -->
-
-            <select
-                name="category"
-                required>
-
-                <option value="">
-                    Select Category
-                </option>
-
-                <option value="Programming">
-                    Programming
-                </option>
-
-                <option value="Database">
-                    Database
-                </option>
-
-                <option value="Artificial Intelligence">
-                    Artificial Intelligence
-                </option>
-
-                <option value="Science">
-                    Science
-                </option>
-
-                <option value="Mathematics">
-                    Mathematics
-                </option>
-
-                <option value="History">
-                    History
-                </option>
-
-                <option value="Novel">
-                    Novel
-                </option>
-
-                <option value="Computer Science">
-                    Computer Science
-                </option>
-
-            </select>
-
-
-            <!-- COPIES -->
-
-            <input
-                type="number"
-                name="copies"
-                placeholder="Number of Copies"
-                min="0"
-                required
-            >
-
-        </div>
-
-
-
-        <!-- FORM BUTTONS -->
-
-        <div class="form-buttons">
-
-
-            <button
-                type="submit"
-                class="save-btn">
-
-                <i class="fa-solid fa-floppy-disk"></i>
-
-                Save Book
-
-            </button>
-
-
-            <button
-                type="reset"
-                class="cancel-btn">
-
-                <i class="fa-solid fa-rotate-left"></i>
-
-                Reset
-
-            </button>
-
-        </div>
-
-    </form>
-
-</section>
-
-
-
-<!-- ================================================= -->
-<!-- VIEW BOOK POPUP -->
-<!-- ================================================= -->
-
-<div id="bookModal"
-     class="book-modal"
-     style="display:none;">
-
-    <div class="book-modal-content">
-
-        <button
-            type="button"
-            class="close-modal"
-            onclick="closeBookModal()">
-
-            <i class="fa-solid fa-xmark"></i>
-
-        </button>
-
-        <h2>
-            <i class="fa-solid fa-book"></i>
-            Book Details
-        </h2>
-
-        <p>
-            <strong>Book ID:</strong>
-            <span id="modalBookId"></span>
-        </p>
-
-        <p>
-            <strong>Book Name:</strong>
-            <span id="modalBookName"></span>
-        </p>
-
-        <p>
-            <strong>Author:</strong>
-            <span id="modalAuthor"></span>
-        </p>
-
-        <p>
-            <strong>Category:</strong>
-            <span id="modalCategory"></span>
-        </p>
-
-        <p>
-            <strong>Copies:</strong>
-            <span id="modalCopies"></span>
-        </p>
-
-    </div>
-
-</div>
-
-
-
-<!-- ================= FOOTER ================= -->
-
-<footer class="dashboard-footer">
-
-    <p>
-
-        © 2026 Library Management System | Book Management
-
-    </p>
-
-</footer>
-
-
-
-<!-- ================================================= -->
-<!-- JAVASCRIPT -->
-<!-- ================================================= -->
-
-<script>
-
-    // =================================================
-    // SEARCH BOOKS
-    // =================================================
-
-    const searchInput =
-        document.getElementById("searchInput");
-
-    const categoryFilter =
-        document.getElementById("categoryFilter");
-
-    const bookTable =
-        document.getElementById("bookTable");
-
-
-    function filterBooks() {
-
-        const searchValue =
-            searchInput.value.toLowerCase().trim();
-
-        const categoryValue =
-            categoryFilter.value.toLowerCase().trim();
-
-        const rows =
-            bookTable.querySelectorAll("tbody tr");
-
-
-        rows.forEach(function(row) {
-
-            const cells = row.querySelectorAll("td");
-
-
-            if (cells.length < 6) {
-                return;
-            }
-
-
-            const bookId =
-                cells[0].innerText.toLowerCase();
-
-            const bookName =
-                cells[1].innerText.toLowerCase();
-
-            const author =
-                cells[2].innerText.toLowerCase();
-
-            const category =
-                cells[3].innerText.toLowerCase();
-
-
-            const matchesSearch =
-                bookId.includes(searchValue) ||
-                bookName.includes(searchValue) ||
-                author.includes(searchValue);
-
-
-            const matchesCategory =
-                categoryValue === "" ||
-                category === categoryValue;
-
-
-            if (
-                matchesSearch &&
-                matchesCategory
-            ) {
-
-                row.style.display = "";
-
-            } else {
-
-                row.style.display = "none";
-
-            }
-
-        });
-
-    }
-
-
-    searchInput.addEventListener(
-        "input",
-        filterBooks
-    );
-
-
-    categoryFilter.addEventListener(
-        "change",
-        filterBooks
-    );
-
-
-    // =================================================
-    // VIEW BOOK
-    // =================================================
-
-    function viewBook(
-        bookId,
-        bookName,
-        author,
-        category,
-        copies
-    ) {
-
-        document.getElementById(
-            "modalBookId"
-        ).innerText = bookId;
-
-
-        document.getElementById(
-            "modalBookName"
-        ).innerText = bookName;
-
-
-        document.getElementById(
-            "modalAuthor"
-        ).innerText = author;
-
-
-        document.getElementById(
-            "modalCategory"
-        ).innerText = category;
-
-
-        document.getElementById(
-            "modalCopies"
-        ).innerText = copies;
-
-
-        document.getElementById(
-            "bookModal"
-        ).style.display = "flex";
-
-    }
-
-
-    function closeBookModal() {
-
-        document.getElementById(
-            "bookModal"
-        ).style.display = "none";
-
-    }
-
-
-    // Close popup when clicking outside
-
-    window.onclick = function(event) {
-
-        const modal =
-            document.getElementById("bookModal");
-
-        if (event.target === modal) {
-
-            closeBookModal();
-
+# =========================================================
+# BOOK MANAGEMENT
+# =========================================================
+
+@app.route("/book-management")
+def book_management():
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    if session.get("role") not in ["admin", "librarian"]:
+        return redirect(url_for("login"))
+
+    try:
+        books = list(
+            books_collection.find(
+                {},
+                {"_id": 0}
+            )
+        )
+    except Exception as e:
+        print("Error loading books:", e)
+        books = []
+
+    return render_template(
+        "book_management.html",
+        books=books
+    )
+
+
+# =========================================================
+# ADD BOOK
+# =========================================================
+
+@app.route("/add_book", methods=["POST"])
+def add_book():
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    if session.get("role") not in ["admin", "librarian"]:
+        return redirect(url_for("login"))
+
+    try:
+
+        book_id = request.form.get(
+            "book_id", ""
+        ).strip()
+
+        book_name = request.form.get(
+            "book_name", ""
+        ).strip()
+
+        author = request.form.get(
+            "author", ""
+        ).strip()
+
+        publisher = request.form.get(
+            "publisher", ""
+        ).strip()
+
+        isbn = request.form.get(
+            "isbn", ""
+        ).strip()
+
+        category = request.form.get(
+            "category", ""
+        ).strip()
+
+        copies = request.form.get(
+            "copies", "0"
+        ).strip()
+
+        # Required fields
+        if (
+            not book_id
+            or not book_name
+            or not author
+            or not category
+        ):
+            flash(
+                "Please fill all required fields.",
+                "error"
+            )
+            return redirect(
+                url_for("book_management")
+            )
+
+        # Convert copies to integer
+        try:
+            copies = int(copies)
+
+        except (ValueError, TypeError):
+            copies = 0
+
+        if copies < 0:
+            copies = 0
+
+        # Check duplicate Book ID
+        existing_book = books_collection.find_one({
+            "book_id": book_id
+        })
+
+        if existing_book:
+            flash(
+                "Book ID already exists.",
+                "error"
+            )
+            return redirect(
+                url_for("book_management")
+            )
+
+        # Create book
+        new_book = {
+            "book_id": book_id,
+            "book_name": book_name,
+            "author": author,
+            "publisher": publisher,
+            "isbn": isbn,
+            "category": category,
+            "copies": copies
         }
 
-    };
+        # Save to MongoDB
+        books_collection.insert_one(
+            new_book
+        )
 
-</script>
+        flash(
+            "Book added successfully.",
+            "success"
+        )
+
+        return redirect(
+            url_for("book_management")
+        )
+
+    except Exception as e:
+
+        print(
+            "Error adding book:",
+            e
+        )
+
+        flash(
+            "Error adding book.",
+            "error"
+        )
+
+        return redirect(
+            url_for("book_management")
+        )
 
 
-</body>
+# =========================================================
+# EDIT BOOK
+# =========================================================
 
-</html>
+@app.route(
+    "/edit_book/<book_id>",
+    methods=["GET", "POST"]
+)
+def edit_book(book_id):
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    if session.get("role") not in ["admin", "librarian"]:
+        return redirect(url_for("login"))
+
+    try:
+
+        # Find book
+        book = books_collection.find_one({
+            "book_id": book_id
+        })
+
+        if not book:
+
+            flash(
+                "Book not found.",
+                "error"
+            )
+
+            return redirect(
+                url_for("book_management")
+            )
+
+        # POST = update book
+        if request.method == "POST":
+
+            book_name = request.form.get(
+                "book_name", ""
+            ).strip()
+
+            author = request.form.get(
+                "author", ""
+            ).strip()
+
+            publisher = request.form.get(
+                "publisher", ""
+            ).strip()
+
+            isbn = request.form.get(
+                "isbn", ""
+            ).strip()
+
+            category = request.form.get(
+                "category", ""
+            ).strip()
+
+            copies = request.form.get(
+                "copies", "0"
+            ).strip()
+
+            # Convert copies
+            try:
+                copies = int(copies)
+
+            except (ValueError, TypeError):
+                copies = 0
+
+            if copies < 0:
+                copies = 0
+
+            # Update book
+            books_collection.update_one(
+                {
+                    "book_id": book_id
+                },
+                {
+                    "$set": {
+                        "book_name": book_name,
+                        "author": author,
+                        "publisher": publisher,
+                        "isbn": isbn,
+                        "category": category,
+                        "copies": copies
+                    }
+                }
+            )
+
+            flash(
+                "Book updated successfully.",
+                "success"
+            )
+
+            return redirect(
+                url_for("book_management")
+            )
+
+        # GET = show edit page
+        return render_template(
+            "edit_book.html",
+            book=book
+        )
+
+    except Exception as e:
+
+        print(
+            "Error editing book:",
+            e
+        )
+
+        flash(
+            "Error editing book.",
+            "error"
+        )
+
+        return redirect(
+            url_for("book_management")
+        )
+
+
+# =========================================================
+# DELETE BOOK
+# =========================================================
+
+@app.route("/delete_book/<book_id>")
+def delete_book(book_id):
+
+    if "email" not in session:
+        return redirect(url_for("login"))
+
+    if session.get("role") not in ["admin", "librarian"]:
+        return redirect(url_for("login"))
+
+    try:
+
+        result = books_collection.delete_one({
+            "book_id": book_id
+        })
+
+        if result.deleted_count > 0:
+
+            flash(
+                "Book deleted successfully.",
+                "success"
+            )
+
+        else:
+
+            flash(
+                "Book not found.",
+                "error"
+            )
+
+    except Exception as e:
+
+        print(
+            "Error deleting book:",
+            e
+        )
+
+        flash(
+            "Error deleting book.",
+            "error"
+        )
+
+    return redirect(
+        url_for("book_management")
+    )
