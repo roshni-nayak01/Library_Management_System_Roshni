@@ -3370,8 +3370,32 @@ def borrow_history():
     if session.get("role") != "user":
         return redirect(url_for("login"))
 
-    return render_template("borrow_history.html")
+    user_email = session.get("email")
 
+    borrow_records = []
+
+    # Read borrow records
+    if os.path.exists("borrow_records.json"):
+        try:
+            with open("borrow_records.json", "r") as f:
+                borrow_records = json.load(f)
+
+        except (json.JSONDecodeError, FileNotFoundError):
+            borrow_records = []
+
+    # Only show records belonging to the logged-in user
+    user_records = [
+        record
+        for record in borrow_records
+        if record
+        and record.get("user_email")
+        and record.get("user_email").lower() == user_email.lower()
+    ]
+
+    return render_template(
+        "borrow_history.html",
+        borrow_records=user_records
+    )
 
 # =========================================================
 # BACK TO CORRESPONDING DASHBOARD
