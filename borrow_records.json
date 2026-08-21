@@ -1,30 +1,31 @@
 [
     {},
     {
+        "user_email": "savio@gmail.com",
         "book_id": "1",
         "book_name": "geetanjali",
         "author": "rabindranath tagore",
-        "publisher": "arun",
-        "isbn": "11",
         "category": "Novel",
-        "copies": 10
+        "borrowed_date": "2026-08-20 22:38:52",
+        "returned": true,
+        "returned_date": "2026-08-20 22:41:18"
     },
     {
+        "user_email": "savio@gmail.com",
         "book_id": "2",
         "book_name": "annana nenapu",
         "author": "purnachandra tejaswi",
-        "publisher": "nishan",
-        "isbn": "12",
         "category": "Novel",
-        "copies": 9
+        "borrowed_date": "2026-08-20 22:44:31",
+        "returned": false
     },
     {
+        "user_email": "savio@gmail.com",
         "book_id": "3",
         "book_name": "heavenly parasole",
         "author": "william Shakesphere",
-        "publisher": "Savio Lobo",
-        "isbn": "13",
         "category": "Novel",
-        "copies": 7
+        "borrowed_date": "2026-08-21 09:32:15",
+        "returned": false
     }
 ]

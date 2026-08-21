@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
+from datetime import datetime
 import json
 import os
 import random
@@ -1015,8 +1016,7 @@ def categories():
 # =========================================================
 # USER - BORROW BOOKS
 # =========================================================
-
-@app.route("/borrow_books")
+@app.route("/borrow_books", methods=["GET", "POST"])
 def borrow_books():
 
     if "email" not in session:
@@ -1025,14 +1025,139 @@ def borrow_books():
     if session.get("role") != "user":
         return redirect(url_for("login"))
 
-    return render_template("borrow_books.html")
+    # Load books
+    if os.path.exists("books.json"):
 
+        with open("books.json", "r") as file:
+            books = json.load(file)
+
+    else:
+        books = []
+
+    # Load borrow records
+    if os.path.exists("borrow_records.json"):
+
+        with open("borrow_records.json", "r") as file:
+            borrow_records = json.load(file)
+
+    else:
+        borrow_records = []
+
+    if request.method == "POST":
+
+        book_id = request.form.get("book_id", "").strip()
+
+        if not book_id:
+
+            flash("Please enter a Book ID.", "error")
+
+            return redirect(url_for("borrow_books"))
+
+        # Check whether user already borrowed this book
+        for record in borrow_records:
+
+            if (
+                record.get("user_email") == session.get("email")
+                and record.get("book_id") == book_id
+                and record.get("returned") == False
+            ):
+
+                flash(
+                    "You have already borrowed this book.",
+                    "error"
+                )
+
+                return redirect(url_for("borrow_books"))
+
+        # Find book
+        book_found = False
+
+        for book in books:
+
+            if str(book.get("book_id", "")).strip() == book_id:
+
+                book_found = True
+
+                copies = int(book.get("copies", 0))
+
+                # Check availability
+                if copies <= 0:
+
+                    flash(
+                        "This book is currently unavailable.",
+                        "error"
+                    )
+
+                    return redirect(url_for("borrow_books"))
+
+                # Deduct one copy
+                book["copies"] = copies - 1
+
+                # Create borrow record
+                new_record = {
+
+                    "user_email": session.get("email"),
+
+                    "book_id": book.get("book_id"),
+
+                    "book_name": book.get("book_name"),
+
+                    "author": book.get("author"),
+
+                    "category": book.get("category"),
+
+                    "borrowed_date": datetime.now().strftime(
+                        "%Y-%m-%d %H:%M:%S"
+                    ),
+
+                    "returned": False
+
+                }
+
+                borrow_records.append(new_record)
+
+                # Save books
+                with open("books.json", "w") as file:
+
+                    json.dump(
+                        books,
+                        file,
+                        indent=4
+                    )
+
+                # Save borrow records
+                with open("borrow_records.json", "w") as file:
+
+                    json.dump(
+                        borrow_records,
+                        file,
+                        indent=4
+                    )
+
+                flash(
+                    f"'{book.get('book_name')}' borrowed successfully!",
+                    "success"
+                )
+
+                return redirect(url_for("borrow_books"))
+
+        if not book_found:
+
+            flash(
+                "Book ID not found. Please enter a valid Book ID.",
+                "error"
+            )
+
+    return render_template(
+        "borrow_books.html",
+        books=books
+    )
 
 # =========================================================
 # USER - RETURN BOOKS
 # =========================================================
 
-@app.route("/return_books")
+@app.route("/return_books", methods=["GET", "POST"])
 def return_books():
 
     if "email" not in session:
@@ -1041,9 +1166,109 @@ def return_books():
     if session.get("role") != "user":
         return redirect(url_for("login"))
 
-    return render_template("return_books.html")
+    # Load books
+    if os.path.exists("books.json"):
 
+        with open("books.json", "r") as file:
+            books = json.load(file)
 
+    else:
+        books = []
+
+    # Load borrow records
+    if os.path.exists("borrow_records.json"):
+
+        with open("borrow_records.json", "r") as file:
+            borrow_records = json.load(file)
+
+    else:
+        borrow_records = []
+
+    if request.method == "POST":
+
+        book_id = request.form.get("book_id", "").strip()
+
+        if not book_id:
+
+            flash(
+                "Please enter a Book ID.",
+                "error"
+            )
+
+            return redirect(url_for("return_books"))
+
+        record_found = False
+
+        # Find user's active borrowed book
+        for record in borrow_records:
+
+            if (
+                record.get("user_email") == session.get("email")
+                and record.get("book_id") == book_id
+                and record.get("returned") == False
+            ):
+
+                record_found = True
+
+                # Mark as returned
+                record["returned"] = True
+
+                record["returned_date"] = datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                )
+
+                # Increase book copies
+                for book in books:
+
+                    if str(book.get("book_id", "")).strip() == book_id:
+
+                        current_copies = int(
+                            book.get("copies", 0)
+                        )
+
+                        book["copies"] = current_copies + 1
+
+                        break
+
+                break
+
+        if not record_found:
+
+            flash(
+                "You have not borrowed this book.",
+                "error"
+            )
+
+            return redirect(url_for("return_books"))
+
+        # Save books
+        with open("books.json", "w") as file:
+
+            json.dump(
+                books,
+                file,
+                indent=4
+            )
+
+        # Save records
+        with open("borrow_records.json", "w") as file:
+
+            json.dump(
+                borrow_records,
+                file,
+                indent=4
+            )
+
+        flash(
+            "Book returned successfully!",
+            "success"
+        )
+
+        return redirect(url_for("return_books"))
+
+    return render_template(
+        "return_books.html"
+    )
 # =========================================================
 # USER - RENEW BOOKS
 # =========================================================
