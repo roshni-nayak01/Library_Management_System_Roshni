@@ -1,65 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-<title>Fine Management</title>
+    <meta charset="UTF-8">
 
-<link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fine Management | Library Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
-
 <body>
 
+<div class="fine-page-container">
 
-<div class="form-card">
+    <div class="fine-management-card">
 
+        <!-- HEADER -->
 
-<h2>💰 Fine Management</h2>
+        <div class="fine-icon">
+            <i class="fa-solid fa-money-bill-wave"></i>
+        </div>
 
+        <h2>Fine Management</h2>
 
-<table>
-
-
-<tr>
-
-<th>Member</th>
-<th>Book</th>
-<th>Days Late</th>
-<th>Fine Amount</th>
-<th>Status</th>
-
-</tr>
+        <p class="fine-subtitle">
+            View and manage library fines.
+        </p>
 
 
-<tr>
+        <!-- FINE TABLE -->
 
-<td>Roshni</td>
+        <div class="fine-table-container">
 
-<td>Operating System</td>
+            <table class="fine-table">
 
-<td>5</td>
+                <thead>
 
-<td>₹50</td>
+                    <tr>
 
-<td>
-Pending
-</td>
+                        <th>#</th>
 
-</tr>
+                        <th>Member</th>
+
+                        <th>Book</th>
+
+                        <th>Days Late</th>
+
+                        <th>Fine Amount</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
 
 
-</table>
+                <tbody>
+
+                    <tr>
+
+                        <td>1</td>
+
+                        <td>Roshni</td>
+
+                        <td>Operating System</td>
+
+                        <td>5</td>
+
+                        <td>₹50</td>
+
+                        <td>
+                            <span class="fine-status pending">
+                                Pending
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
 
 
-<a href="{{url_for('librarian_dashboard')}}">
-    Back
-</a>
+        <!-- BACK BUTTON -->
 
+        <div class="fine-back-container">
+
+            <a href="{{ url_for('librarian_dashboard') }}"
+               class="fine-back-btn">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
 
 </div>
-
 
 </body>
 

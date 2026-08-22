@@ -192,15 +192,11 @@ def view_books():
     if "email" not in session:
         return redirect(url_for("login"))
 
-    # Load books from books.json
+    books = []
+
     if os.path.exists("books.json"):
-
-        with open("books.json", "r") as file:
+        with open("books.json", "r", encoding="utf-8") as file:
             books = json.load(file)
-
-    else:
-
-        books = []
 
     return render_template(
         "view_books.html",

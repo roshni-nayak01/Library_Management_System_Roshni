@@ -15,122 +15,128 @@
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
 
-    <style>
+.books-page {
+    width: 95%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
 
-        .books-page {
-            width: 95%;
-            max-width: 1200px;
-            margin: 40px auto;
-        }
+.books-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
 
-        .books-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        }
+.books-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
 
-        .books-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+.books-header .icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
 
-        .books-header .icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
+.books-header h2 {
+    margin-bottom: 8px;
+}
 
-        .books-header h2 {
-            margin-bottom: 8px;
-        }
+.books-header .subtitle {
+    color: #666;
+}
 
-        .books-header .subtitle {
-            color: #666;
-        }
+.search-section {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
 
-        .search-section {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
+.book-search {
+    flex: 1;
+    min-width: 250px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
+    color: #333;
+}
 
-        .book-search {
-            flex: 1;
-            min-width: 250px;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 15px;
-        }
+.book-category {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    min-width: 200px;
+    background: white;
+    color: #333;
+}
 
-        .book-category {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 15px;
-            min-width: 200px;
-        }
+.books-table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-        .books-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.books-table th,
+.books-table td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
 
-        .books-table th,
-        .books-table td {
-            padding: 14px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
+.books-table th {
+    background: #f5f7fb;
+    font-weight: 600;
+    color: #333;
+}
 
-        .books-table th {
-            background: #f5f7fb;
-            font-weight: 600;
-        }
+.books-table td {
+    color: #333;
+    background: white;
+}
 
-        .available-status {
-            color: #16803c;
-            font-weight: 600;
-        }
+.books-table tbody tr:hover {
+    background: #f8f9ff;
+}
 
-        .unavailable-status {
-            color: #d93025;
-            font-weight: 600;
-        }
+.available-status {
+    color: #16803c;
+    font-weight: 600;
+}
 
-        .no-books {
-            text-align: center;
-            padding: 30px;
-            color: #777;
-        }
+.unavailable-status {
+    color: #d93025;
+    font-weight: 600;
+}
 
-        .back-home {
-            display: inline-block;
-            margin-top: 25px;
-        }
+.back-home {
+    display: inline-block;
+    margin-top: 25px;
+}
 
-        @media (max-width: 800px) {
+@media (max-width: 800px) {
 
-            .books-card {
-                padding: 15px;
-                overflow-x: auto;
-            }
+    .books-card {
+        padding: 15px;
+        overflow-x: auto;
+    }
 
-            .books-table {
-                min-width: 800px;
-            }
+    .books-table {
+        min-width: 800px;
+    }
 
-        }
+}
 
-    </style>
+</style>
 
 </head>
 
 
 <body>
-
 
 <div class="page-container">
 
@@ -144,9 +150,7 @@
             <div class="books-header">
 
                 <div class="icon">
-
                     <i class="fa-solid fa-book-open"></i>
-
                 </div>
 
                 <h2>
@@ -154,9 +158,7 @@
                 </h2>
 
                 <p class="subtitle">
-
                     Browse books available in the library.
-
                 </p>
 
             </div>
@@ -221,154 +223,121 @@
 
             <!-- ================= BOOK TABLE ================= -->
 
-            <table
-                class="books-table"
-                id="booksTable">
+            <div class="books-table-wrapper">
 
+                <table
+                    class="books-table"
+                    id="booksTable">
 
-                <thead>
+                    <thead>
 
-                    <tr>
+                        <tr>
 
-                        <th>
-                            Book ID
-                        </th>
+                            <th>Book ID</th>
 
-                        <th>
-                            Title
-                        </th>
+                            <th>Title</th>
 
-                        <th>
-                            Author
-                        </th>
+                            <th>Author</th>
 
-                        <th>
-                            Category
-                        </th>
+                            <th>Category</th>
 
-                        <th>
-                            ISBN
-                        </th>
+                            <th>ISBN</th>
 
-                        <th>
-                            Copies
-                        </th>
+                            <th>Copies</th>
 
-                        <th>
-                            Status
-                        </th>
+                            <th>Status</th>
 
-                    </tr>
+                        </tr>
 
-                </thead>
+                    </thead>
 
 
-                <tbody>
+                    <tbody>
 
+                    {% if books %}
 
-                {% if books %}
+                        {% for book in books %}
 
-                    {% for book in books %}
+                            <tr>
 
-                    <tr>
+                                <td>
+                                    {{ book.get("book_id", "N/A") }}
+                                </td>
 
-                        <!-- BOOK ID -->
+                                <td>
+                                    {{ book.get("book_name", "N/A") }}
+                                </td>
 
-                        <td>
-                            {{ book.get('book_id', 'N/A') }}
-                        </td>
+                                <td>
+                                    {{ book.get("author", "N/A") }}
+                                </td>
 
+                                <td>
+                                    {{ book.get("category", "N/A") }}
+                                </td>
 
-                        <!-- TITLE -->
+                                <td>
+                                    {{ book.get("isbn", "N/A") }}
+                                </td>
 
-                        <td>
-                            {{ book.get('book_name', 'N/A') }}
-                        </td>
+                                <td>
+                                    {{ book.get("copies", 0) }}
+                                </td>
 
+                                <td>
 
-                        <!-- AUTHOR -->
+                                    {% if book.get("copies", 0)|int > 0 %}
 
-                        <td>
-                            {{ book.get('author', 'N/A') }}
-                        </td>
+                                        <span class="available-status">
 
+                                            <i class="fa-solid fa-circle-check"></i>
 
-                        <!-- CATEGORY -->
+                                            Available
 
-                        <td>
-                            {{ book.get('category', 'N/A') }}
-                        </td>
+                                        </span>
 
+                                    {% else %}
 
-                        <!-- ISBN -->
+                                        <span class="unavailable-status">
 
-                        <td>
-                            {{ book.get('isbn', 'N/A') }}
-                        </td>
+                                            <i class="fa-solid fa-circle-xmark"></i>
 
+                                            Unavailable
 
-                        <!-- COPIES -->
+                                        </span>
 
-                        <td>
-                            {{ book.get('copies', 0) }}
-                        </td>
+                                    {% endif %}
 
+                                </td>
 
-                        <!-- STATUS -->
+                            </tr>
 
-                        <td>
+                        {% endfor %}
 
-                            {% if book.get('copies', 0)|int > 0 %}
+                    {% else %}
 
-                                <span class="available-status">
+                        <tr>
 
-                                    <i class="fa-solid fa-circle-check"></i>
+                            <td
+                                colspan="7"
+                                class="no-books">
 
-                                    Available
+                                <i class="fa-solid fa-book"></i>
 
-                                </span>
+                                No books are currently available
+                                in the library.
 
-                            {% else %}
+                            </td>
 
-                                <span class="unavailable-status">
+                        </tr>
 
-                                    <i class="fa-solid fa-circle-xmark"></i>
+                    {% endif %}
 
-                                    Unavailable
+                    </tbody>
 
-                                </span>
+                </table>
 
-                            {% endif %}
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-
-                {% else %}
-
-                    <tr>
-
-                        <td
-                            colspan="7"
-                            class="no-books">
-
-                            <i class="fa-solid fa-book"></i>
-
-                            No books are currently available in the library.
-
-                        </td>
-
-                    </tr>
-
-                {% endif %}
-
-
-                </tbody>
-
-            </table>
+            </div>
 
 
             <!-- ================= BACK ================= -->
