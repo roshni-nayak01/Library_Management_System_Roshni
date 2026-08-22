@@ -38,7 +38,21 @@
             Enter the Book ID to reserve a book that is currently unavailable.
 
         </p>
+{% with messages = get_flashed_messages(with_categories=true) %}
 
+    {% if messages %}
+
+        {% for category, message in messages %}
+
+            <div class="flash-message {{ category }}">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+{% endwith %}
         <form action="" method="POST">
 
             <div class="input-group">

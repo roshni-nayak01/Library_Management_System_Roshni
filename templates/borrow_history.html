@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,6 +38,7 @@
 
         </p>
 
+
         <table class="history-table">
 
             <thead>
@@ -46,6 +46,8 @@
                 <tr>
 
                     <th>Book</th>
+
+                    <th>Author</th>
 
                     <th>Borrow Date</th>
 
@@ -57,23 +59,81 @@
 
             </thead>
 
+
             <tbody>
 
-                <tr>
+                {% if borrow_records %}
 
-                    <td>No records available</td>
+                    {% for record in borrow_records %}
 
-                    <td>-</td>
+                    <tr>
 
-                    <td>-</td>
+                        <td>
+                            {{ record.get('book_name', '-') }}
+                        </td>
 
-                    <td>-</td>
+                        <td>
+                            {{ record.get('author', '-') }}
+                        </td>
 
-                </tr>
+                        <td>
+                            {{ record.get('borrowed_date', '-') }}
+                        </td>
+
+                        <td>
+
+                            {% if record.get('returned') %}
+
+                                {{ record.get('returned_date', '-') }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if record.get('returned') %}
+
+                                <span class="status returned">
+                                    Returned
+                                </span>
+
+                            {% else %}
+
+                                <span class="status borrowed">
+                                    Issued
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="5">
+
+                            No borrowing records available.
+
+                        </td>
+
+                    </tr>
+
+                {% endif %}
 
             </tbody>
 
         </table>
+
 
         <a class="back-home"
            href="{{ url_for('dashboard') }}">
@@ -91,4 +151,3 @@
 </body>
 
 </html>
-

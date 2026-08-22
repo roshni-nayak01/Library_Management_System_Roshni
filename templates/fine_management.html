@@ -5,7 +5,12 @@
 
     <meta charset="UTF-8">
 
+<<<<<<< HEAD
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+=======
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+>>>>>>> d223a34eb74ed688179e44668acdba22e9202c6d
 
     <title>Fine Management | Library Management System</title>
 
@@ -19,6 +24,7 @@
 
 <body>
 
+<<<<<<< HEAD
 <div class="fine-page-container">
 
     <div class="fine-management-card">
@@ -26,11 +32,19 @@
         <!-- HEADER -->
 
         <div class="fine-icon">
+=======
+<div class="page-container">
+
+    <div class="book-card">
+
+        <div class="icon">
+>>>>>>> d223a34eb74ed688179e44668acdba22e9202c6d
             <i class="fa-solid fa-money-bill-wave"></i>
         </div>
 
         <h2>Fine Management</h2>
 
+<<<<<<< HEAD
         <p class="fine-subtitle">
             View and manage library fines.
         </p>
@@ -98,15 +112,226 @@
 
             <a href="{{ url_for('librarian_dashboard') }}"
                class="fine-back-btn">
+=======
+        <p class="subtitle">
+            View and manage fines for late, damaged and lost books.
+        </p>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        {% if fines %}
+
+            <div style="overflow-x:auto; margin-top:25px;">
+
+                <table style="width:100%; border-collapse:collapse;">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Member</th>
+
+                            <th>Book</th>
+
+                            <th>Due Date</th>
+
+                            <th>Condition</th>
+
+                            <th>Days Late</th>
+
+                            <th>Late Fine</th>
+
+                            <th>Damage</th>
+
+                            <th>Lost</th>
+
+                            <th>Total Fine</th>
+
+                            <th>Status</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for fine in fines %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    {{ fine.member_name }}
+                                </strong>
+
+                                <br>
+
+                                <small>
+                                    {{ fine.user_email }}
+                                </small>
+
+                            </td>
+>>>>>>> d223a34eb74ed688179e44668acdba22e9202c6d
 
                 <i class="fa-solid fa-arrow-left"></i>
 
+<<<<<<< HEAD
                 Back to Dashboard
 
             </a>
 
         </div>
 
+=======
+                            <td>
+
+                                {{ fine.book_name }}
+
+                                <br>
+
+                                <small>
+                                    ID: {{ fine.book_id }}
+                                </small>
+
+                            </td>
+
+
+                            <td>
+                                {{ fine.due_date }}
+                            </td>
+
+
+                            <td>
+                                {{ fine.condition }}
+                            </td>
+
+
+                            <td>
+                                {{ fine.days_late }}
+                            </td>
+
+
+                            <td>
+                                ₹{{ fine.late_fine }}
+                            </td>
+
+
+                            <td>
+                                ₹{{ fine.damage_fine }}
+                            </td>
+
+
+                            <td>
+                                ₹{{ fine.lost_fine }}
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    ₹{{ fine.total_fine }}
+                                </strong>
+
+                            </td>
+
+
+                           <td>
+    <strong>{{ fine.status }}</strong>
+</td>
+
+
+                            <td>
+
+                                {% if fine.status != "Paid" %}
+
+                                    <form
+                                        action="{{ url_for('fine_management') }}"
+                                        method="POST">
+
+                                        <input
+                                            type="hidden"
+                                            name="record_index"
+                                            value="{{ fine._index }}">
+
+                                        <button type="submit">
+
+                                            <i class="fa-solid fa-check"></i>
+
+                                            Mark Paid
+
+                                        </button>
+
+                                    </form>
+
+                                {% else %}
+
+                                    <span>
+                                        Paid
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div style="margin-top:30px;">
+
+                <i class="fa-solid fa-circle-check"
+                   style="font-size:40px;">
+                </i>
+
+                <p>
+                    No fines currently recorded.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <hr>
+
+        <a class="back-home"
+           href="{{ url_for('librarian_dashboard') }}">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Back to Dashboard
+
+        </a>
+
+>>>>>>> d223a34eb74ed688179e44668acdba22e9202c6d
     </div>
 
 </div>

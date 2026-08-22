@@ -6,7 +6,7 @@
         "publisher": "nishan",
         "isbn": "12",
         "category": "Novel",
-        "copies": 9
+        "copies": 10
     },
     {
         "book_id": "3",
@@ -16,5 +16,14 @@
         "isbn": "13",
         "category": "Novel",
         "copies": 7
+    },
+    {
+        "book_id": "4",
+        "book_name": "Harry Potter and the Philosopher's Stone",
+        "author": "J.K. Rowling",
+        "publisher": "Bloomsbury",
+        "isbn": "14",
+        "category": "Novel",
+        "copies": 0
     }
 ]

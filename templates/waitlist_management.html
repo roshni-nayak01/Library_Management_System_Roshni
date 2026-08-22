@@ -3,252 +3,168 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>Waitlist Management | Library Management System</title>
+    <title>Waitlist Management | Library Management System</title>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
-
 <body>
 
+<div class="page-container">
 
-<!-- NAVBAR -->
+    <div class="book-card">
 
-<header class="navbar">
+        <div class="icon">
+            <i class="fa-solid fa-clock"></i>
+        </div>
 
-<div class="logo-section">
+        <h2>Waitlist Management</h2>
 
-<div class="logo-circle">
+        <p class="subtitle">
+            Manage users waiting for unavailable books.
+        </p>
 
-<i class="fa-solid fa-book-open"></i>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        {% if waitlist %}
+
+            <div style="overflow-x:auto; margin-top:25px;">
+
+                <table style="width:100%; border-collapse:collapse;">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Position</th>
+
+                            <th>Book ID</th>
+
+                            <th>Book Name</th>
+
+                            <th>User</th>
+
+                            <th>Email</th>
+
+                            <th>Requested Date</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for item in waitlist %}
+
+                        <tr>
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td>
+                                {{ item.book_id }}
+                            </td>
+
+                            <td>
+                                {{ item.book_name }}
+                            </td>
+
+                            <td>
+                                {{ item.user_name }}
+                            </td>
+
+                            <td>
+                                {{ item.user_email }}
+                            </td>
+
+                            <td>
+                                {{ item.requested_date }}
+                            </td>
+
+                            <td>
+
+                                <form
+                                    action="{{ url_for('waitlist_management') }}"
+                                    method="POST">
+
+                                    <input
+                                        type="hidden"
+                                        name="waitlist_index"
+                                        value="{{ item._index }}">
+
+                                    <button type="submit">
+
+                                        <i class="fa-solid fa-trash"></i>
+
+                                        Remove
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <p style="margin-top:25px;">
+                No users are currently on the waitlist.
+            </p>
+
+        {% endif %}
+
+
+        <hr>
+
+        <a class="back-home"
+           href="{{ url_for('librarian_dashboard') }}">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Back to Dashboard
+
+        </a>
+
+    </div>
 
 </div>
-
-
-<div>
-
-<h2>Library Management System</h2>
-
-<p>Librarian Portal</p>
-
-</div>
-
-</div>
-
-
-
-<div class="navbar-right">
-
-
-<a href="{{ url_for('librarian_dashboard') }}" class="profile-btn">
-
-<i class="fa-solid fa-house"></i>
-
-Dashboard
-
-</a>
-
-
-<a href="{{ url_for('profile') }}" class="profile-btn">
-
-<i class="fa-solid fa-user"></i>
-
-Profile
-
-</a>
-
-
-<a href="{{ url_for('logout') }}" class="logout-btn">
-
-<i class="fa-solid fa-right-from-bracket"></i>
-
-Logout
-
-</a>
-
-
-</div>
-
-
-</header>
-
-
-
-<!-- TITLE -->
-
-
-<section class="welcome-box">
-
-
-<h1>
-
-<i class="fa-solid fa-clock"></i>
-
-Waitlist Management
-
-</h1>
-
-
-<p>
-
-Manage members waiting for unavailable books.
-
-</p>
-
-
-</section>
-
-
-
-
-<!-- TABLE -->
-
-
-<div class="table-container">
-
-
-<table class="book-table">
-
-
-<thead>
-
-
-<tr>
-
-<th>Waitlist ID</th>
-
-<th>Member Name</th>
-
-<th>Book Name</th>
-
-<th>Request Date</th>
-
-<th>Status</th>
-
-<th>Action</th>
-
-
-</tr>
-
-
-</thead>
-
-
-
-<tbody>
-
-
-<tr>
-
-
-<td>W001</td>
-
-<td>Roshni Nayak</td>
-
-<td>Database Management System</td>
-
-<td>05-08-2026</td>
-
-
-<td>
-
-<span class="issued">
-
-Waiting
-
-</span>
-
-</td>
-
-
-<td>
-
-
-<button class="view-btn">
-
-<i class="fa-solid fa-eye"></i>
-
-</button>
-
-
-</td>
-
-
-</tr>
-
-
-
-
-<tr>
-
-
-<td>W002</td>
-
-<td>Savio</td>
-
-<td>Python Programming</td>
-
-<td>06-08-2026</td>
-
-
-<td>
-
-<span class="available">
-
-Available
-
-</span>
-
-</td>
-
-<td>
-
-<button class="view-btn">
-
-<i class="fa-solid fa-eye"></i>
-
-</button>
-
-</td>
-
-
-
-</tr>
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-
-
-<footer class="dashboard-footer">
-
-
-<p>
-
-© 2026 Library Management System | Waitlist Management
-
-</p>
-
-
-</footer>
-
-
 
 </body>
 
