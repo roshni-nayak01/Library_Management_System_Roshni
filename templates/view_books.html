@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +16,13 @@
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
 <style>
+
+/* ===============================
+   BOOKS PAGE
+================================ */
 
 .books-page {
     width: 95%;
@@ -29,6 +36,11 @@
     padding: 30px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 }
+
+
+/* ===============================
+   HEADER
+================================ */
 
 .books-header {
     text-align: center;
@@ -48,6 +60,45 @@
     color: #666;
 }
 
+
+/* ===============================
+   FLASH MESSAGES
+================================ */
+
+.flash-container {
+    margin-bottom: 20px;
+}
+
+.flash-message {
+    padding: 13px 18px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.flash-success {
+    background: #e8f7ee;
+    color: #16803c;
+    border: 1px solid #b8e5c8;
+}
+
+.flash-error {
+    background: #fdecec;
+    color: #d93025;
+    border: 1px solid #f5bcbc;
+}
+
+.flash-warning {
+    background: #fff7df;
+    color: #8a6500;
+    border: 1px solid #f0d98a;
+}
+
+
+/* ===============================
+   SEARCH
+================================ */
+
 .search-section {
     display: flex;
     gap: 15px;
@@ -59,21 +110,38 @@
     flex: 1;
     min-width: 250px;
     padding: 12px 15px;
+
     border: 1px solid #ddd;
     border-radius: 8px;
+
     font-size: 15px;
+
     background: white;
     color: #333;
 }
 
 .book-category {
     padding: 12px 15px;
+
     border: 1px solid #ddd;
     border-radius: 8px;
+
     font-size: 15px;
+
     min-width: 200px;
+
     background: white;
     color: #333;
+}
+
+
+/* ===============================
+   BOOK TABLE
+================================ */
+
+.books-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
 }
 
 .books-table {
@@ -103,6 +171,11 @@
     background: #f8f9ff;
 }
 
+
+/* ===============================
+   STATUS
+================================ */
+
 .available-status {
     color: #16803c;
     font-weight: 600;
@@ -113,20 +186,108 @@
     font-weight: 600;
 }
 
-.back-home {
-    display: inline-block;
-    margin-top: 25px;
+
+/* ===============================
+   LIBRARIAN MESSAGE
+================================ */
+
+.librarian-action {
+    color: #16803c;
+    font-weight: 600;
+    white-space: nowrap;
 }
+
+.librarian-action i {
+    margin-right: 5px;
+}
+
+
+/* ===============================
+   RESERVE BUTTON
+================================ */
+
+.reserve-btn {
+    background: #6c63ff;
+    color: white;
+
+    border: none;
+
+    padding: 9px 15px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: all 0.3s ease;
+
+    white-space: nowrap;
+}
+
+.reserve-btn:hover {
+    background: #5548d9;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 10px rgba(108, 99, 255, 0.25);
+}
+
+.reserve-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ===============================
+   NO BOOKS
+================================ */
+
+.no-books {
+    text-align: center;
+
+    padding: 30px !important;
+
+    color: #777 !important;
+
+    font-size: 15px;
+}
+
+.no-books i {
+    margin-right: 8px;
+}
+
+
+/* ===============================
+   BACK BUTTON
+================================ */
+
+.back-home {
+    display: block;
+
+    width: fit-content;
+
+    margin: 30px auto 0;
+
+    text-align: center;
+
+    text-decoration: none;
+}
+
+
+/* ===============================
+   RESPONSIVE
+================================ */
 
 @media (max-width: 800px) {
 
     .books-card {
         padding: 15px;
-        overflow-x: auto;
     }
 
     .books-table {
-        min-width: 800px;
+        min-width: 900px;
     }
 
 }
@@ -145,26 +306,77 @@
         <div class="books-card">
 
 
-            <!-- ================= HEADER ================= -->
+            <!-- ===============================
+                 HEADER
+            ================================= -->
 
             <div class="books-header">
 
                 <div class="icon">
+
                     <i class="fa-solid fa-book-open"></i>
+
                 </div>
 
                 <h2>
-                    Available Library Books
+                    Library Books
                 </h2>
 
                 <p class="subtitle">
-                    Browse books available in the library.
+                    Browse books and reserve unavailable books
+                    directly from this page.
                 </p>
 
             </div>
 
 
-            <!-- ================= SEARCH ================= -->
+            <!-- ===============================
+                 FLASH MESSAGE
+            ================================= -->
+
+            <div class="flash-container">
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+
+                    {% if messages %}
+
+                        {% for category, message in messages %}
+
+                            <div class="flash-message
+                                {% if category == 'success' %}
+                                    flash-success
+                                {% elif category == 'error' %}
+                                    flash-error
+                                {% else %}
+                                    flash-warning
+                                {% endif %}">
+
+                                <i class="fa-solid
+                                    {% if category == 'success' %}
+                                        fa-circle-check
+                                    {% elif category == 'error' %}
+                                        fa-circle-xmark
+                                    {% else %}
+                                        fa-circle-exclamation
+                                    {% endif %}">
+                                </i>
+
+                                {{ message }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                {% endwith %}
+
+            </div>
+
+
+            <!-- ===============================
+                 SEARCH
+            ================================= -->
 
             <div class="search-section">
 
@@ -172,8 +384,7 @@
                     type="text"
                     id="bookSearch"
                     class="book-search"
-                    placeholder="🔍 Search by Book ID, Title or Author"
-                >
+                    placeholder="🔍 Search by Book ID, Title or Author">
 
 
                 <select
@@ -221,7 +432,9 @@
             </div>
 
 
-            <!-- ================= BOOK TABLE ================= -->
+            <!-- ===============================
+                 BOOK TABLE
+            ================================= -->
 
             <div class="books-table-wrapper">
 
@@ -247,6 +460,8 @@
 
                             <th>Status</th>
 
+                            <th>Action</th>
+
                         </tr>
 
                     </thead>
@@ -260,29 +475,49 @@
 
                             <tr>
 
+                                <!-- BOOK ID -->
+
                                 <td>
                                     {{ book.get("book_id", "N/A") }}
                                 </td>
+
+
+                                <!-- TITLE -->
 
                                 <td>
                                     {{ book.get("book_name", "N/A") }}
                                 </td>
 
+
+                                <!-- AUTHOR -->
+
                                 <td>
                                     {{ book.get("author", "N/A") }}
                                 </td>
+
+
+                                <!-- CATEGORY -->
 
                                 <td>
                                     {{ book.get("category", "N/A") }}
                                 </td>
 
+
+                                <!-- ISBN -->
+
                                 <td>
                                     {{ book.get("isbn", "N/A") }}
                                 </td>
 
+
+                                <!-- COPIES -->
+
                                 <td>
                                     {{ book.get("copies", 0) }}
                                 </td>
+
+
+                                <!-- STATUS -->
 
                                 <td>
 
@@ -310,6 +545,45 @@
 
                                 </td>
 
+
+                                <!-- ===============================
+                                     ACTION
+                                ================================= -->
+
+                                <td>
+
+                                    {% if book.get("copies", 0)|int > 0 %}
+
+                                        <span class="librarian-action">
+
+                                            <i class="fa-solid fa-user-tie"></i>
+
+                                            Ask Librarian
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <form
+                                            action="{{ url_for('reserve_books', book_id=book.get('book_id')) }}"
+                                            method="POST">
+
+                                            <button
+                                                type="submit"
+                                                class="reserve-btn">
+
+                                                <i class="fa-solid fa-bookmark"></i>
+
+                                                Reserve Book
+
+                                            </button>
+
+                                        </form>
+
+                                    {% endif %}
+
+                                </td>
+
                             </tr>
 
                         {% endfor %}
@@ -319,7 +593,7 @@
                         <tr>
 
                             <td
-                                colspan="7"
+                                colspan="8"
                                 class="no-books">
 
                                 <i class="fa-solid fa-book"></i>
@@ -340,7 +614,9 @@
             </div>
 
 
-            <!-- ================= BACK ================= -->
+            <!-- ===============================
+                 BACK
+            ================================= -->
 
             <a
                 class="back-home"
@@ -359,7 +635,9 @@
 </div>
 
 
-<!-- ================= JAVASCRIPT ================= -->
+<!-- ===============================
+     JAVASCRIPT
+================================= -->
 
 <script>
 
@@ -380,6 +658,7 @@ function filterBooks() {
         .toLowerCase()
         .trim();
 
+
     const categoryValue =
         categoryFilter.value
         .toLowerCase()
@@ -396,28 +675,24 @@ function filterBooks() {
             row.querySelectorAll("td");
 
 
-        // Ignore "No books" row
+        /* Ignore "No books" row */
 
-        if (cells.length < 7) {
+        if (cells.length < 8) {
             return;
         }
 
 
         const bookId =
-            cells[0].innerText
-            .toLowerCase();
+            cells[0].innerText.toLowerCase();
 
         const bookName =
-            cells[1].innerText
-            .toLowerCase();
+            cells[1].innerText.toLowerCase();
 
         const author =
-            cells[2].innerText
-            .toLowerCase();
+            cells[2].innerText.toLowerCase();
 
         const category =
-            cells[3].innerText
-            .toLowerCase();
+            cells[3].innerText.toLowerCase();
 
 
         const matchesSearch =

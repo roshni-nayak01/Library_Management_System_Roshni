@@ -15,7 +15,7 @@
         "publisher": "Savio Lobo",
         "isbn": "13",
         "category": "Novel",
-        "copies": 7
+        "copies": 8
     },
     {
         "book_id": "4",
@@ -24,6 +24,6 @@
         "publisher": "Bloomsbury",
         "isbn": "14",
         "category": "Novel",
-        "copies": 0
+        "copies": 2
     }
 ]

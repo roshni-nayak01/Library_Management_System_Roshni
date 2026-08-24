@@ -45,14 +45,7 @@
 
     <div class="navbar-right">
 
-        <!-- Dashboard -->
-<<<<<<< Updated upstream
-        <a href="{{ url_for('admin_dashboard') }}" class="profile-btn">
-           <i class="fa-solid fa-house"></i>
-           Dashboard
-        </a>
 
-=======
         
 <!-- Dashboard -->
 {% if session.get('role') == 'librarian' %}
@@ -71,7 +64,7 @@
         Dashboard
     </a>
 {% endif %}
->>>>>>> Stashed changes
+
         <!-- Profile -->
         <a href="/profile" class="profile-btn">
             <i class="fa-solid fa-user"></i>

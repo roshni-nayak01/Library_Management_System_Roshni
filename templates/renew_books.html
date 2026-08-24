@@ -18,131 +18,165 @@
 
     <style>
 
-        .renew-container {
+        /* ===============================
+           PAGE
+        =============================== */
 
+        .renew-page {
+            min-height: 100vh;
             padding: 40px 20px;
-
-            min-height: 80vh;
-
+            background: linear-gradient(135deg, #3569d8, #2858c7);
+            box-sizing: border-box;
         }
 
+
+        /* ===============================
+           MAIN CARD
+        =============================== */
 
         .renew-card {
-
             width: 95%;
-
-            max-width: 1100px;
-
-            margin: auto;
-
-            background: white;
-
-            border-radius: 20px;
-
-            padding: 35px;
-
-            box-shadow:
-                0 10px 35px rgba(0, 0, 0, 0.12);
-
+            max-width: 1150px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px;
+            box-sizing: border-box;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
         }
 
+
+        /* ===============================
+           HEADER
+        =============================== */
 
         .renew-header {
-
             text-align: center;
-
-            margin-bottom: 30px;
-
+            margin-bottom: 35px;
         }
 
 
-        .renew-header .icon {
+        .renew-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 18px;
 
-            width: 70px;
-
-            height: 70px;
-
-            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             border-radius: 50%;
 
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #667eea,
-                    #764ba2
-                );
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
 
             color: white;
-
-            font-size: 28px;
-
-        }
-
-
-        .renew-header h1 {
-
-            margin: 0;
-
             font-size: 30px;
 
-            color: #222;
-
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
         }
 
 
-        .renew-header p {
+        .renew-title {
+            margin: 0;
+            color: #222222;
+            font-size: 32px;
+            font-weight: 700;
+        }
 
-            color: #777;
 
-            margin-top: 8px;
+        .renew-description {
+            margin: 10px auto 0;
+            color: #666666;
+            font-size: 16px;
+        }
 
+
+        /* ===============================
+           FLASH MESSAGE
+        =============================== */
+
+        .renew-flash {
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            background: #f4f4f4;
+            color: #333333;
+        }
+
+
+        /* ===============================
+           TABLE
+        =============================== */
+
+        .renew-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 25px;
         }
 
 
         .renew-table {
-
             width: 100%;
-
+            min-width: 850px;
             border-collapse: collapse;
-
-            margin-top: 25px;
-
-        }
-
-
-        .renew-table th,
-        .renew-table td {
-
-            padding: 14px;
-
-            text-align: left;
-
-            border-bottom: 1px solid #eee;
-
+            background: white;
         }
 
 
         .renew-table th {
+            padding: 15px;
+            text-align: left;
 
-            background: #f5f7ff;
+            background: #f1f3ff;
+            color: #333333;
 
-            color: #333;
+            font-size: 14px;
+            font-weight: 700;
 
+            border-bottom: 2px solid #e2e5f5;
+        }
+
+
+        .renew-table td {
+            padding: 15px;
+            text-align: left;
+
+            color: #444444;
+
+            border-bottom: 1px solid #eeeeee;
+            background: #ffffff;
+        }
+
+
+        .renew-table tbody tr:hover td {
+            background: #f8f9ff;
+        }
+
+
+        /* ===============================
+           RENEW BUTTON
+        =============================== */
+
+        .renew-action-form {
+            margin: 0;
         }
 
 
         .renew-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
 
             border: none;
 
-            padding: 9px 15px;
+            padding: 10px 16px;
 
             border-radius: 8px;
 
@@ -150,54 +184,89 @@
 
             color: white;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #667eea,
-                    #764ba2
-                );
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
 
             font-weight: 600;
 
+            transition: 0.2s ease;
         }
 
 
         .renew-btn:hover {
+            transform: translateY(-2px);
 
-            transform: translateY(-1px);
-
+            box-shadow:
+                0 5px 15px rgba(102, 126, 234, 0.3);
         }
 
 
-        .no-books {
+        /* ===============================
+           NO BOOKS
+        =============================== */
+
+        .renew-no-books {
+            margin-top: 25px;
+
+            padding: 40px 20px;
 
             text-align: center;
 
-            padding: 30px;
+            background: #f8f9ff;
 
-            color: #777;
+            border: 1px solid #e4e7f5;
 
+            border-radius: 15px;
+
+            color: #666666;
         }
 
 
-        .back-area {
+        .renew-no-books i {
+            display: block;
 
+            margin-bottom: 15px;
+
+            color: #667eea;
+
+            font-size: 42px;
+        }
+
+
+        .renew-no-books p {
+            margin: 0;
+
+            color: #666666;
+
+            background: transparent;
+
+            font-size: 16px;
+        }
+
+
+        /* ===============================
+           BACK BUTTON
+        =============================== */
+
+        .renew-back-area {
             text-align: center;
 
-            margin-top: 30px;
-
+            margin-top: 35px;
         }
 
 
-        .back-btn {
-
+        .renew-back-btn {
             display: inline-flex;
 
             align-items: center;
+            justify-content: center;
 
-            gap: 8px;
+            gap: 9px;
 
-            padding: 12px 22px;
+            padding: 13px 24px;
 
             border-radius: 10px;
 
@@ -205,14 +274,49 @@
 
             color: white;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #667eea,
-                    #764ba2
-                );
+            background: linear-gradient(
+                135deg,
+                #667eea,
+                #764ba2
+            );
 
             font-weight: 600;
+
+            transition: 0.2s ease;
+        }
+
+
+        .renew-back-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 18px rgba(102, 126, 234, 0.35);
+        }
+
+
+        /* ===============================
+           MOBILE
+        =============================== */
+
+        @media (max-width: 700px) {
+
+            .renew-page {
+                padding: 20px 10px;
+            }
+
+            .renew-card {
+                width: 100%;
+                padding: 25px 15px;
+                border-radius: 18px;
+            }
+
+            .renew-title {
+                font-size: 26px;
+            }
+
+            .renew-description {
+                font-size: 14px;
+            }
 
         }
 
@@ -224,49 +328,40 @@
 <body>
 
 
-<div class="renew-container">
-
+<div class="renew-page">
 
     <div class="renew-card">
 
 
-        <!-- HEADER -->
+        <!-- ===============================
+             HEADER
+        =============================== -->
 
         <div class="renew-header">
 
-            <div class="icon">
+            <div class="renew-icon">
 
                 <i class="fa-solid fa-arrows-rotate"></i>
 
             </div>
 
 
-            <h1>
-
+            <h1 class="renew-title">
                 Renew Books
-
-<<<<<<< HEAD
-                <!-- IMPORTANT:
-                     This goes back to the correct dashboard
-                     according to the logged-in user's role.
-                -->
-               <a href="{{ url_for('back_to_dashboard') }}" class="back-btn">
-=======
             </h1>
->>>>>>> d223a34eb74ed688179e44668acdba22e9202c6d
 
 
-            <p>
-
+            <p class="renew-description">
                 Extend the due date of currently issued books.
-
             </p>
 
         </div>
 
 
 
-        <!-- FLASH MESSAGES -->
+        <!-- ===============================
+             FLASH MESSAGES
+        =============================== -->
 
         {% with messages = get_flashed_messages(with_categories=true) %}
 
@@ -274,10 +369,8 @@
 
                 {% for category, message in messages %}
 
-                    <div class="flash-message {{ category }}">
-
+                    <div class="renew-flash {{ category }}">
                         {{ message }}
-
                     </div>
 
                 {% endfor %}
@@ -288,133 +381,141 @@
 
 
 
-        <!-- TABLE -->
+        <!-- ===============================
+             BOOK TABLE
+        =============================== -->
 
         {% if borrowed_books %}
 
-            <table class="renew-table">
+            <div class="renew-table-wrapper">
 
-                <thead>
+                <table class="renew-table">
 
-                    <tr>
-
-                        <th>Member</th>
-
-                        <th>Book</th>
-
-                        <th>Author</th>
-
-                        <th>Issue Date</th>
-
-                        <th>Current Due Date</th>
-
-                        <th>Action</th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for book in borrowed_books %}
+                    <thead>
 
                         <tr>
 
-                            <td>
+                            <th>Member</th>
 
-                                {{ book.user_email }}
+                            <th>Book</th>
 
-                            </td>
+                            <th>Author</th>
 
+                            <th>Issue Date</th>
 
-                            <td>
+                            <th>Current Due Date</th>
 
-                                {{ book.book_name }}
-
-                            </td>
-
-
-                            <td>
-
-                                {{ book.author }}
-
-                            </td>
-
-
-                            <td>
-
-                                {{ book.borrowed_date }}
-
-                            </td>
-
-
-                            <td>
-
-                                {{ book.due_date }}
-
-                            </td>
-
-
-                            <td>
-
-                                <form method="POST"
-                                      action="{{ url_for('librarian_renew_books') }}">
-
-                                    <input
-                                        type="hidden"
-                                        name="record_index"
-                                        value="{{ book._index }}"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        class="renew-btn"
-                                    >
-
-                                        <i class="fa-solid fa-rotate-right"></i>
-
-                                        Renew
-
-                                    </button>
-
-                                </form>
-
-                            </td>
+                            <th>Action</th>
 
                         </tr>
 
-                    {% endfor %}
+                    </thead>
 
-                </tbody>
 
-            </table>
+                    <tbody>
+
+                        {% for book in borrowed_books %}
+
+                            <tr>
+
+                                <td>
+                                    {{ book.user_email }}
+                                </td>
+
+
+                                <td>
+                                    {{ book.book_name }}
+                                </td>
+
+
+                                <td>
+                                    {{ book.author }}
+                                </td>
+
+
+                                <td>
+                                    {{ book.borrowed_date }}
+                                </td>
+
+
+                                <td>
+                                    {{ book.due_date }}
+                                </td>
+
+
+                                <td>
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('librarian_renew_books') }}"
+                                        class="renew-action-form"
+                                    >
+
+                                        <input
+                                            type="hidden"
+                                            name="record_index"
+                                            value="{{ book._index }}"
+                                        >
+
+
+                                        <button
+                                            type="submit"
+                                            class="renew-btn"
+                                        >
+
+                                            <i class="fa-solid fa-rotate-right"></i>
+
+                                            Renew
+
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
 
         {% else %}
 
-            <div class="no-books">
 
-                <i class="fa-solid fa-book-open"
-                   style="font-size:35px;"></i>
+            <!-- ===============================
+                 NO BOOKS
+            =============================== -->
+
+            <div class="renew-no-books">
+
+                <i class="fa-solid fa-book-open"></i>
 
                 <p>
-
                     No currently issued books are available for renewal.
-
                 </p>
 
             </div>
+
 
         {% endif %}
 
 
 
-        <!-- BACK BUTTON -->
+        <!-- ===============================
+             BACK TO COMMON DASHBOARD
+        =============================== -->
 
-        <div class="back-area">
+        <div class="renew-back-area">
 
-            <a href="{{ url_for('librarian_dashboard') }}"
-               class="back-btn">
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="renew-back-btn"
+            >
 
                 <i class="fa-solid fa-arrow-left"></i>
 

@@ -3115,8 +3115,15 @@ def renew_books():
 # =========================================================
 # USER - RESERVE BOOKS
 # =========================================================
-@app.route("/reserve-books", methods=["GET", "POST"])
-def reserve_books():
+# =========================================================
+# USER - RESERVE BOOK
+# =========================================================
+@app.route("/reserve-books/<book_id>", methods=["POST"])
+def reserve_books(book_id):
+
+    # =====================================================
+    # CHECK LOGIN
+    # =====================================================
 
     if "email" not in session:
         return redirect(url_for("login"))
@@ -3124,9 +3131,19 @@ def reserve_books():
     if session.get("role") != "user":
         return redirect(url_for("login"))
 
+
+    # =====================================================
+    # LOAD DATA
+    # =====================================================
+
     books = load_books()
     waitlist = load_waitlist()
     users = load_users()
+
+
+    # =====================================================
+    # GET CURRENT USER
+    # =====================================================
 
     current_email = session.get(
         "email",
@@ -3145,213 +3162,271 @@ def reserve_books():
             current_user = user
             break
 
-    if request.method == "POST":
 
-        book_id = request.form.get(
-            "book_id",
-            ""
-        ).strip()
+    # =====================================================
+    # FIND BOOK
+    # =====================================================
 
-        if not book_id:
+    book_id = str(book_id).strip()
 
-            flash(
-                "Please enter a Book ID.",
-                "error"
-            )
+    selected_book = None
 
-            return redirect(
-                url_for("reserve_books")
-            )
+    for book in books:
 
-        # =================================================
-        # FIND BOOK
-        # =================================================
+        if (
+            str(
+                book.get("book_id", "")
+            ).strip()
+            == book_id
+        ):
 
-        selected_book = None
+            selected_book = book
+            break
 
-        for book in books:
 
-            if (
-                str(book.get("book_id", "")).strip()
-                == book_id
-            ):
+    # =====================================================
+    # BOOK NOT FOUND
+    # =====================================================
 
-                selected_book = book
-                break
-
-        if selected_book is None:
-
-            flash(
-                "Book ID not found.",
-                "error"
-            )
-
-            return redirect(
-                url_for("reserve_books")
-            )
-
-        # =================================================
-        # CHECK AVAILABLE COPIES
-        # =================================================
-
-        try:
-            copies = int(
-                selected_book.get("copies", 0)
-            )
-        except (TypeError, ValueError):
-            copies = 0
-
-        if copies > 0:
-
-            flash(
-                f"'{selected_book.get('book_name', 'Book')}' "
-                f"is currently available. You can borrow it "
-                f"from the Borrow Books page.",
-                "error"
-            )
-
-            return redirect(
-                url_for("reserve_books")
-            )
-
-        # =================================================
-        # CHECK WHETHER ALREADY BORROWED
-        # =================================================
-
-        borrow_records = load_borrow_records()
-
-        for record in borrow_records:
-
-            if not isinstance(record, dict):
-                continue
-
-            if (
-                record.get(
-                    "user_email",
-                    ""
-                ).strip().lower()
-                == current_email
-                and str(
-                    record.get(
-                        "book_id",
-                        ""
-                    )
-                ).strip()
-                == book_id
-                and record.get(
-                    "returned"
-                ) is False
-            ):
-
-                flash(
-                    "You already have this book.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for("reserve_books")
-                )
-
-        # =================================================
-        # CHECK DUPLICATE WAITLIST ENTRY
-        # =================================================
-
-        for waiting_user in waitlist:
-
-            if not isinstance(
-                waiting_user,
-                dict
-            ):
-                continue
-
-            if (
-                waiting_user.get(
-                    "user_email",
-                    ""
-                ).strip().lower()
-                == current_email
-                and str(
-                    waiting_user.get(
-                        "book_id",
-                        ""
-                    )
-                ).strip()
-                == book_id
-            ):
-
-                flash(
-                    "You are already on the waitlist for "
-                    "this book.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for("reserve_books")
-                )
-
-        # =================================================
-        # ADD USER TO WAITLIST
-        # =================================================
-
-        user_name = session.get(
-            "name",
-            current_email
-        )
-
-        if current_user is not None:
-
-            user_name = current_user.get(
-                "name",
-                user_name
-            )
-
-        waitlist_entry = {
-
-            "user_email":
-                current_email,
-
-            "user_name":
-                user_name,
-
-            "book_id":
-                str(
-                    selected_book.get(
-                        "book_id"
-                    )
-                ),
-
-            "book_name":
-                selected_book.get(
-                    "book_name",
-                    ""
-                ),
-
-            "requested_date":
-                datetime.now().strftime(
-                    "%Y-%m-%d %H:%M:%S"
-                )
-        }
-
-        waitlist.append(
-            waitlist_entry
-        )
-
-        save_waitlist(
-            waitlist
-        )
+    if selected_book is None:
 
         flash(
-            f"You have been added to the waitlist "
-            f"for '{selected_book.get('book_name', 'Book')}'.",
-            "success"
+            "Book not found.",
+            "error"
         )
 
         return redirect(
-            url_for("reserve_books")
+            url_for("view_books")
         )
 
-    return render_template(
-        "reserve_books.html"
+
+    # =====================================================
+    # CHECK AVAILABLE COPIES
+    # =====================================================
+
+    try:
+
+        copies = int(
+            selected_book.get(
+                "copies",
+                0
+            )
+        )
+
+    except (TypeError, ValueError):
+
+        copies = 0
+
+
+    # =====================================================
+    # BOOK IS AVAILABLE
+    # =====================================================
+
+    if copies > 0:
+
+        flash(
+            f"'{selected_book.get('book_name', 'Book')}' "
+            f"is currently available. Please ask the librarian "
+            f"to issue the book to you.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("view_books")
+        )
+
+
+    # =====================================================
+    # CHECK WHETHER ALREADY BORROWED
+    # =====================================================
+
+    borrow_records = load_borrow_records()
+
+    for record in borrow_records:
+
+        if not isinstance(
+            record,
+            dict
+        ):
+            continue
+
+        record_email = record.get(
+            "user_email",
+            ""
+        )
+
+        if not isinstance(
+            record_email,
+            str
+        ):
+            record_email = str(
+                record_email
+            )
+
+        record_book_id = str(
+            record.get(
+                "book_id",
+                ""
+            )
+        ).strip()
+
+        returned = record.get(
+            "returned"
+        )
+
+        if (
+            record_email.strip().lower()
+            == current_email
+            and record_book_id
+            == book_id
+            and returned is False
+        ):
+
+            flash(
+                "You already have this book.",
+                "error"
+            )
+
+            return redirect(
+                url_for("view_books")
+            )
+
+
+    # =====================================================
+    # CHECK DUPLICATE WAITLIST ENTRY
+    # =====================================================
+
+    for waiting_user in waitlist:
+
+        if not isinstance(
+            waiting_user,
+            dict
+        ):
+            continue
+
+        waiting_email = waiting_user.get(
+            "user_email",
+            ""
+        )
+
+        if not isinstance(
+            waiting_email,
+            str
+        ):
+            waiting_email = str(
+                waiting_email
+            )
+
+        waiting_book_id = str(
+            waiting_user.get(
+                "book_id",
+                ""
+            )
+        ).strip()
+
+        if (
+            waiting_email.strip().lower()
+            == current_email
+            and waiting_book_id
+            == book_id
+        ):
+
+            flash(
+                "You are already on the waitlist for "
+                "this book.",
+                "warning"
+            )
+
+            return redirect(
+                url_for("view_books")
+            )
+
+
+    # =====================================================
+    # GET USER NAME
+    # =====================================================
+
+    user_name = session.get(
+        "name",
+        current_email
+    )
+
+    if current_user is not None:
+
+        user_name = current_user.get(
+            "name",
+            user_name
+        )
+
+
+    # =====================================================
+    # CREATE WAITLIST ENTRY
+    # =====================================================
+
+    waitlist_entry = {
+
+        "user_email":
+            current_email,
+
+        "user_name":
+            user_name,
+
+        "book_id":
+            str(
+                selected_book.get(
+                    "book_id"
+                )
+            ),
+
+        "book_name":
+            selected_book.get(
+                "book_name",
+                ""
+            ),
+
+        "requested_date":
+            datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+    }
+
+
+    # =====================================================
+    # ADD TO WAITLIST
+    # =====================================================
+
+    waitlist.append(
+        waitlist_entry
+    )
+
+
+    # =====================================================
+    # SAVE WAITLIST
+    # =====================================================
+
+    save_waitlist(
+        waitlist
+    )
+
+
+    # =====================================================
+    # SUCCESS MESSAGE
+    # =====================================================
+
+    flash(
+        f"'{selected_book.get('book_name', 'Book')}' "
+        f"has been reserved successfully. "
+        f"You are now in the waiting list.",
+        "success"
+    )
+
+
+    # =====================================================
+    # RETURN TO VIEW BOOKS
+    # =====================================================
+
+    return redirect(
+        url_for("view_books")
     )
 # =========================================================
 # USER - BORROW HISTORY
