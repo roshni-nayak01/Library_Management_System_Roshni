@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add New Book | Library Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="logo-section">
+
+        <div class="logo-circle">
+            <i class="fa-solid fa-book-open"></i>
+        </div>
+
+        <div>
+            <h2>Library Management System</h2>
+
+            <p>
+                {% if session.get('role') == 'admin' %}
+                    Admin Portal
+                {% elif session.get('role') == 'librarian' %}
+                    Librarian Portal
+                {% else %}
+                    Library Portal
+                {% endif %}
+            </p>
+        </div>
+
+    </div>
+
+    <div class="navbar-right">
+
+        {% if session.get('role') == 'librarian' %}
+
+            <a href="/librarian-dashboard" class="profile-btn">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+
+        {% elif session.get('role') == 'admin' %}
+
+            <a href="/admin-dashboard" class="profile-btn">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+
+        {% else %}
+
+            <a href="/dashboard" class="profile-btn">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+
+        {% endif %}
+
+        <a href="/profile" class="profile-btn">
+            <i class="fa-solid fa-user"></i>
+            Profile
+        </a>
+
+        <a href="/logout" class="logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- ================= PAGE HEADER ================= -->
+
+<section class="welcome-box">
+
+    <h1>
+        <i class="fa-solid fa-circle-plus"></i>
+        Add New Book
+    </h1>
+
+    <p>
+        Add a new book to the library.
+    </p>
+
+</section>
+
+
+<!-- ================= ADD BOOK FORM ================= -->
+
+<section class="book-form">
+
+    <h2>
+        <i class="fa-solid fa-book"></i>
+        Book Details
+    </h2>
+
+    <form action="/add-book" method="POST">
+
+        <div class="form-grid">
+
+            <!-- BOOK ID -->
+
+            <input
+                type="text"
+                name="book_id"
+                placeholder="Book ID"
+                required
+            >
+
+
+            <!-- BOOK NAME -->
+
+            <input
+                type="text"
+                name="book_name"
+                placeholder="Book Name"
+                required
+            >
+
+
+            <!-- AUTHOR -->
+
+            <input
+                type="text"
+                name="author"
+                placeholder="Author"
+                required
+            >
+
+
+            <!-- PUBLISHER -->
+
+            <input
+                type="text"
+                name="publisher"
+                placeholder="Publisher"
+            >
+
+
+            <!-- ISBN -->
+
+            <input
+                type="text"
+                name="isbn"
+                placeholder="ISBN"
+            >
+
+
+            <!-- CATEGORY -->
+
+            <select name="category" required>
+
+                <option value="">
+                    Select Category
+                </option>
+
+                <option value="Programming">
+                    Programming
+                </option>
+
+                <option value="Database">
+                    Database
+                </option>
+
+                <option value="Artificial Intelligence">
+                    Artificial Intelligence
+                </option>
+
+                <option value="Science">
+                    Science
+                </option>
+
+                <option value="Mathematics">
+                    Mathematics
+                </option>
+
+                <option value="History">
+                    History
+                </option>
+
+                <option value="Novel">
+                    Novel
+                </option>
+
+                <option value="Computer Science">
+                    Computer Science
+                </option>
+
+            </select>
+
+
+            <!-- NUMBER OF COPIES -->
+
+            <input
+                type="number"
+                name="copies"
+                placeholder="Number of Copies"
+                min="0"
+                required
+            >
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="form-buttons">
+
+            <button
+                type="submit"
+                class="save-btn">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+                Save Book
+
+            </button>
+
+
+            <button
+                type="reset"
+                class="cancel-btn">
+
+                <i class="fa-solid fa-rotate-left"></i>
+                Reset
+
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<!-- ================= BACK ================= -->
+
+<div style="text-align: center; margin: 25px 0;">
+
+    <a href="/book-management" class="profile-btn">
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Back to Book Management
+
+    </a>
+
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="dashboard-footer">
+
+    <p>
+        © 2026 Library Management System | Add New Book
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

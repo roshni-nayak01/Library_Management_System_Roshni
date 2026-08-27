@@ -45,31 +45,37 @@
 
     <div class="navbar-right">
 
+        <!-- Dashboard -->
+        {% if session.get('role') == 'librarian' %}
 
-        
-<!-- Dashboard -->
-{% if session.get('role') == 'librarian' %}
-    <a href="/librarian-dashboard" class="profile-btn">
-        <i class="fa-solid fa-house"></i>
-        Dashboard
-    </a>
-{% elif session.get('role') == 'admin' %}
-    <a href="/admin-dashboard" class="profile-btn">
-        <i class="fa-solid fa-house"></i>
-        Dashboard
-    </a>
-{% else %}
-    <a href="/dashboard" class="profile-btn">
-        <i class="fa-solid fa-house"></i>
-        Dashboard
-    </a>
-{% endif %}
+            <a href="/librarian-dashboard" class="profile-btn">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+
+        {% elif session.get('role') == 'admin' %}
+
+            <a href="/admin-dashboard" class="profile-btn">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+
+        {% else %}
+
+            <a href="/dashboard" class="profile-btn">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+
+        {% endif %}
+
 
         <!-- Profile -->
         <a href="/profile" class="profile-btn">
             <i class="fa-solid fa-user"></i>
             Profile
         </a>
+
 
         <!-- Logout -->
         <a href="/logout" class="logout-btn">
@@ -96,63 +102,6 @@
     </p>
 
 </section>
-
-
-<!-- ================= OPTIONS ================= -->
-
-<div class="book-management-options">
-
-    <!-- View Books -->
-
-    <a href="#books" class="management-option">
-
-        <i class="fa-solid fa-book"></i>
-
-        <h3>
-            View / Manage Books
-        </h3>
-
-        <p>
-            Search, edit and delete library books.
-        </p>
-
-    </a>
-
-
-    <!-- Categories -->
-
-    <a href="/categories" class="management-option">
-
-        <i class="fa-solid fa-layer-group"></i>
-
-        <h3>
-            Categories
-        </h3>
-
-        <p>
-            View and manage book categories.
-        </p>
-
-    </a>
-
-
-    <!-- Add Book -->
-
-    <a href="#add-book" class="management-option">
-
-        <i class="fa-solid fa-circle-plus"></i>
-
-        <h3>
-            Add New Book
-        </h3>
-
-        <p>
-            Add a new book to the library.
-        </p>
-
-    </a>
-
-</div>
 
 
 <!-- ================= BOOK TABLE ================= -->
@@ -218,7 +167,7 @@
 
         <!-- Add Book -->
 
-        <a href="#add-book" class="add-book-btn">
+        <a href="/add-book" class="add-book-btn">
 
             <i class="fa-solid fa-circle-plus"></i>
 
@@ -235,23 +184,23 @@
 
         <thead>
 
-        <tr>
+            <tr>
 
-            <th>Book ID</th>
+                <th>Book ID</th>
 
-            <th>Book Name</th>
+                <th>Book Name</th>
 
-            <th>Author</th>
+                <th>Author</th>
 
-            <th>Category</th>
+                <th>Category</th>
 
-            <th>Copies</th>
+                <th>Copies</th>
 
-            <th>Status</th>
+                <th>Status</th>
 
-            <th>Actions</th>
+                <th>Actions</th>
 
-        </tr>
+            </tr>
 
         </thead>
 
@@ -314,50 +263,51 @@
 
 
                         <!-- VIEW -->
-                     <button
-    type="button"
-    class="view-btn"
-    title="View Book"
 
-    data-book-id="{{ book.get('book_id', '') }}"
-    data-book-name="{{ book.get('book_name', '') }}"
-    data-author="{{ book.get('author', '') }}"
-    data-category="{{ book.get('category', '') }}"
-    data-copies="{{ book.get('copies', 0) }}"
+                        <button
+                            type="button"
+                            class="view-btn"
+                            title="View Book"
 
-    onclick="viewBookFromButton(this)">
+                            data-book-id="{{ book.get('book_id', '') }}"
+                            data-book-name="{{ book.get('book_name', '') }}"
+                            data-author="{{ book.get('author', '') }}"
+                            data-category="{{ book.get('category', '') }}"
+                            data-copies="{{ book.get('copies', 0) }}"
 
-    <i class="fa-solid fa-eye"></i>
+                            onclick="viewBookFromButton(this)">
 
-</button>
+                            <i class="fa-solid fa-eye"></i>
+
+                        </button>
 
 
                         <!-- EDIT -->
 
-                     <a
-    href="/edit-book/{{ book.get('book_id') }}"
-    class="edit-btn"
-    title="Edit Book">
+                        <a
+                            href="/edit-book/{{ book.get('book_id') }}"
+                            class="edit-btn"
+                            title="Edit Book">
 
-    <i class="fa-solid fa-pen"></i>
+                            <i class="fa-solid fa-pen"></i>
 
-</a>
+                        </a>
 
 
                         <!-- DELETE -->
-<a
-    href="/delete-book/{{ book.get('book_id') }}"
-    class="delete-btn"
-    title="Delete Book"
 
-    onclick="return confirm(
-        'Are you sure you want to delete this book?'
-    );">
+                        <a
+                            href="/delete-book/{{ book.get('book_id') }}"
+                            class="delete-btn"
+                            title="Delete Book"
 
-    <i class="fa-solid fa-trash"></i>
+                            onclick="return confirm(
+                                'Are you sure you want to delete this book?'
+                            );">
 
-</a>
-                        
+                            <i class="fa-solid fa-trash"></i>
+
+                        </a>
 
                     </div>
 
@@ -391,165 +341,6 @@
 </div>
 
 
-<!-- ================= ADD BOOK ================= -->
-
-<section class="book-form" id="add-book">
-
-    <h2>
-
-        <i class="fa-solid fa-circle-plus"></i>
-
-        Add New Book
-
-    </h2>
-
-
-    <form
-        action="/add-book"
-        method="POST">
-
-
-        <div class="form-grid">
-
-
-            <!-- Book ID -->
-
-            <input
-                type="text"
-                name="book_id"
-                placeholder="Book ID"
-                required
-            >
-
-
-            <!-- Book Name -->
-
-            <input
-                type="text"
-                name="book_name"
-                placeholder="Book Name"
-                required
-            >
-
-
-            <!-- Author -->
-
-            <input
-                type="text"
-                name="author"
-                placeholder="Author"
-                required
-            >
-
-
-            <!-- Publisher -->
-
-            <input
-                type="text"
-                name="publisher"
-                placeholder="Publisher"
-            >
-
-
-            <!-- ISBN -->
-
-            <input
-                type="text"
-                name="isbn"
-                placeholder="ISBN"
-            >
-
-
-            <!-- Category -->
-
-            <select
-                name="category"
-                required>
-
-                <option value="">
-                    Select Category
-                </option>
-
-                <option value="Programming">
-                    Programming
-                </option>
-
-                <option value="Database">
-                    Database
-                </option>
-
-                <option value="Artificial Intelligence">
-                    Artificial Intelligence
-                </option>
-
-                <option value="Science">
-                    Science
-                </option>
-
-                <option value="Mathematics">
-                    Mathematics
-                </option>
-
-                <option value="History">
-                    History
-                </option>
-
-                <option value="Novel">
-                    Novel
-                </option>
-
-                <option value="Computer Science">
-                    Computer Science
-                </option>
-
-            </select>
-
-
-            <!-- Copies -->
-
-            <input
-                type="number"
-                name="copies"
-                placeholder="Number of Copies"
-                min="0"
-                required
-            >
-
-        </div>
-
-
-        <!-- BUTTONS -->
-
-        <div class="form-buttons">
-
-            <button
-                type="submit"
-                class="save-btn">
-
-                <i class="fa-solid fa-floppy-disk"></i>
-
-                Save Book
-
-            </button>
-
-
-            <button
-                type="reset"
-                class="cancel-btn">
-
-                <i class="fa-solid fa-rotate-left"></i>
-
-                Reset
-
-            </button>
-
-        </div>
-
-    </form>
-
-</section>
-
-
 <!-- ================= VIEW BOOK MODAL ================= -->
 
 <div
@@ -580,32 +371,47 @@
 
 
         <p>
+
             <strong>Book ID:</strong>
+
             <span id="modalBookId"></span>
+
         </p>
 
 
         <p>
+
             <strong>Book Name:</strong>
+
             <span id="modalBookName"></span>
+
         </p>
 
 
         <p>
+
             <strong>Author:</strong>
+
             <span id="modalAuthor"></span>
+
         </p>
 
 
         <p>
+
             <strong>Category:</strong>
+
             <span id="modalCategory"></span>
+
         </p>
 
 
         <p>
+
             <strong>Copies:</strong>
+
             <span id="modalCopies"></span>
+
         </p>
 
     </div>
@@ -724,22 +530,51 @@ categoryFilter.addEventListener(
 // =====================================================
 // VIEW BOOK
 // =====================================================
+
 function viewBookFromButton(button) {
 
     const bookId = button.dataset.bookId;
+
     const bookName = button.dataset.bookName;
+
     const author = button.dataset.author;
+
     const category = button.dataset.category;
+
     const copies = button.dataset.copies;
 
-    document.getElementById("modalBookId").innerText = bookId;
-    document.getElementById("modalBookName").innerText = bookName;
-    document.getElementById("modalAuthor").innerText = author;
-    document.getElementById("modalCategory").innerText = category;
-    document.getElementById("modalCopies").innerText = copies;
 
-    document.getElementById("bookModal").style.display = "flex";
+    document.getElementById(
+        "modalBookId"
+    ).innerText = bookId;
+
+
+    document.getElementById(
+        "modalBookName"
+    ).innerText = bookName;
+
+
+    document.getElementById(
+        "modalAuthor"
+    ).innerText = author;
+
+
+    document.getElementById(
+        "modalCategory"
+    ).innerText = category;
+
+
+    document.getElementById(
+        "modalCopies"
+    ).innerText = copies;
+
+
+    document.getElementById(
+        "bookModal"
+    ).style.display = "flex";
+
 }
+
 
 // =====================================================
 // CLOSE MODAL

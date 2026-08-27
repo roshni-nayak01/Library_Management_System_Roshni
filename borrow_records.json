@@ -59,5 +59,23 @@
         "due_date": "2026-09-07 15:17:48",
         "returned": true,
         "returned_date": "2026-08-24 15:19:14"
+    },
+    {
+        "user_email": "abc@gmail.com",
+        "book_id": "2",
+        "book_name": "annana nenapu",
+        "author": "purnachandra tejaswi",
+        "category": "Novel",
+        "borrowed_date": "2026-08-26 11:37:39",
+        "due_date": "2026-09-09 11:37:39",
+        "returned": true,
+        "returned_date": "2026-08-26 11:38:31",
+        "book_condition": "good",
+        "days_late": 0,
+        "late_fine": 0,
+        "damage_fine": 0,
+        "lost_fine": 0,
+        "total_fine": 0,
+        "fine_status": "No Fine"
     }
 ]

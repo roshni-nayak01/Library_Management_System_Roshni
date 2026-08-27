@@ -5,10 +5,10 @@
 
     <meta charset="UTF-8">
 
-<<<<<<< HEAD
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Borrow Records</title>
+    <title>Borrow Records | Library Management System</title>
 
     <!-- MAIN CSS -->
     <link rel="stylesheet"
@@ -16,214 +16,24 @@
 
     <!-- FONT AWESOME -->
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-=======
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Borrow Records | Library Management System</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
-    <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
->>>>>>> d223a34eb74ed688179e44668acdba22e9202c6d
 
 </head>
+
 
 <body>
 
 <div class="page-container">
 
-<<<<<<< HEAD
-<!-- =========================================================
-     BORROW RECORDS PAGE
-========================================================= -->
-
-<div class="borrow-records-page">
-
 
     <!-- =====================================================
-         MAIN CARD
+         BORROW RECORDS PAGE
     ====================================================== -->
 
-    <div class="borrow-records-card">
-
-
-        <!-- =================================================
-             ICON
-        ================================================== -->
-
-        <div class="borrow-records-icon">
-
-            <i class="fa-solid fa-file-lines"></i>
-
-        </div>
-
-
-        <!-- =================================================
-             TITLE
-        ================================================== -->
-
-        <h2>
-
-            Borrow Records
-
-        </h2>
-
-
-        <!-- =================================================
-             SUBTITLE
-        ================================================== -->
-
-        <p class="borrow-records-subtitle">
-
-            View all books that have been borrowed and returned.
-
-        </p>
-
-
-        <!-- =================================================
-             RECORDS TABLE
-        ================================================== -->
-
-        <div class="borrow-records-table-container">
-
-            <table class="borrow-records-table">
-
-
-                <!-- TABLE HEADER -->
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Member
-                        </th>
-
-                        <th>
-                            Book
-                        </th>
-
-                        <th>
-                            Issue Date
-                        </th>
-
-                        <th>
-                            Return Date
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <!-- TABLE BODY -->
-
-                <tbody>
-
-
-                    <!-- SAMPLE RECORD -->
-
-                    <tr>
-
-                        <td>
-                            Roshni
-                        </td>
-
-                        <td>
-                            Data Structures
-                        </td>
-
-                        <td>
-                            01-08-2026
-                        </td>
-
-                        <td>
-                            06-08-2026
-                        </td>
-
-                        <td>
-
-                            <span class="borrow-status returned">
-
-                                Returned
-
-                            </span>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- YOU CAN ADD MORE RECORDS HERE -->
-
-                    <tr>
-
-                        <td>
-                            Savio
-                        </td>
-
-                        <td>
-                            Database Management Systems
-                        </td>
-
-                        <td>
-                            05-08-2026
-                        </td>
-
-                        <td>
-                            12-08-2026
-                        </td>
-
-                        <td>
-
-                            <span class="borrow-status returned">
-
-                                Returned
-
-                            </span>
-
-                        </td>
-
-                    </tr>
-
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-
-        <!-- =================================================
-             BACK BUTTON
-        ================================================== -->
-
-        <div class="borrow-records-back-container">
-
-            <a href="{{ url_for('librarian_dashboard') }}"
-               class="borrow-records-back-btn">
-
-                <i class="fa-solid fa-arrow-left"></i>
-
-                Back to Dashboard
-
-            </a>
-
-        </div>
-
-
-    </div>
-
-=======
     <div class="book-card">
+
+
+        <!-- ================= ICON ================= -->
 
         <div class="icon">
 
@@ -231,7 +41,15 @@
 
         </div>
 
-        <h2>Borrow Records</h2>
+
+        <!-- ================= TITLE ================= -->
+
+        <h2>
+            Borrow Records
+        </h2>
+
+
+        <!-- ================= SUBTITLE ================= -->
 
         <p class="subtitle">
 
@@ -240,7 +58,7 @@
         </p>
 
 
-        <!-- FLASH MESSAGES -->
+        <!-- ================= FLASH MESSAGES ================= -->
 
         {% with messages = get_flashed_messages(with_categories=true) %}
 
@@ -261,7 +79,9 @@
         {% endwith %}
 
 
-        <!-- RECORDS -->
+        <!-- =================================================
+             ACTUAL BORROWING RECORDS
+        ================================================== -->
 
         {% if borrow_records %}
 
@@ -274,21 +94,37 @@
 
                         <tr>
 
-                            <th>Member</th>
+                            <th>
+                                Member
+                            </th>
 
-                            <th>Email</th>
+                            <th>
+                                Email
+                            </th>
 
-                            <th>Book</th>
+                            <th>
+                                Book
+                            </th>
 
-                            <th>Book ID</th>
+                            <th>
+                                Book ID
+                            </th>
 
-                            <th>Borrowed Date</th>
+                            <th>
+                                Borrowed Date
+                            </th>
 
-                            <th>Due Date</th>
+                            <th>
+                                Due Date
+                            </th>
 
-                            <th>Returned Date</th>
+                            <th>
+                                Returned Date
+                            </th>
 
-                            <th>Status</th>
+                            <th>
+                                Status
+                            </th>
 
                         </tr>
 
@@ -300,6 +136,7 @@
                     {% for record in borrow_records %}
 
                         <tr>
+
 
                             <!-- MEMBER -->
 
@@ -396,6 +233,7 @@
 
                             </td>
 
+
                         </tr>
 
                     {% endfor %}
@@ -406,7 +244,11 @@
 
             </div>
 
+
         {% else %}
+
+
+            <!-- ================= NO RECORDS ================= -->
 
             <div style="margin-top:30px;">
 
@@ -423,13 +265,14 @@
 
             </div>
 
+
         {% endif %}
 
 
         <hr>
 
 
-        <!-- BACK TO DASHBOARD -->
+        <!-- ================= BACK BUTTON ================= -->
 
         <a
             class="back-home"
@@ -441,10 +284,12 @@
 
         </a>
 
+
     </div>
->>>>>>> d223a34eb74ed688179e44668acdba22e9202c6d
+
 
 </div>
+
 
 </body>
 

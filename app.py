@@ -2612,24 +2612,24 @@ def admin_renew_books():
         return redirect(url_for("login"))
 
     return render_template("renew_books.html")
-
-@app.route("/add-book", methods=["POST"])
+@app.route('/add-book', methods=['GET', 'POST'])
 def add_book():
 
-    if "email" not in session:
-        return redirect(url_for("login"))
+    if request.method == 'GET':
+        return render_template('add_book.html')
 
-    book_id = request.form.get("book_id", "").strip()
-    book_name = request.form.get("book_name", "").strip()
-    author = request.form.get("author", "").strip()
-    publisher = request.form.get("publisher", "").strip()
-    isbn = request.form.get("isbn", "").strip()
-    category = request.form.get("category", "").strip()
-    copies = request.form.get("copies", "0").strip()
+    # POST = Save the book
+    book_id = request.form.get('book_id')
+    book_name = request.form.get('book_name')
+    author = request.form.get('author')
+    publisher = request.form.get('publisher')
+    isbn = request.form.get('isbn')
+    category = request.form.get('category')
+    copies = request.form.get('copies')
 
-    if not book_id or not book_name or not author or not category:
-        flash("Please fill all required fields.", "error")
-        return redirect(url_for("book_management"))
+    # Your existing book-saving code should go here
+
+    return redirect(url_for('book_management'))
 
     try:
         copies = int(copies)

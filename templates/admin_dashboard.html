@@ -39,13 +39,9 @@
 
             color: #222;
 
-            /* BLUE + PURPLE BACKGROUND */
+            /* BLUE BACKGROUND - MATCH USER DASHBOARD */
             background:
-                linear-gradient(
-                    135deg,
-                    #667eea 0%,
-                    #764ba2 100%
-                );
+                linear-gradient(135deg, #4f7fe8 0%, #2458d6 100%);
         }
 
 
@@ -61,12 +57,12 @@
 
             padding: 16px 40px;
 
-            background: #ffffff;
+            background: #4f7fe8;
 
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 
             box-shadow:
-                0 3px 15px rgba(0, 0, 0, 0.10);
+                0 3px 15px rgba(0, 0, 0, 0.12);
         }
 
 
@@ -75,6 +71,14 @@
             align-items: center;
 
             gap: 13px;
+        }
+
+
+        .navbar-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
 
@@ -94,14 +98,14 @@
 
             border-radius: 50%;
 
-            background: #667eea !important;
+            background: rgba(255, 255, 255, 0.18) !important;
 
             color: #ffffff !important;
 
             font-size: 21px;
 
             box-shadow:
-                0 5px 15px rgba(102, 126, 234, 0.35);
+                0 5px 15px rgba(0, 0, 0, 0.12);
         }
 
 
@@ -117,7 +121,7 @@
         .brand-text h1 {
             margin: 0;
 
-            color: #222222 !important;
+            color: #ffffff !important;
 
             font-size: 19px;
 
@@ -132,7 +136,7 @@
 
             margin-top: 2px;
 
-            color: #666666 !important;
+            color: rgba(255, 255, 255, 0.85) !important;
 
             font-size: 12px;
 
@@ -148,11 +152,11 @@
 
             width: 100%;
 
-            max-width: 1350px;
+            max-width: 1450px;
 
             margin: 0 auto;
 
-            padding: 35px 45px 50px;
+            padding: 32px 32px 50px;
         }
 
 
@@ -172,12 +176,12 @@
 
             gap: 25px;
 
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
 
 
         .welcome-text {
-            flex: 1;
+            width: 100%;
         }
 
 
@@ -248,17 +252,17 @@
 
         .profile-btn-admin {
 
-            background: #ffffff !important;
+            background: #2563eb !important;
 
-            color: #333333 !important;
+            color: #ffffff !important;
 
-            border: 1px solid #dddddd;
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
 
         .profile-btn-admin i {
 
-            color: #667eea !important;
+            color: #ffffff !important;
         }
 
 
@@ -275,11 +279,11 @@
 
         .logout-btn-admin {
 
-            background: #333333 !important;
+            background: #ef4444 !important;
 
             color: #ffffff !important;
 
-            border: 1px solid #333333;
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
 
@@ -512,7 +516,8 @@
         @media (max-width: 650px) {
 
             .navbar {
-                padding: 14px 18px;
+                padding: 12px 14px;
+                gap: 10px;
             }
 
 
@@ -538,14 +543,14 @@
             }
 
 
-            .admin-actions {
-                width: 100%;
+            .navbar-right {
+                gap: 6px;
             }
-
 
             .profile-btn-admin,
             .logout-btn-admin {
-                flex: 1;
+                padding: 9px 11px;
+                font-size: 12px;
             }
 
 
@@ -580,23 +585,33 @@
     <div class="navbar-left">
 
         <div class="logo-circle">
-
             <i class="fas fa-book-open"></i>
-
         </div>
-
 
         <div class="brand-text">
-
-            <h1>
-                Library Management System
-            </h1>
-
-            <span>
-                Admin Portal
-            </span>
-
+            <h1>Library Management System</h1>
+            <span>Admin Portal</span>
         </div>
+
+    </div>
+
+
+    <div class="navbar-right">
+
+        <a href="{{ url_for('profile') }}" class="profile-btn-admin">
+            <i class="fas fa-user"></i>
+            Profile
+        </a>
+
+        <a href="{{ url_for('change_password') }}" class="profile-btn-admin">
+            <i class="fas fa-key"></i>
+            Change Password
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn-admin">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
 
     </div>
 
@@ -638,34 +653,6 @@
         </div>
 
 
-
-        <div class="admin-actions">
-
-
-            <!-- PROFILE -->
-
-            <a href="{{ url_for('profile') }}"
-               class="profile-btn-admin">
-
-                <i class="fas fa-user"></i>
-
-                Profile
-
-            </a>
-
-
-            <!-- LOGOUT -->
-
-            <a href="{{ url_for('logout') }}"
-               class="logout-btn-admin">
-
-                <i class="fas fa-sign-out-alt"></i>
-
-                Logout
-
-            </a>
-
-        </div>
 
     </div>
 
@@ -809,37 +796,6 @@
 
                 <p>
                     View and generate library system reports.
-                </p>
-
-            </div>
-
-
-            <i class="fas fa-arrow-right admin-option-arrow"></i>
-
-        </a>
-
-
-
-        <!-- CHANGE PASSWORD -->
-
-        <a href="{{ url_for('change_password') }}"
-           class="admin-option">
-
-            <div class="admin-option-icon">
-
-                <i class="fas fa-lock"></i>
-
-            </div>
-
-
-            <div class="admin-option-content">
-
-                <h3>
-                    Change Password
-                </h3>
-
-                <p>
-                    Update your administrator account password.
                 </p>
 
             </div>
