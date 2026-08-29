@@ -2800,14 +2800,135 @@ def delete_book(book_id):
 @app.route("/reports")
 def reports():
 
+    # Check login
     if "email" not in session:
         return redirect(url_for("login"))
 
+    # Admin and Librarian only
     if session.get("role") not in ["admin", "librarian"]:
         return redirect(url_for("login"))
 
-    return render_template("reports.html")
+    # =====================================================
+    # TOTAL BOOKS
+    # =====================================================
 
+    total_books = 0
+
+    if os.path.exists("books.json"):
+        try:
+            with open("books.json", "r") as file:
+                books = json.load(file)
+
+            # Count every book record as one book
+            total_books = len(books)
+
+        except (json.JSONDecodeError, FileNotFoundError):
+            books = []
+    else:
+        books = []
+
+
+    # =====================================================
+    # TOTAL USERS
+    # =====================================================
+
+    total_users = 0
+
+    if os.path.exists("users.json"):
+        try:
+            with open("users.json", "r") as file:
+                users = json.load(file)
+
+            # Count only normal users
+            total_users = sum(
+                1 for user in users
+                if user.get("role", "").lower() == "user"
+            )
+
+        except (json.JSONDecodeError, FileNotFoundError):
+            users = []
+    else:
+        users = []
+
+
+    # =====================================================
+    # BOOKS CURRENTLY ISSUED
+    # =====================================================
+
+    total_issued = 0
+
+    if os.path.exists("borrow_records.json"):
+        try:
+            with open("borrow_records.json", "r") as file:
+                borrow_records = json.load(file)
+
+            # Count records where book has NOT been returned
+            total_issued = sum(
+                1 for record in borrow_records
+                if record.get("returned") is False
+            )
+
+        except (json.JSONDecodeError, FileNotFoundError):
+            borrow_records = []
+    else:
+        borrow_records = []
+
+
+    # =====================================================
+    # TOTAL OUTSTANDING FINE
+    # =====================================================
+
+    total_fine = 0
+
+    # Fine rate used by the library
+    FINE_PER_DAY = 10
+
+    from datetime import datetime
+
+    for record in borrow_records:
+
+        # Only calculate fine for books that are still issued
+        if record.get("returned") is not False:
+            continue
+
+        due_date_text = record.get("due_date")
+
+        if not due_date_text:
+            continue
+
+        try:
+
+            due_date = datetime.strptime(
+                due_date_text,
+                "%Y-%m-%d %H:%M:%S"
+            )
+
+        except (ValueError, TypeError):
+            continue
+
+
+        today = datetime.now()
+
+        if today > due_date:
+
+            overdue_days = (
+                today.date() - due_date.date()
+            ).days
+
+            total_fine += overdue_days * FINE_PER_DAY
+
+
+    # =====================================================
+    # SEND REAL DATA TO REPORTS PAGE
+    # =====================================================
+
+    return render_template(
+        "reports.html",
+        total_books=total_books,
+        total_users=total_users,
+        total_issued=total_issued,
+        total_fine=total_fine
+    )
 
 # =========================================================
 # CATEGORIES

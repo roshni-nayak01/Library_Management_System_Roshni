@@ -3055,3 +3055,538 @@ hr {
     }
 
 }
+/* =====================================================
+   BORROW RECORDS PAGE
+===================================================== */
+
+.borrow-records-card {
+    width: 95%;
+    max-width: 1400px;
+    margin: 30px auto;
+    padding: 30px;
+}
+
+
+/* =====================================================
+   BORROW RECORDS TABLE CONTAINER
+===================================================== */
+
+.borrow-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 25px;
+}
+
+
+/* =====================================================
+   BORROW RECORDS TABLE
+===================================================== */
+
+.borrow-table {
+    width: 100%;
+    min-width: 1150px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+
+/* TABLE HEADER */
+
+.borrow-table th {
+    padding: 13px 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+
+/* TABLE DATA */
+
+.borrow-table td {
+    padding: 13px 12px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   NO RECORDS MESSAGE
+===================================================== */
+
+.no-borrow-records {
+    margin-top: 30px;
+    text-align: center;
+}
+
+
+.no-borrow-records i {
+    font-size: 40px;
+}
+
+
+/* =====================================================
+   BACK TO DASHBOARD
+===================================================== */
+
+.borrow-back-section {
+    margin-top: 25px;
+}
+
+    /* =====================================================
+       RETURN BOOKS PAGE - FULL WIDTH
+    ===================================================== */
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-width: 100%;
+        font-family: 'Poppins', sans-serif;
+    }
+
+
+    /* =====================================================
+       MAIN PAGE
+    ===================================================== */
+
+    .return-page {
+
+        width: 100vw !important;
+
+        max-width: none !important;
+
+        min-height: 100vh;
+
+        margin: 0 !important;
+
+        padding: 25px 20px !important;
+
+        box-sizing: border-box;
+
+        overflow-x: auto;
+    }
+
+
+    /* =====================================================
+       REMOVE RESTRICTIONS FROM BOOK CARD
+    ===================================================== */
+
+    .return-page .book-card.return-card {
+
+        width: calc(100vw - 40px) !important;
+
+        max-width: none !important;
+
+        min-width: 0 !important;
+
+        margin: 0 !important;
+
+        padding: 35px 40px !important;
+
+        box-sizing: border-box;
+
+        border-radius: 12px;
+
+        overflow: visible !important;
+    }
+
+
+    /* =====================================================
+       ICON
+    ===================================================== */
+
+    .return-icon {
+
+        text-align: center;
+
+        font-size: 45px;
+
+        margin-bottom: 15px;
+    }
+
+
+    /* =====================================================
+       TITLE
+    ===================================================== */
+
+    .return-card h2 {
+
+        text-align: center;
+
+        margin: 0 0 8px 0;
+
+        font-size: 32px;
+    }
+
+
+    /* =====================================================
+       SUBTITLE
+    ===================================================== */
+
+    .return-subtitle {
+
+        text-align: center;
+
+        margin: 0 0 30px 0;
+
+        font-size: 17px;
+    }
+
+
+    /* =====================================================
+       FLASH MESSAGE
+    ===================================================== */
+
+    .flash-message {
+
+        width: 100% !important;
+
+        box-sizing: border-box;
+
+        margin-bottom: 20px;
+    }
+
+
+    /* =====================================================
+       TABLE CONTAINER
+    ===================================================== */
+
+    .return-table-container {
+
+        width: 100% !important;
+
+        max-width: none !important;
+
+        margin: 20px 0 0 0 !important;
+
+        padding: 0 !important;
+
+        overflow-x: auto;
+
+        overflow-y: visible;
+    }
+
+
+    /* =====================================================
+       TABLE
+    ===================================================== */
+
+    .return-table {
+
+        width: 100% !important;
+
+        max-width: none !important;
+
+        min-width: 1250px;
+
+        border-collapse: collapse;
+
+        table-layout: fixed;
+    }
+
+
+    /* =====================================================
+       TABLE HEADER
+    ===================================================== */
+
+    .return-table th {
+
+        padding: 16px 15px;
+
+        text-align: left;
+
+        font-size: 15px;
+
+        white-space: nowrap;
+    }
+
+
+    /* =====================================================
+       TABLE DATA
+    ===================================================== */
+
+    .return-table td {
+
+        padding: 20px 15px;
+
+        text-align: left;
+
+        font-size: 15px;
+
+        vertical-align: middle;
+
+        word-wrap: break-word;
+
+        overflow-wrap: break-word;
+
+        line-height: 1.5;
+    }
+
+
+    /* =====================================================
+       COLUMN WIDTHS
+    ===================================================== */
+
+    /* BOOK ID */
+    .return-table th:nth-child(1),
+    .return-table td:nth-child(1) {
+
+        width: 8%;
+    }
+
+
+    /* BOOK NAME */
+    .return-table th:nth-child(2),
+    .return-table td:nth-child(2) {
+
+        width: 22%;
+    }
+
+
+    /* BORROWER */
+    .return-table th:nth-child(3),
+    .return-table td:nth-child(3) {
+
+        width: 14%;
+    }
+
+
+    /* EMAIL */
+    .return-table th:nth-child(4),
+    .return-table td:nth-child(4) {
+
+        width: 22%;
+    }
+
+
+    /* BORROWED DATE */
+    .return-table th:nth-child(5),
+    .return-table td:nth-child(5) {
+
+        width: 12%;
+    }
+
+
+    /* DUE DATE */
+    .return-table th:nth-child(6),
+    .return-table td:nth-child(6) {
+
+        width: 12%;
+    }
+
+
+    /* ACTION */
+    .return-table th:nth-child(7),
+    .return-table td:nth-child(7) {
+
+        width: 10%;
+    }
+
+
+    /* =====================================================
+       BOOK NAME
+    ===================================================== */
+
+    .return-table td:nth-child(2) strong {
+
+        display: block;
+
+        font-size: 15px;
+
+        white-space: normal;
+    }
+
+
+    /* =====================================================
+       EMAIL
+    ===================================================== */
+
+    .return-table td:nth-child(4) {
+
+        white-space: normal;
+
+        word-break: break-word;
+    }
+
+
+    /* =====================================================
+       RETURN BUTTON
+    ===================================================== */
+
+    .return-action-button {
+
+        padding: 10px 18px;
+
+        border: none;
+
+        border-radius: 6px;
+
+        cursor: pointer;
+
+        font-size: 14px;
+
+        white-space: nowrap;
+
+        min-width: 90px;
+    }
+
+
+    /* =====================================================
+       NO RECORDS
+    ===================================================== */
+
+    .no-return-records {
+
+        width: 100%;
+
+        text-align: center;
+
+        padding: 50px 20px;
+
+        font-size: 16px;
+
+        box-sizing: border-box;
+    }
+
+
+    .no-return-records i {
+
+        font-size: 45px;
+
+        margin-bottom: 12px;
+    }
+
+
+    /* =====================================================
+       BACK BUTTON
+    ===================================================== */
+
+    .return-back-section {
+
+        margin-top: 30px;
+
+        text-align: left;
+    }
+
+
+    /* =====================================================
+       HR
+    ===================================================== */
+
+    .return-card hr {
+
+        margin-top: 30px;
+
+        margin-bottom: 0;
+
+        border: 0;
+
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+
+    /* =====================================================
+       LARGE DESKTOP
+    ===================================================== */
+
+    @media (min-width: 1600px) {
+
+        .return-page {
+
+            padding-left: 15px !important;
+
+            padding-right: 15px !important;
+        }
+
+        .return-page .book-card.return-card {
+
+            width: calc(100vw - 30px) !important;
+
+            padding-left: 50px !important;
+
+            padding-right: 50px !important;
+        }
+
+        .return-table th {
+
+            font-size: 16px;
+
+            padding: 18px 16px;
+        }
+
+        .return-table td {
+
+            font-size: 16px;
+
+            padding: 22px 16px;
+        }
+    }
+
+
+    /* =====================================================
+       TABLET
+    ===================================================== */
+
+    @media (max-width: 1100px) {
+
+        .return-page {
+
+            padding: 20px 15px !important;
+        }
+
+        .return-page .book-card.return-card {
+
+            width: calc(100vw - 30px) !important;
+
+            padding: 30px 25px !important;
+        }
+
+        .return-table {
+
+            min-width: 1200px;
+        }
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width: 700px) {
+
+        .return-page {
+
+            padding: 15px 10px !important;
+        }
+
+        .return-page .book-card.return-card {
+
+            width: calc(100vw - 20px) !important;
+
+            padding: 25px 15px !important;
+        }
+
+        .return-card h2 {
+
+            font-size: 27px;
+        }
+
+        .return-subtitle {
+
+            font-size: 14px;
+        }
+
+        .return-table {
+
+            min-width: 1100px;
+        }
+
+        .return-table th,
+        .return-table td {
+
+            padding: 11px 9px;
+
+            font-size: 13px;
+        }
+    }
+

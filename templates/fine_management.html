@@ -24,9 +24,13 @@
 
 <div class="page-container">
 
-    <div class="book-card">
 
-        <!-- ================= ICON ================= -->
+    <!-- WIDE FINE CARD -->
+
+    <div class="book-card fine-management-card">
+
+
+        <!-- ICON -->
 
         <div class="icon">
 
@@ -35,7 +39,7 @@
         </div>
 
 
-        <!-- ================= TITLE ================= -->
+        <!-- TITLE -->
 
         <h2>
             Fine Management
@@ -47,7 +51,7 @@
         </p>
 
 
-        <!-- ================= FLASH MESSAGES ================= -->
+        <!-- FLASH MESSAGES -->
 
         {% with messages = get_flashed_messages(with_categories=true) %}
 
@@ -66,13 +70,14 @@
         {% endwith %}
 
 
-        <!-- ================= FINE TABLE ================= -->
+
+        <!-- FINE TABLE -->
 
         {% if fines %}
 
-            <div style="overflow-x:auto; margin-top:25px;">
+            <div class="fine-table-container">
 
-                <table style="width:100%; border-collapse:collapse;">
+                <table class="fine-table">
 
                     <thead>
 
@@ -133,7 +138,9 @@
 
                             <td>
 
-                                {{ fine.book_name }}
+                                <strong>
+                                    {{ fine.book_name }}
+                                </strong>
 
                                 <br>
 
@@ -147,58 +154,46 @@
                             <!-- DUE DATE -->
 
                             <td>
-
                                 {{ fine.due_date }}
-
                             </td>
 
 
                             <!-- CONDITION -->
 
                             <td>
-
                                 {{ fine.condition }}
-
                             </td>
 
 
                             <!-- DAYS LATE -->
 
                             <td>
-
                                 {{ fine.days_late }}
-
                             </td>
 
 
                             <!-- LATE FINE -->
 
                             <td>
-
                                 ₹{{ fine.late_fine }}
-
                             </td>
 
 
                             <!-- DAMAGE -->
 
                             <td>
-
                                 ₹{{ fine.damage_fine }}
-
                             </td>
 
 
                             <!-- LOST -->
 
                             <td>
-
                                 ₹{{ fine.lost_fine }}
-
                             </td>
 
 
-                            <!-- TOTAL FINE -->
+                            <!-- TOTAL -->
 
                             <td>
 
@@ -233,8 +228,7 @@
                                         <input
                                             type="hidden"
                                             name="record_index"
-                                            value="{{ fine._index }}"
-                                        >
+                                            value="{{ fine._index }}">
 
                                         <button type="submit">
 
@@ -271,14 +265,11 @@
         {% else %}
 
 
-            <!-- ================= NO FINES ================= -->
+            <!-- NO FINES -->
 
-            <div style="margin-top:30px;">
+            <div class="no-fines">
 
-                <i
-                    class="fa-solid fa-circle-check"
-                    style="font-size:40px;">
-                </i>
+                <i class="fa-solid fa-circle-check"></i>
 
                 <p>
                     No fines currently recorded.
@@ -286,26 +277,29 @@
 
             </div>
 
-
         {% endif %}
 
 
-        <!-- ================= BACK BUTTON ================= -->
 
-        <hr>
+        <!-- BACK BUTTON -->
 
-        <a
-            class="back-home"
-            href="{{ url_for('librarian_dashboard') }}">
+        <div class="fine-back-section">
 
-            <i class="fa-solid fa-arrow-left"></i>
+            <a
+                class="back-home"
+                href="{{ url_for('back_to_dashboard') }}">
 
-            Back to Dashboard
+                <i class="fa-solid fa-arrow-left"></i>
 
-        </a>
+                Back to Dashboard
+
+            </a>
+
+        </div>
 
 
     </div>
+
 
 </div>
 

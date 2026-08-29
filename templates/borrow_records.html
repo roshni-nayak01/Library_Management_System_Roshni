@@ -18,19 +18,175 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+
+    <style>
+
+        /* =========================================
+           BORROW RECORDS PAGE
+        ========================================= */
+
+        .borrow-records-card {
+            width: 95% !important;
+            max-width: 1450px !important;
+            margin: 30px auto !important;
+            padding: 30px !important;
+            box-sizing: border-box;
+        }
+
+
+        /* =========================================
+           TABLE CONTAINER
+        ========================================= */
+
+        .borrow-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 25px;
+        }
+
+
+        /* =========================================
+           TABLE
+        ========================================= */
+
+        .borrow-table {
+            width: 100%;
+            min-width: 1100px;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+
+
+        /* =========================================
+           TABLE HEADER
+        ========================================= */
+
+        .borrow-table th {
+            padding: 14px 12px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+
+        /* =========================================
+           TABLE DATA
+        ========================================= */
+
+        .borrow-table td {
+            padding: 14px 12px;
+            text-align: left;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+
+        /* =========================================
+           COLUMN WIDTHS
+        ========================================= */
+
+        /* Member Name */
+
+        .borrow-table th:nth-child(1),
+        .borrow-table td:nth-child(1) {
+            min-width: 150px;
+        }
+
+
+        /* Member Email */
+
+        .borrow-table th:nth-child(2),
+        .borrow-table td:nth-child(2) {
+            min-width: 220px;
+        }
+
+
+        /* Book Name */
+
+        .borrow-table th:nth-child(3),
+        .borrow-table td:nth-child(3) {
+            min-width: 250px;
+        }
+
+
+        /* Book ID */
+
+        .borrow-table th:nth-child(4),
+        .borrow-table td:nth-child(4) {
+            min-width: 90px;
+        }
+
+
+        /* Borrowed Date */
+
+        .borrow-table th:nth-child(5),
+        .borrow-table td:nth-child(5) {
+            min-width: 150px;
+        }
+
+
+        /* Due Date */
+
+        .borrow-table th:nth-child(6),
+        .borrow-table td:nth-child(6) {
+            min-width: 150px;
+        }
+
+
+        /* Returned Date */
+
+        .borrow-table th:nth-child(7),
+        .borrow-table td:nth-child(7) {
+            min-width: 150px;
+        }
+
+
+        /* Borrow Status */
+
+        .borrow-table th:nth-child(8),
+        .borrow-table td:nth-child(8) {
+            min-width: 170px;
+        }
+
+
+        /* =========================================
+           NO RECORDS
+        ========================================= */
+
+        .no-borrow-records {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+
+        .no-borrow-records i {
+            font-size: 40px;
+        }
+
+
+        /* =========================================
+           BACK TO DASHBOARD
+        ========================================= */
+
+        .borrow-back-section {
+            margin-top: 25px;
+        }
+
+    </style>
+
 </head>
 
 
 <body>
 
+
 <div class="page-container">
 
 
-    <!-- =====================================================
-         BORROW RECORDS PAGE
-    ====================================================== -->
+    <!-- =========================================
+         BORROW RECORDS CARD
+    ========================================= -->
 
-    <div class="book-card">
+    <div class="book-card borrow-records-card">
 
 
         <!-- ================= ICON ================= -->
@@ -45,7 +201,9 @@
         <!-- ================= TITLE ================= -->
 
         <h2>
+
             Borrow Records
+
         </h2>
 
 
@@ -53,12 +211,15 @@
 
         <p class="subtitle">
 
-            View all actual borrowing records in the library.
+            View complete details of all books borrowed and
+            returned by library users.
 
         </p>
 
 
-        <!-- ================= FLASH MESSAGES ================= -->
+        <!-- =========================================
+             FLASH MESSAGES
+        ========================================= -->
 
         {% with messages = get_flashed_messages(with_categories=true) %}
 
@@ -79,31 +240,35 @@
         {% endwith %}
 
 
-        <!-- =================================================
-             ACTUAL BORROWING RECORDS
-        ================================================== -->
+
+        <!-- =========================================
+             BORROW RECORDS TABLE
+        ========================================= -->
 
         {% if borrow_records %}
 
-            <div style="overflow-x:auto; margin-top:25px;">
+            <div class="borrow-table-wrapper">
 
-                <table
-                    style="width:100%; border-collapse:collapse;">
+
+                <table class="borrow-table">
+
+
+                    <!-- ================= TABLE HEADER ================= -->
 
                     <thead>
 
                         <tr>
 
                             <th>
-                                Member
+                                Member Name
                             </th>
 
                             <th>
-                                Email
+                                Member Email
                             </th>
 
                             <th>
-                                Book
+                                Book Name
                             </th>
 
                             <th>
@@ -123,13 +288,16 @@
                             </th>
 
                             <th>
-                                Status
+                                Borrow Status
                             </th>
 
                         </tr>
 
                     </thead>
 
+
+
+                    <!-- ================= TABLE BODY ================= -->
 
                     <tbody>
 
@@ -138,7 +306,7 @@
                         <tr>
 
 
-                            <!-- MEMBER -->
+                            <!-- MEMBER NAME -->
 
                             <td>
 
@@ -149,7 +317,8 @@
                             </td>
 
 
-                            <!-- EMAIL -->
+
+                            <!-- MEMBER EMAIL -->
 
                             <td>
 
@@ -158,7 +327,8 @@
                             </td>
 
 
-                            <!-- BOOK -->
+
+                            <!-- BOOK NAME -->
 
                             <td>
 
@@ -167,6 +337,7 @@
                                 </strong>
 
                             </td>
+
 
 
                             <!-- BOOK ID -->
@@ -178,6 +349,7 @@
                             </td>
 
 
+
                             <!-- BORROWED DATE -->
 
                             <td>
@@ -187,6 +359,7 @@
                             </td>
 
 
+
                             <!-- DUE DATE -->
 
                             <td>
@@ -194,6 +367,7 @@
                                 {{ record.due_date }}
 
                             </td>
+
 
 
                             <!-- RETURNED DATE -->
@@ -206,14 +380,15 @@
 
                                 {% else %}
 
-                                    Not returned
+                                    Not Returned
 
                                 {% endif %}
 
                             </td>
 
 
-                            <!-- STATUS -->
+
+                            <!-- BORROW STATUS -->
 
                             <td>
 
@@ -226,7 +401,7 @@
                                 {% else %}
 
                                     <strong>
-                                        Borrowed
+                                        Currently Borrowed
                                     </strong>
 
                                 {% endif %}
@@ -240,6 +415,7 @@
 
                     </tbody>
 
+
                 </table>
 
             </div>
@@ -248,14 +424,13 @@
         {% else %}
 
 
-            <!-- ================= NO RECORDS ================= -->
+            <!-- =========================================
+                 NO BORROW RECORDS
+            ========================================= -->
 
-            <div style="margin-top:30px;">
+            <div class="no-borrow-records">
 
-                <i
-                    class="fa-solid fa-book-open"
-                    style="font-size:40px;">
-                </i>
+                <i class="fa-solid fa-book-open"></i>
 
                 <p>
 
@@ -265,18 +440,20 @@
 
             </div>
 
-
         {% endif %}
 
+
+
+        <!-- =========================================
+             BACK TO DASHBOARD
+        ========================================= -->
 
         <hr>
 
 
-        <!-- ================= BACK BUTTON ================= -->
-
         <a
             class="back-home"
-            href="{{ url_for('librarian_dashboard') }}">
+            href="{{ url_for('back_to_dashboard') }}">
 
             <i class="fa-solid fa-arrow-left"></i>
 

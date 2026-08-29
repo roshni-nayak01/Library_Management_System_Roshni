@@ -6,7 +6,7 @@
         "publisher": "nishan",
         "isbn": "12",
         "category": "Novel",
-        "copies": 10
+        "copies": 8
     },
     {
         "book_id": "3",
@@ -15,7 +15,7 @@
         "publisher": "Savio Lobo",
         "isbn": "13",
         "category": "Novel",
-        "copies": 8
+        "copies": 7
     },
     {
         "book_id": "4",

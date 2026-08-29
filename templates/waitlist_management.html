@@ -10,29 +10,191 @@
 
     <title>Waitlist Management | Library Management System</title>
 
+    <!-- MAIN CSS -->
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
 
+    <!-- FONT AWESOME -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <style>
+
+        /* =========================================
+           WAITLIST PAGE
+        ========================================= */
+
+        .waitlist-card {
+            width: 95% !important;
+            max-width: 1450px !important;
+            margin: 30px auto !important;
+            padding: 30px !important;
+            box-sizing: border-box;
+        }
+
+
+        /* =========================================
+           TABLE CONTAINER
+        ========================================= */
+
+        .waitlist-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 25px;
+        }
+
+
+        /* =========================================
+           TABLE
+        ========================================= */
+
+        .waitlist-table {
+            width: 100%;
+            min-width: 1050px;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+
+
+        /* =========================================
+           TABLE HEADER
+        ========================================= */
+
+        .waitlist-table th {
+            padding: 14px 12px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+
+        /* =========================================
+           TABLE DATA
+        ========================================= */
+
+        .waitlist-table td {
+            padding: 14px 12px;
+            text-align: left;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+
+        /* =========================================
+           COLUMN WIDTHS
+        ========================================= */
+
+        .waitlist-table th:nth-child(1),
+        .waitlist-table td:nth-child(1) {
+            min-width: 130px;
+        }
+
+
+        .waitlist-table th:nth-child(2),
+        .waitlist-table td:nth-child(2) {
+            min-width: 90px;
+        }
+
+
+        .waitlist-table th:nth-child(3),
+        .waitlist-table td:nth-child(3) {
+            min-width: 250px;
+        }
+
+
+        .waitlist-table th:nth-child(4),
+        .waitlist-table td:nth-child(4) {
+            min-width: 150px;
+        }
+
+
+        .waitlist-table th:nth-child(5),
+        .waitlist-table td:nth-child(5) {
+            min-width: 220px;
+        }
+
+
+        .waitlist-table th:nth-child(6),
+        .waitlist-table td:nth-child(6) {
+            min-width: 180px;
+        }
+
+
+        .waitlist-table th:nth-child(7),
+        .waitlist-table td:nth-child(7) {
+            min-width: 120px;
+        }
+
+
+        /* =========================================
+           REMOVE BUTTON
+        ========================================= */
+
+        .waitlist-table button {
+            padding: 9px 14px;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+
+        /* =========================================
+           NO WAITLIST
+        ========================================= */
+
+        .no-waitlist {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+
+        .no-waitlist i {
+            font-size: 40px;
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
+
 <div class="page-container">
 
-    <div class="book-card">
+
+    <!-- =========================================
+         WAITLIST MANAGEMENT CARD
+    ========================================= -->
+
+    <div class="book-card waitlist-card">
+
+
+        <!-- ICON -->
 
         <div class="icon">
+
             <i class="fa-solid fa-clock"></i>
+
         </div>
 
-        <h2>Waitlist Management</h2>
+
+        <!-- TITLE -->
+
+        <h2>
+            Waitlist Management
+        </h2>
+
+
+        <!-- SUBTITLE -->
 
         <p class="subtitle">
             Manage users waiting for unavailable books.
         </p>
+
+
+        <!-- =========================================
+             FLASH MESSAGES
+        ========================================= -->
 
         {% with messages = get_flashed_messages(with_categories=true) %}
 
@@ -41,7 +203,9 @@
                 {% for category, message in messages %}
 
                     <div class="flash-message {{ category }}">
+
                         {{ message }}
+
                     </div>
 
                 {% endfor %}
@@ -51,33 +215,59 @@
         {% endwith %}
 
 
+
+        <!-- =========================================
+             WAITLIST TABLE
+        ========================================= -->
+
         {% if waitlist %}
 
-            <div style="overflow-x:auto; margin-top:25px;">
+            <div class="waitlist-table-wrapper">
 
-                <table style="width:100%; border-collapse:collapse;">
+                <table class="waitlist-table">
+
+
+                    <!-- TABLE HEADER -->
 
                     <thead>
 
                         <tr>
 
-                            <th>Position</th>
+                            <th>
+                                Position
+                            </th>
 
-                            <th>Book ID</th>
+                            <th>
+                                Book ID
+                            </th>
 
-                            <th>Book Name</th>
+                            <th>
+                                Book Name
+                            </th>
 
-                            <th>User</th>
+                            <th>
+                                User Name
+                            </th>
 
-                            <th>Email</th>
+                            <th>
+                                User Email
+                            </th>
 
-                            <th>Requested Date</th>
+                            <th>
+                                Requested Date
+                            </th>
 
-                            <th>Action</th>
+                            <th>
+                                Action
+                            </th>
 
                         </tr>
 
                     </thead>
+
+
+
+                    <!-- TABLE BODY -->
 
                     <tbody>
 
@@ -85,29 +275,50 @@
 
                         <tr>
 
+
+                            <!-- POSITION -->
+
                             <td>
                                 {{ loop.index }}
                             </td>
+
+
+                            <!-- BOOK ID -->
 
                             <td>
                                 {{ item.book_id }}
                             </td>
 
+
+                            <!-- BOOK NAME -->
+
                             <td>
                                 {{ item.book_name }}
                             </td>
+
+
+                            <!-- USER NAME -->
 
                             <td>
                                 {{ item.user_name }}
                             </td>
 
+
+                            <!-- USER EMAIL -->
+
                             <td>
                                 {{ item.user_email }}
                             </td>
 
+
+                            <!-- REQUESTED DATE -->
+
                             <td>
                                 {{ item.requested_date }}
                             </td>
+
+
+                            <!-- ACTION -->
 
                             <td>
 
@@ -119,6 +330,7 @@
                                         type="hidden"
                                         name="waitlist_index"
                                         value="{{ item._index }}">
+
 
                                     <button type="submit">
 
@@ -132,6 +344,7 @@
 
                             </td>
 
+
                         </tr>
 
                     {% endfor %}
@@ -142,19 +355,38 @@
 
             </div>
 
+
         {% else %}
 
-            <p style="margin-top:25px;">
-                No users are currently on the waitlist.
-            </p>
+
+            <!-- =========================================
+                 NO WAITLIST RECORDS
+            ========================================= -->
+
+            <div class="no-waitlist">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                <p>
+                    No users are currently on the waitlist.
+                </p>
+
+            </div>
 
         {% endif %}
 
 
+
+        <!-- =========================================
+             BACK TO DASHBOARD
+        ========================================= -->
+
         <hr>
 
-        <a class="back-home"
-           href="{{ url_for('librarian_dashboard') }}">
+
+        <a
+            class="back-home"
+            href="{{ url_for('back_to_dashboard') }}">
 
             <i class="fa-solid fa-arrow-left"></i>
 
@@ -162,9 +394,12 @@
 
         </a>
 
+
     </div>
 
+
 </div>
+
 
 </body>
 

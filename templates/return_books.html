@@ -1,78 +1,743 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+```
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>Return Books | Library Management System</title>
+<title>Return Books | Library Management System</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+<!-- MAIN CSS -->
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<!-- FONT AWESOME -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+    /* =====================================================
+       RETURN BOOKS PAGE
+    ===================================================== */
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+    }
+
+
+    /* =====================================================
+       MAIN CONTAINER
+    ===================================================== */
+
+    .return-page {
+        width: 100%;
+        min-height: 100vh;
+
+        padding: 25px 20px;
+
+        box-sizing: border-box;
+    }
+
+
+    /* =====================================================
+       EXTRA WIDE CARD
+    ===================================================== */
+
+    .return-card {
+
+        width: 100% !important;
+
+        max-width: 1800px !important;
+
+        margin: 0 auto !important;
+
+        padding: 35px 45px !important;
+
+        box-sizing: border-box;
+
+        border-radius: 14px;
+
+        overflow: visible !important;
+    }
+
+
+    /* =====================================================
+       ICON
+    ===================================================== */
+
+    .return-icon {
+
+        text-align: center;
+
+        font-size: 45px;
+
+        margin-bottom: 12px;
+    }
+
+
+    /* =====================================================
+       TITLE
+    ===================================================== */
+
+    .return-card h2 {
+
+        text-align: center;
+
+        margin: 0 0 8px 0;
+
+        font-size: 32px;
+    }
+
+
+    /* =====================================================
+       SUBTITLE
+    ===================================================== */
+
+    .return-subtitle {
+
+        text-align: center;
+
+        margin: 0 0 30px 0;
+
+        font-size: 17px;
+    }
+
+
+    /* =====================================================
+       FLASH MESSAGE
+    ===================================================== */
+
+    .flash-message {
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+        margin-bottom: 20px;
+    }
+
+
+    /* =====================================================
+       TABLE CONTAINER
+    ===================================================== */
+
+    .return-table-container {
+
+        width: 100%;
+
+        margin-top: 20px;
+
+        overflow-x: auto;
+
+        overflow-y: visible;
+
+        padding-bottom: 5px;
+    }
+
+
+    /* =====================================================
+       TABLE
+    ===================================================== */
+
+    .return-table {
+
+        width: 100%;
+
+        min-width: 1250px;
+
+        border-collapse: collapse;
+
+        table-layout: fixed;
+    }
+
+
+    /* =====================================================
+       TABLE HEADER
+    ===================================================== */
+
+    .return-table th {
+
+        padding: 16px 14px;
+
+        text-align: left;
+
+        font-size: 15px;
+
+        white-space: nowrap;
+    }
+
+
+    /* =====================================================
+       TABLE DATA
+    ===================================================== */
+
+    .return-table td {
+
+        padding: 20px 14px;
+
+        text-align: left;
+
+        font-size: 15px;
+
+        vertical-align: middle;
+
+        word-wrap: break-word;
+
+        overflow-wrap: break-word;
+
+        line-height: 1.5;
+    }
+
+
+    /* =====================================================
+       COLUMN WIDTHS
+    ===================================================== */
+
+    /* Book ID */
+    .return-table th:nth-child(1),
+    .return-table td:nth-child(1) {
+
+        width: 9%;
+    }
+
+
+    /* Book Name */
+    .return-table th:nth-child(2),
+    .return-table td:nth-child(2) {
+
+        width: 21%;
+    }
+
+
+    /* Borrower */
+    .return-table th:nth-child(3),
+    .return-table td:nth-child(3) {
+
+        width: 14%;
+    }
+
+
+    /* Email */
+    .return-table th:nth-child(4),
+    .return-table td:nth-child(4) {
+
+        width: 22%;
+    }
+
+
+    /* Borrowed Date */
+    .return-table th:nth-child(5),
+    .return-table td:nth-child(5) {
+
+        width: 13%;
+    }
+
+
+    /* Due Date */
+    .return-table th:nth-child(6),
+    .return-table td:nth-child(6) {
+
+        width: 13%;
+    }
+
+
+    /* Action */
+    .return-table th:nth-child(7),
+    .return-table td:nth-child(7) {
+
+        width: 8%;
+    }
+
+
+    /* =====================================================
+       BOOK NAME
+    ===================================================== */
+
+    .return-table td:nth-child(2) strong {
+
+        font-size: 15px;
+
+        display: block;
+    }
+
+
+    /* =====================================================
+       EMAIL
+    ===================================================== */
+
+    .return-table td:nth-child(4) {
+
+        white-space: normal;
+
+        word-break: break-word;
+    }
+
+
+    /* =====================================================
+       RETURN BUTTON
+    ===================================================== */
+
+    .return-action-button {
+
+        padding: 10px 17px;
+
+        border: none;
+
+        border-radius: 6px;
+
+        cursor: pointer;
+
+        font-size: 14px;
+
+        white-space: nowrap;
+
+        min-width: 90px;
+
+        transition: 0.2s ease;
+    }
+
+
+    .return-action-button:hover {
+
+        transform: translateY(-1px);
+    }
+
+
+    /* =====================================================
+       NO RECORDS
+    ===================================================== */
+
+    .no-return-records {
+
+        text-align: center;
+
+        padding: 50px 20px;
+
+        font-size: 16px;
+    }
+
+
+    .no-return-records i {
+
+        font-size: 45px;
+
+        margin-bottom: 12px;
+    }
+
+
+    /* =====================================================
+       BACK BUTTON
+    ===================================================== */
+
+    .return-back-section {
+
+        margin-top: 30px;
+
+        text-align: left;
+    }
+
+
+    /* =====================================================
+       HORIZONTAL LINE
+    ===================================================== */
+
+    .return-card hr {
+
+        margin-top: 30px;
+
+        margin-bottom: 0;
+
+        border: 0;
+
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+
+    /* =====================================================
+       LARGE SCREEN
+    ===================================================== */
+
+    @media (min-width: 1600px) {
+
+        .return-page {
+
+            padding-left: 25px;
+
+            padding-right: 25px;
+        }
+
+        .return-card {
+
+            max-width: 1900px !important;
+
+            padding-left: 50px !important;
+
+            padding-right: 50px !important;
+        }
+
+        .return-table th {
+
+            font-size: 16px;
+
+            padding: 17px 16px;
+        }
+
+        .return-table td {
+
+            font-size: 16px;
+
+            padding: 21px 16px;
+        }
+    }
+
+
+    /* =====================================================
+       MEDIUM SCREEN
+    ===================================================== */
+
+    @media (max-width: 1200px) {
+
+        .return-page {
+
+            padding: 20px 15px;
+        }
+
+        .return-card {
+
+            padding: 30px 25px !important;
+        }
+
+        .return-table {
+
+            min-width: 1150px;
+        }
+
+        .return-table th,
+        .return-table td {
+
+            padding-left: 12px;
+
+            padding-right: 12px;
+        }
+    }
+
+
+    /* =====================================================
+       MOBILE / SMALL SCREEN
+    ===================================================== */
+
+    @media (max-width: 800px) {
+
+        .return-page {
+
+            padding: 15px;
+        }
+
+        .return-card {
+
+            padding: 25px 18px !important;
+        }
+
+        .return-card h2 {
+
+            font-size: 27px;
+        }
+
+        .return-subtitle {
+
+            font-size: 14px;
+        }
+
+        .return-table {
+
+            min-width: 1100px;
+        }
+
+        .return-table th,
+        .return-table td {
+
+            padding: 11px 9px;
+
+            font-size: 13px;
+        }
+
+        .return-action-button {
+
+            padding: 8px 12px;
+
+            min-width: 80px;
+
+            font-size: 13px;
+        }
+    }
+
+</style>
+```
 
 </head>
 
 <body>
 
-<div class="page-container">
+<div class="return-page">
 
-    <div class="book-card">
+```
+<!-- =====================================================
+     RETURN BOOKS CARD
+===================================================== -->
 
-        <div class="icon">
+<div class="book-card return-card">
 
-            <i class="fa-solid fa-arrow-rotate-left"></i>
+
+    <!-- ================= ICON ================= -->
+
+    <div class="return-icon">
+
+        <i class="fa-solid fa-arrow-rotate-left"></i>
+
+    </div>
+
+
+    <!-- ================= TITLE ================= -->
+
+    <h2>
+
+        Return Books
+
+    </h2>
+
+
+    <!-- ================= SUBTITLE ================= -->
+
+    <p class="return-subtitle">
+
+        Manage currently issued books and process returns.
+
+    </p>
+
+
+    <!-- =================================================
+         FLASH MESSAGES
+    ================================================== -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash-message {{ category }}">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =================================================
+         RETURN BOOKS TABLE
+    ================================================== -->
+
+    {% if borrowed_books %}
+
+        <div class="return-table-container">
+
+            <table class="return-table">
+
+
+                <!-- ================= TABLE HEADER ================= -->
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Book ID
+                        </th>
+
+                        <th>
+                            Book Name
+                        </th>
+
+                        <th>
+                            Borrower
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Borrowed Date
+                        </th>
+
+                        <th>
+                            Due Date
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <!-- ================= TABLE BODY ================= -->
+
+                <tbody>
+
+                {% for book in borrowed_books %}
+
+                    <tr>
+
+
+                        <!-- BOOK ID -->
+
+                        <td>
+
+                            {{ book.book_id }}
+
+                        </td>
+
+
+                        <!-- BOOK NAME -->
+
+                        <td>
+
+                            <strong>
+
+                                {{ book.book_name }}
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- BORROWER -->
+
+                        <td>
+
+                            {{ book.user_name }}
+
+                        </td>
+
+
+                        <!-- EMAIL -->
+
+                        <td>
+
+                            {{ book.user_email }}
+
+                        </td>
+
+
+                        <!-- BORROWED DATE -->
+
+                        <td>
+
+                            {{ book.borrowed_date }}
+
+                        </td>
+
+
+                        <!-- DUE DATE -->
+
+                        <td>
+
+                            {{ book.due_date }}
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <td>
+
+                            <form
+                                action="{{ url_for('return_books') }}"
+                                method="POST">
+
+                                <input
+                                    type="hidden"
+                                    name="book_id"
+                                    value="{{ book.book_id }}">
+
+                                <button
+                                    type="submit"
+                                    class="return-action-button">
+
+                                    <i class="fa-solid fa-rotate-left"></i>
+
+                                    Return
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+
+            </table>
 
         </div>
 
-        <h2>Return Books</h2>
 
-        <p class="subtitle">
+    {% else %}
 
-            Enter the Book ID to return a borrowed book to the library.
 
-        </p>
+        <!-- =================================================
+             NO BOOKS
+        ================================================== -->
 
-        <form action="" method="POST">
+        <div class="no-return-records">
 
-            <div class="input-group">
+            <i class="fa-solid fa-circle-check"></i>
 
-                <label>
+            <p>
 
-                    <i class="fa-solid fa-book"></i>
+                No currently borrowed books found.
 
-                    Book ID
+            </p>
 
-                </label>
+        </div>
 
-                <input
-                    type="text"
-                    name="book_id"
-                    placeholder="Enter Book ID"
-                    required>
 
-            </div>
+    {% endif %}
 
-            <button type="submit">
 
-                <i class="fa-solid fa-right-left"></i>
+    <!-- =================================================
+         BACK TO DASHBOARD
+    ================================================== -->
 
-                Return Book
+    <hr>
 
-            </button>
 
-        </form>
+    <div class="return-back-section">
 
-        <hr>
-
-        <a class="back-home"
-           href="{{ url_for('dashboard') }}">
+        <a
+            class="back-home"
+            href="{{ url_for('back_to_dashboard') }}">
 
             <i class="fa-solid fa-arrow-left"></i>
 
@@ -81,6 +746,10 @@
         </a>
 
     </div>
+
+
+</div>
+```
 
 </div>
 

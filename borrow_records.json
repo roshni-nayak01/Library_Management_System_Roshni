@@ -77,5 +77,56 @@
         "lost_fine": 0,
         "total_fine": 0,
         "fine_status": "No Fine"
+    },
+    {
+        "user_email": "savio@gmail.com",
+        "book_id": "3",
+        "book_name": "heavenly parasole",
+        "author": "william Shakesphere",
+        "category": "Novel",
+        "borrowed_date": "2026-08-28 15:36:55",
+        "due_date": "2026-09-11 15:36:55",
+        "returned": false,
+        "returned_date": null
+    },
+    {
+        "user_email": "xyz@gmail.com",
+        "book_id": "2",
+        "book_name": "annana nenapu",
+        "author": "purnachandra tejaswi",
+        "category": "Novel",
+        "borrowed_date": "2026-08-28 15:37:05",
+        "due_date": "2026-09-11 15:37:05",
+        "returned": false,
+        "returned_date": null
+    },
+    {
+        "user_email": "abc@gmail.com",
+        "book_id": "4",
+        "book_name": "Harry Potter and the Philosopher's Stone",
+        "author": "J.K. Rowling",
+        "category": "Novel",
+        "borrowed_date": "2026-08-28 15:37:44",
+        "due_date": "2026-09-11 15:37:44",
+        "returned": true,
+        "returned_date": "2026-08-28 16:17:33",
+        "book_condition": "good",
+        "days_late": 0,
+        "late_fine": 0,
+        "damage_fine": 0,
+        "lost_fine": 0,
+        "total_fine": 0,
+        "fine_status": "No Fine"
+    },
+    {
+        "user_email": "abc@gmail.com",
+        "book_id": "2",
+        "book_name": "annana nenapu",
+        "author": "purnachandra tejaswi",
+        "category": "Novel",
+        "borrowed_date": "2026-08-29 09:19:41",
+        "due_date": "2026-09-12 09:19:41",
+        "returned": false,
+        "returned_date": null
     }
 ]
